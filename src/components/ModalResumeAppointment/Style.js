@@ -12,7 +12,7 @@ background-color: white;
 padding: 20px;
 border-radius: 10px;
 width: 90%;
-height: 80%;
+height: 85%;
 align-items: center;
 `
 
