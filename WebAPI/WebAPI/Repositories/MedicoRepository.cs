@@ -45,5 +45,12 @@ namespace WebAPI.Repositories
         {
             return ctx.Medicos.ToList();
         }
+
+        public void Cadastrar(Medico medico)
+        {
+            ctx.Medicos.Add(medico);
+            ctx.SaveChanges();
+        }
+            
     }
 }
