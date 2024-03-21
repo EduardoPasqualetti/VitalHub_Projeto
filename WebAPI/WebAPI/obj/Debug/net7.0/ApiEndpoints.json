@@ -1,0 +1,226 @@
+[
+  {
+    "ContainingType": "WebAPI.Controllers.ConsultasController",
+    "Method": "BuscarConsultasPaciente",
+    "RelativePath": "api/Consultas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.ConsultasController",
+    "Method": "Cadastrar",
+    "RelativePath": "api/Consultas/Cadastrar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "consulta",
+        "Type": "WebAPI.Domains.Consulta",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.ConsultasController",
+    "Method": "BuscarConsultasMedico",
+    "RelativePath": "api/Consultas/ConsultasMedico",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.ConsultasController",
+    "Method": "EditarProntuario",
+    "RelativePath": "api/Consultas/Prontuario",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "consulta",
+        "Type": "WebAPI.Domains.Consulta",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.ConsultasController",
+    "Method": "EditarStatus",
+    "RelativePath": "api/Consultas/Status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "consulta",
+        "Type": "WebAPI.Domains.Consulta",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.EspecialidadeController",
+    "Method": "Get",
+    "RelativePath": "api/Especialidade",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.EspecialidadeController",
+    "Method": "Post",
+    "RelativePath": "api/Especialidade",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "especialidade",
+        "Type": "WebAPI.Domains.Especialidade",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.LoginController",
+    "Method": "Login",
+    "RelativePath": "api/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuario",
+        "Type": "WebAPI.ViewModels.LoginViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.MedicosController",
+    "Method": "Get",
+    "RelativePath": "api/Medicos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.MedicosController",
+    "Method": "AtualizarPerfil",
+    "RelativePath": "api/Medicos",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "medico",
+        "Type": "WebAPI.ViewModels.MedicoViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.PacientesController",
+    "Method": "Post",
+    "RelativePath": "api/Pacientes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pacienteModel",
+        "Type": "WebAPI.ViewModels.PacienteViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.PacientesController",
+    "Method": "BuscarPorID",
+    "RelativePath": "api/Pacientes/BuscarPorID",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "WebAPI.Domains.Usuario",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.PacientesController",
+    "Method": "BuscarAgendadas",
+    "RelativePath": "api/Pacientes/ConsultasAgendadas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.PacientesController",
+    "Method": "BuscarCanceladas",
+    "RelativePath": "api/Pacientes/ConsultasCanceladas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.PacientesController",
+    "Method": "BuscarRealizadas",
+    "RelativePath": "api/Pacientes/ConsultasRealizadas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.PacientesController",
+    "Method": "BuscarLogado",
+    "RelativePath": "api/Pacientes/PerfilLogado",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebAPI.Controllers.UsuarioController",
+    "Method": "AlterarSenha",
+    "RelativePath": "api/Usuario/AlterarSenha",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "senhas",
+        "Type": "WebAPI.ViewModels.AlterarSenhaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

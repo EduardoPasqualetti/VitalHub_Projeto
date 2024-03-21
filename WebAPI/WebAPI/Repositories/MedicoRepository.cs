@@ -51,6 +51,10 @@ namespace WebAPI.Repositories
             ctx.Medicos.Add(medico);
             ctx.SaveChanges();
         }
-            
+
+        public void Cadastrar(MedicoViewModel medico)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
