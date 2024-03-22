@@ -46,15 +46,12 @@ namespace WebAPI.Repositories
             return ctx.Medicos.ToList();
         }
 
-        public void Cadastrar(Medico medico)
+        public void Cadastrar(Usuario medico)
         {
-            ctx.Medicos.Add(medico);
+            ctx.Usuarios.Add(medico);
             ctx.SaveChanges();
         }
 
-        public void Cadastrar(MedicoViewModel medico)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

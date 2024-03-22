@@ -35,20 +35,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(MedicoViewModel medicoModal)
+        public IActionResult Cadastrar(MedicoViewModel medicoModel)
         {
             Usuario user = new Usuario();
 
-            user.Nome = medicoModal.Nome;
-            user.Email = medicoModal.Email;
-            user.TipoUsuarioId = medicoModal.IdTipoUsuario;
-            user.Foto = medicoModal.Foto;
-            user.Senha = medicoModal.Senha;
+            user.Nome = medicoModel.Nome;
+            user.Email = medicoModel.Email;
+            user.TipoUsuarioId = medicoModel.IdTipoUsuario;
+            user.Foto = medicoModel.Foto;
+            user.Senha = medicoModel.Senha;
 
             user.Medico = new Medico();
 
-            user.Medico.Crm = medicoModal.Crm;
-            user.Medico.EspecialidadeId = medicoModal.EspecialidadeId;
+            user.Medico.Crm = medicoModel.Crm;
+            user.Medico.EspecialidadeId = medicoModel.EspecialidadeId;
+
+            _medicoRepository.Cadastrar(user);
 
             return Ok();
         }
