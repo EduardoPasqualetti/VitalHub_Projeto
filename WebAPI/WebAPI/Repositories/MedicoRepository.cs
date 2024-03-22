@@ -2,6 +2,7 @@
 using WebAPI.Contexts;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
+using WebAPI.Utils;
 using WebAPI.ViewModels;
 
 namespace WebAPI.Repositories
@@ -48,6 +49,7 @@ namespace WebAPI.Repositories
 
         public void Cadastrar(Usuario medico)
         {
+            medico.Senha = Criptografia.GerarHash(medico.Senha!);
             ctx.Usuarios.Add(medico);
             ctx.SaveChanges();
         }

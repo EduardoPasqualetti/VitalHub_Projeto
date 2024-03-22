@@ -5,13 +5,26 @@ import { ButtonGoogleTitle, ButtonTitle, ImgGoogle, TextAccount, Title } from ".
 import { Input } from "../../components/Input/Style"
 import { LinkCreate, LinkMedium } from "../../components/Link/Style"
 import { Btn, BtnGoogle } from "../../components/Button/Button"
-import { Keyboard, TouchableWithoutFeedback } from "react-native"
+import { Keyboard, Text, TouchableWithoutFeedback } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
+import { useState } from "react"
+import api from "../../service/Service"
 
 export const Login = ({ navigation }) => {
+    const[email,setEmail] = useState('')
+    const[senha,setSenha] = useState('')
 
+    // Funcao de login
     async function Login() {
-        navigation.replace("Main")
+        
+        // Chamar a api de Login
+        const response = await api.post('Login', {
+            email:email,
+            senha:senha
+        })
+        console.log(response)
+
+        // navigation.replace("Main")
     }
 
     return (
@@ -24,8 +37,18 @@ export const Login = ({ navigation }) => {
 
 
 
-                <Input placeholder={"Usuário ou E-mail"} />
-                <Input placeholder={"Senha"} />
+                <Input
+                 placeholder={"Usuário ou E-mail"}
+                 value={email}
+                 onChangeText={ (txt) => setEmail(txt)}
+                 />
+
+                <Input 
+                placeholder={"Senha"}
+                secureTextEntry={true}
+                value={senha}
+                onChangeText={ (txt) => setSenha(txt)}
+                />
 
                 <LinkMedium onPress={() => navigation.replace("Recover")} >Esqueceu sua senha?</LinkMedium>
 
