@@ -4,14 +4,32 @@ import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn, ButtonGoOut } from "../../components/Button/Button"
-import { StatusBar } from "expo-status-bar"
-import { useState } from "react"
-import {  LinkCancelMargin } from "../../components/Link/Style"
+import { useEffect, useState } from "react"
+import { LinkCancelMargin } from "../../components/Link/Style"
+import { UserDecodeToken } from "../../Utils/Auth/auth"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-export const Profile = ({navigation}) => {
-
+export const Profile = ({ navigation }) => {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
     const [profileEdit, setProfileEdit] = useState(false)
-    
+
+    async function profileLoad() {
+        const token = await UserDecodeToken();
+
+        setName(token.name)
+        setEmail(token.email)
+    }
+
+    useEffect(() => {
+        profileLoad()
+    }, [])
+
+
+    async function closeApp() {
+        await AsyncStorage.removeItem('token')
+        navigation.replace("Login")
+    }
 
     return (
         <ContainerScroll>
@@ -21,13 +39,13 @@ export const Profile = ({navigation}) => {
                     <ProfileImage source={require("../../assets/photo.png")} />
 
                     <ContainerProfile>
-                        <TitleProfile>Richard Kosta</TitleProfile>
-                        <SubTitleProfile>richard.kosta@gmail.com</SubTitleProfile>
+                        <TitleProfile>{name}</TitleProfile>
+                        <SubTitleProfile>{email}</SubTitleProfile>
 
                         <BoxInput
                             textLabel={'Data de nascimento:'}
                             placeholder={'04/05/1999'}
-                            
+
                         />
                         <BoxInput
                             textLabel={'CPF'}
@@ -53,8 +71,11 @@ export const Profile = ({navigation}) => {
                         <Btn onPress={() => setProfileEdit(true)}>
                             <ButtonTitle>EDITAR</ButtonTitle>
                         </Btn>
+                        <Btn onPress={() => {closeApp()}}>
+                            <ButtonTitle>SAIR DO APP</ButtonTitle>
+                        </Btn>
 
-                    <LinkCancelMargin onPress={() => navigation.replace("Main")}>Voltar</LinkCancelMargin>
+                        <LinkCancelMargin onPress={() => navigation.replace("Main")}>Voltar</LinkCancelMargin>
                     </ContainerProfile>
                 </>
             ) : (

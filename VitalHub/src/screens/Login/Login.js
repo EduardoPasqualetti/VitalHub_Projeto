@@ -9,10 +9,12 @@ import { Keyboard, Text, TouchableWithoutFeedback } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from "react"
 import api from "../../service/Service"
+import asyncStorage from '@react-native-async-storage/async-storage'
+
 
 export const Login = ({ navigation }) => {
-    const[email,setEmail] = useState('')
-    const[senha,setSenha] = useState('')
+    const[email,setEmail] = useState('eduardopasqualetti@gmal.com')
+    const[senha,setSenha] = useState('edu123')
 
     // Funcao de login
     async function Login() {
@@ -22,13 +24,15 @@ export const Login = ({ navigation }) => {
             email:email,
             senha:senha
         })
-        console.log(response)
 
-        // navigation.replace("Main")
+        await asyncStorage.setItem('token', JSON.stringify(response.data))
+        
+            navigation.replace("Main")
+        
     }
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>
 
                 <Logo source={require('../../assets/logo.png')} />
@@ -69,6 +73,7 @@ export const Login = ({ navigation }) => {
                 </ContentAccount>
 
             </Container>
-        </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+
     )
 }   

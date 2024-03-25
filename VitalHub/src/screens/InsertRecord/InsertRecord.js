@@ -23,6 +23,7 @@ export const InsertRecord = ({navigation}) => {
                  fieldHeight={150}
                  insertRecord={true}
                  multiline={true}
+                 editable={true}
                 />
                 <BoxInput
                  textLabel={'Diagnóstico do paciente'}
@@ -30,6 +31,7 @@ export const InsertRecord = ({navigation}) => {
                  fieldHeight={80}
                  insertRecord={true}
                  multiline={true}
+                 editable={true}
                 />
                 <BoxInput
                  textLabel={'Prescrição médica'}
@@ -37,6 +39,7 @@ export const InsertRecord = ({navigation}) => {
                  fieldHeight={150}
                  insertRecord={true}
                  multiline={true}
+                 editable={true}
                 />
 
                 <Btn onPress={() => navigation.replace("Main")}>
