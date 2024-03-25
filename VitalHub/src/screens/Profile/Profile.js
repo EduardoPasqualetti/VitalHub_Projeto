@@ -84,8 +84,8 @@ export const Profile = ({ navigation }) => {
 
 
                     <ViewTitle>
-                        <TitleProfile>Richard Kosta</TitleProfile>
-                        <SubTitleProfile>richard.kosta@gmail.com</SubTitleProfile>
+                        <TitleProfile>{name}</TitleProfile>
+                        <SubTitleProfile>{email}</SubTitleProfile>
                     </ViewTitle>
 
                     <ContainerSafeEdit>

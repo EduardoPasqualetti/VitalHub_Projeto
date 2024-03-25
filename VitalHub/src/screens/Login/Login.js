@@ -13,7 +13,7 @@ import asyncStorage from '@react-native-async-storage/async-storage'
 
 
 export const Login = ({ navigation }) => {
-    const[email,setEmail] = useState('eduardopasqualetti@gmal.com')
+    const[email,setEmail] = useState('eduardopasqualetti@gmail.com')
     const[senha,setSenha] = useState('edu123')
 
     // Funcao de login
@@ -27,7 +27,7 @@ export const Login = ({ navigation }) => {
 
         await asyncStorage.setItem('token', JSON.stringify(response.data))
         
-            navigation.replace("Main")
+        navigation.replace("Main")
         
     }
 

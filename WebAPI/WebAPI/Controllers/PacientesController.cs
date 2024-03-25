@@ -57,11 +57,11 @@ namespace WebAPI.Controllers
 
         [Authorize]
         [HttpGet("BuscarPorID")]
-        public IActionResult BuscarPorID(Usuario user)
+        public IActionResult BuscarPorID(Guid id)
         {
-            Guid idUsuario = user.Id;
+            
 
-            return Ok(pacienteRepository.BuscarPorId(idUsuario));
+            return Ok(pacienteRepository.BuscarPorId(id));
         }
 
         [HttpPost]
