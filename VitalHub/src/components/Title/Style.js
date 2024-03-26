@@ -80,3 +80,13 @@ export const TitleCancelPhoto = styled.Text`
 font-family: 'MontserratAlternates_500Medium';
 color: #C81D25;
 `
+
+
+export const TextFieldNull = styled.Text`
+align-self: flex-start;
+margin-top: 10px;
+margin-left: 30px;
+font-family: 'Quicksand_700Bold';
+font-size: 17px;
+color: #DC143C;
+`

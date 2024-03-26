@@ -10,9 +10,12 @@ import { UserDecodeToken } from "../../Utils/Auth/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const Profile = ({ navigation }) => {
+    const [profileEdit, setProfileEdit] = useState(false)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [profileEdit, setProfileEdit] = useState(false)
+    const[dtNasc,setDtNasc] = useState('04/05/1999')
+    const[cpf,setCpf] = useState('859********')
+    const [endereco,setEndereco] = useState('Rua Vicenso Silva, 987')
 
     async function profileLoad() {
         const token = await UserDecodeToken();
@@ -44,16 +47,16 @@ export const Profile = ({ navigation }) => {
 
                         <BoxInput
                             textLabel={'Data de nascimento:'}
-                            placeholder={'04/05/1999'}
+                            fieldValue={dtNasc}
 
                         />
                         <BoxInput
                             textLabel={'CPF'}
-                            placeholder={'859********'}
+                           fieldValue={cpf}
                         />
                         <BoxInput
                             textLabel={'Endereço'}
-                            placeholder={'Rua Vicenso Silva, 987'}
+                            fieldValue={endereco}
                         />
                         <ViewFormat>
                             <BoxInput
@@ -66,6 +69,7 @@ export const Profile = ({ navigation }) => {
                                 placeholder={'Moema-SP'}
                                 fieldWidth={'45'}
                             />
+                            
                         </ViewFormat>
 
                         <Btn onPress={() => setProfileEdit(true)}>
@@ -91,18 +95,18 @@ export const Profile = ({ navigation }) => {
                     <ContainerSafeEdit>
                         <BoxInput
                             textLabel={'Data de nascimento:'}
-                            placeholder={'04/05/1999'}
+                            fieldValue={dtNasc}
                             editable={true}
 
                         />
                         <BoxInput
                             textLabel={'CPF'}
-                            placeholder={'859********'}
+                            fieldValue={cpf}
                             editable={true}
                         />
                         <BoxInput
                             textLabel={'Endereço'}
-                            fieldValue={'Rua Vicenso Silva, 987'}
+                            fieldValue={endereco}
                             editable={true}
                         />
                         <ViewFormat>

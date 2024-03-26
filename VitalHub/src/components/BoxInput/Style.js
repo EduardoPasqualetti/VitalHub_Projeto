@@ -29,7 +29,7 @@ background-color: #F5F3F3;
 color: #4E4B59;
 font-family: 'MontserratAlternates_500Medium';
 font-size: 16px;
-padding: 30px;
+padding-left: 20px;
 `
 
 export const InputTextModificate = styled.TextInput.attrs(props => ({
