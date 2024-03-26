@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {ContentIcon, TextIcon} from './Style'
 
+
 const BottomTab = createBottomTabNavigator()
 
 import {Home} from '../Home/Home'

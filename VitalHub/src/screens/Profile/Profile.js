@@ -1,17 +1,30 @@
-import { Button, Text } from "react-native"
 import { ContainerProfile, ContainerSafeEdit, ContainerScroll, ViewFormat, ViewTitle } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
-import { Btn, ButtonGoOut } from "../../components/Button/Button"
-import { StatusBar } from "expo-status-bar"
+import { Btn } from "../../components/Button/Button"
 import { useState } from "react"
-import {  LinkCancelMargin } from "../../components/Link/Style"
+import { LinkCancelMargin } from "../../components/Link/Style"
+import { AntDesign } from '@expo/vector-icons';
 
-export const Profile = ({navigation}) => {
+import api from "../../service/Service"
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-    const [profileEdit, setProfileEdit] = useState(false)
-    
+export const Profile = ({ navigation }) => {
+
+    const [profileEdit, setProfileEdit] = useState(false) 
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')   
+
+    async function LogOut() {
+        const response = api.delete('/Login', {
+            email: email,
+            senha: senha
+        })
+
+        await AsyncStorage.removeItem('token', JSON.stringify(response.data))
+        navigation.replace("Login")
+    }
 
     return (
         <ContainerScroll>
@@ -21,23 +34,29 @@ export const Profile = ({navigation}) => {
                     <ProfileImage source={require("../../assets/photo.png")} />
 
                     <ContainerProfile>
-                        <TitleProfile>Richard Kosta</TitleProfile>
-                        <SubTitleProfile>richard.kosta@gmail.com</SubTitleProfile>
 
-                        <BoxInput
+                        <TitleProfile></TitleProfile>
+                        <SubTitleProfile>richard.kosta@gmail.com</SubTitleProfile>
+                        
+                        {/* style={styles.textPlaceholder} */}
+                        
+                        <BoxInput 
                             textLabel={'Data de nascimento:'}
-                            placeholder={'04/05/1999'}
-                            
+                            placeholder={'04/05/1999'} 
                         />
+
                         <BoxInput
                             textLabel={'CPF'}
                             placeholder={'859********'}
                         />
+
                         <BoxInput
                             textLabel={'Endereço'}
                             placeholder={'Rua Vicenso Silva, 987'}
                         />
+
                         <ViewFormat>
+
                             <BoxInput
                                 textLabel={'Cep'}
                                 placeholder={'06548-909'}
@@ -48,19 +67,25 @@ export const Profile = ({navigation}) => {
                                 placeholder={'Moema-SP'}
                                 fieldWidth={'45'}
                             />
+
                         </ViewFormat>
 
                         <Btn onPress={() => setProfileEdit(true)}>
                             <ButtonTitle>EDITAR</ButtonTitle>
                         </Btn>
 
-                    <LinkCancelMargin onPress={() => navigation.replace("Main")}>Voltar</LinkCancelMargin>
+                        <LinkCancelMargin onPress={() => navigation.replace("Main")}>Voltar</LinkCancelMargin>
+
+                        <AntDesign style={{marginTop: -30, marginRight: 280, borderColor: "black"}} onPress={() => LogOut()}
+                            name="logout" size={24} 
+                            color="black" 
+                        />
+
                     </ContainerProfile>
                 </>
             ) : (
                 <>
                     <ProfileImage source={require("../../assets/photo.png")} />
-
 
                     <ViewTitle>
                         <TitleProfile>Richard Kosta</TitleProfile>
@@ -81,7 +106,7 @@ export const Profile = ({navigation}) => {
                         />
                         <BoxInput
                             textLabel={'Endereço'}
-                            fieldValue={'Rua Vicenso Silva, 987'}
+                            placeholder={'Rua Vicenso Silva, 987'}
                             editable={true}
                         />
                         <ViewFormat>
@@ -108,7 +133,22 @@ export const Profile = ({navigation}) => {
 
                     </ContainerSafeEdit>
                 </>
+
             )}
         </ContainerScroll>
+
+
     )
 }
+
+// const styles = StyleSheet.create({
+//     map: {
+//     flex: 1,
+//     width: '100%',
+//     },
+    
+//     textPlaceholder: {
+//         color: "black",
+        
+//     }
+// });

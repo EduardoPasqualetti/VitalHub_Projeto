@@ -7,10 +7,10 @@ import { ListComponent } from "../../components/List/List"
 import { Card } from "../../components/Card/Card"
 import { ModalCancel } from "../../components/ModalCancel/ModalCancel"
 import { ModalAppointment } from "../../components/ModalAppointment/ModalAppointment"
-import { BtnCard, BtnSchedule } from "../../components/Button/Button"
-import { FontAwesome } from '@expo/vector-icons';
+import { BtnSchedule } from "../../components/Button/Button"
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
-import { Text, TouchableOpacity } from "react-native"
+import { TouchableOpacity } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
 
 const Lista = [
