@@ -142,7 +142,7 @@ export const Home = ({ navigation }) => {
                     keyExtractor={(item) => item.id}
 
                     renderItem={({ item }) => {
-                        if (statusList === 'agendada' && item.status === "agendada" && item.typeUser == 'paciente') {
+                        if (statusList === 'agendada' && item.status === "agendada") {
                             return (
                                 <TouchableOpacity onPress={() => { setShowModalAppointment(true) }}>
                                     <Card name={item.nome}
@@ -154,7 +154,7 @@ export const Home = ({ navigation }) => {
                                     />
                                 </TouchableOpacity>
                             )
-                        } else if (statusList === 'realizada' && item.status === "realizada" && item.typeUser == 'paciente') {
+                        } else if (statusList === 'realizada' && item.status === "realizada") {
                             return (
                                     <Card name={item.nome}
                                         status={item.status}
@@ -167,7 +167,7 @@ export const Home = ({ navigation }) => {
                                     />
 
                             )
-                        } else if (statusList === 'cancelada' && item.status === "cancelada" && item.typeUser == 'paciente') {
+                        } else if (statusList === 'cancelada' && item.status === "cancelada") {
                             return (
                                     <Card name={item.nome}
                                         status={item.status}
@@ -231,7 +231,7 @@ export const Home = ({ navigation }) => {
 
 
                     renderItem={({ item }) => {
-                        if (statusList === 'agendada' && item.status === "agendada" && item.typeUser == 'medico') {
+                        if (statusList === 'agendada' && item.status === "agendada") {
                             return (
                                 <TouchableOpacity onPress={() => { setShowModalSeeDoctor(true) }}>
                                     <Card name={item.nome}
@@ -243,7 +243,7 @@ export const Home = ({ navigation }) => {
                                     />
                                 </TouchableOpacity>
                             )
-                        } else if (statusList === 'realizada' && item.status === "realizada" && item.typeUser == 'medico') {
+                        } else if (statusList === 'realizada' && item.status === "realizada") {
                             return(
                                     <Card name={item.nome}
                                         status={item.status}
@@ -255,7 +255,7 @@ export const Home = ({ navigation }) => {
                                         }}
                                     />
                             )
-                        } else if (statusList === 'cancelada' && item.status === "cancelada" && item.typeUser == 'medico') {
+                        } else if (statusList === 'cancelada' && item.status === "cancelada") {
                             return(
                                     <Card name={item.nome}
                                         status={item.status}

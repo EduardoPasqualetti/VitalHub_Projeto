@@ -11,6 +11,7 @@ namespace WebAPI.Repositories
     {
 
         public VitalContext ctx = new VitalContext();
+
         public Consulta BuscarPorId(Guid id)
         {
             return ctx.Consultas.Find(id);
@@ -67,7 +68,21 @@ namespace WebAPI.Repositories
 
         public List<Consulta> ListarTodos()
         {
-            return ctx.Consultas.ToList();
+            return ctx.Consultas
+                .Select(m => new Consulta
+                {
+                    Id = m.Id,
+                    Descricao = m.Descricao,
+                    Diagnostico = m.Diagnostico,
+
+
+                    Situacao = new SituacaoConsulta
+                    {
+                        Situacao = m.Situacao.Situacao
+                    }
+                })
+                .ToList();
+
         }
     }
 }

@@ -8,8 +8,6 @@ export const Header = ({ ProfileImage, onPress}) => {
 
   async function profileLoad() {
     const token = await UserDecodeToken();
-
-    console.log(token)
     setName(token.name)
   }
 

@@ -21,7 +21,7 @@ export const Card = ({
                 <DataProfile>   
                     <ProfileName>{name}</ProfileName>
                     <ProfileData>
-                        <TextAge>{age} anos</TextAge>
+                        <TextAge>{age}</TextAge>
                         <ImagePoint source={require('../../assets/point.png')} />
                         <TextBold>{typeAppointment}</TextBold>
                     </ProfileData>

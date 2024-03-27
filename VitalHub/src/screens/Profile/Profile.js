@@ -11,17 +11,27 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const Profile = ({ navigation }) => {
     const [profileEdit, setProfileEdit] = useState(false)
+    const [role, setRole] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const[dtNasc,setDtNasc] = useState('04/05/1999')
-    const[cpf,setCpf] = useState('859********')
-    const [endereco,setEndereco] = useState('Rua Vicenso Silva, 987')
+    const [dtNasc, setDtNasc] = useState('04/05/1999')
+    const [cpf, setCpf] = useState('859********')
+    const [crm, setCrm] = useState('824981')
+    const [endereco, setEndereco] = useState('Rua Vicenso Silva, 987')
 
     async function profileLoad() {
         const token = await UserDecodeToken();
 
         setName(token.name)
         setEmail(token.email)
+        setRole(token.role)
+    }
+
+    async function GetProfile() {
+        if (role == 'Paciente') {
+            await api.get("/")
+        }
+
     }
 
     useEffect(() => {
@@ -50,10 +60,19 @@ export const Profile = ({ navigation }) => {
                             fieldValue={dtNasc}
 
                         />
-                        <BoxInput
-                            textLabel={'CPF'}
-                           fieldValue={cpf}
-                        />
+                        {
+                            role == 'Paciente' ? 
+                                <BoxInput
+                                    textLabel={'CPF'}
+                                    fieldValue={cpf}
+                                />
+                             : 
+                             <BoxInput
+                                    textLabel={'CRM'}
+                                    fieldValue={crm}
+                                />
+                        }
+
                         <BoxInput
                             textLabel={'Endereço'}
                             fieldValue={endereco}
@@ -69,13 +88,13 @@ export const Profile = ({ navigation }) => {
                                 placeholder={'Moema-SP'}
                                 fieldWidth={'45'}
                             />
-                            
+
                         </ViewFormat>
 
                         <Btn onPress={() => setProfileEdit(true)}>
                             <ButtonTitle>EDITAR</ButtonTitle>
                         </Btn>
-                        <Btn onPress={() => {closeApp()}}>
+                        <Btn onPress={() => { closeApp() }}>
                             <ButtonTitle>SAIR DO APP</ButtonTitle>
                         </Btn>
 
