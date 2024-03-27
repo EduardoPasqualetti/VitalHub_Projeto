@@ -26,12 +26,11 @@ export const Login = ({ navigation }) => {
             senha: senha
         })
 
-        await AsyncStorage.setItem('token', JSON.stringify(response.data))
+        await AsyncStorage.setItem('token', JSON.stringify( response.data ))
         navigation.replace("Main")
     }
 
     //A função LogOut está em Profile
-
 
 
     return (
