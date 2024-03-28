@@ -48,6 +48,7 @@ export const Login = ({ navigation }) => {
             setEmailError(false)
             setSenhaError(false)
         }
+        
     }
 
     function handleLogin() {

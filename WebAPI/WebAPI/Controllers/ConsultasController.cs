@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("ConsultasPaciete")]
+        [HttpGet("ConsultasPaciente")]
         public IActionResult BuscarConsultasPaciente()
         {
             Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);

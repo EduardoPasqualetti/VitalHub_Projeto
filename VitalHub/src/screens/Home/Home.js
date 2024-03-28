@@ -14,75 +14,8 @@ import { Text, TouchableOpacity } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
+import api from "../../service/Service"
 
-const Lista = [
-    {
-        id: "1",
-        nome: "Gabriel Victor",
-        idade: "22",
-        horarioConsulta: "14:00",
-        tipoConsulta: "Rotina",
-        status: "agendada",
-        typeUser: "paciente"
-    },
-    {
-        id: "4",
-        nome: "Walter",
-        idade: "22",
-        horarioConsulta: "14:00",
-        tipoConsulta: "Exame",
-        status: "agendada",
-        typeUser: "paciente"
-    },
-    {
-        id: "2",
-        nome: "Richard Kosta",
-        idade: "28",
-        horarioConsulta: "15:00",
-        tipoConsulta: "Urgencia",
-        status: "realizada",
-        typeUser: "paciente"
-    },
-    {
-        id: "3",
-        nome: "Rubens",
-        idade: "28",
-        horarioConsulta: "15:00",
-        tipoConsulta: "Urgencia",
-        status: "cancelada",
-        typeUser: "paciente"
-    },
-    {
-        id: "5",
-        nome: "Dr. Murilo",
-        idade: "22",
-        horarioConsulta: "14:00",
-        tipoConsulta: "Rotina",
-        status: "agendada",
-        typeUser: "medico",
-
-    },
-    {
-        id: "6",
-        nome: "Dra. Vanessa",
-        idade: "36",
-        horarioConsulta: "15:20",
-        tipoConsulta: "Urgencia",
-        status: "realizada",
-        typeUser: "medico",
-
-    },
-    {
-        id: "7",
-        nome: "Dra. Rafaela",
-        idade: "28",
-        horarioConsulta: "16:00",
-        tipoConsulta: "Urgencia",
-        status: "cancelada",
-        typeUser: "medico",
-
-    }
-]
 
 export const Home = ({ navigation }) => {
 
@@ -94,21 +27,55 @@ export const Home = ({ navigation }) => {
     const [showModalSeeDoctor, setShowModalSeeDoctor] = useState(false)
 
     const [userLogin, setUserLogin] = useState("")
+    const [doctorAppointments, setDoctorAppointments] = useState([])
+    const [patientAppointments, setPatientAppointments] = useState([])
+    const [token, setToken] = useState('')
 
     async function profileLoad() {
         const token = await UserDecodeToken();
+
         setUserLogin(token.role)
+        
+        
+        setToken( token.token )
     }
 
+    async function GetAppointments() {
+        const token = await AsyncStorage.getItem('token')
+
+        if (userLogin === "Medico") {
+            console.log(token);
+            await api.get("/Consultas/ConsultasMedico", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(response => setDoctorAppointments(response.data))
+                .catch(error => console.log(error))
+            console.log('doctor', doctorAppointments);
+
+        } else if (userLogin === "Paciente") {
+
+            await api.get("/Consultas/ConsultasPaciente", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(response => setPatientAppointments(response.data))
+                .catch(error => console.log(error))
+            console.log('paciente', patientAppointments);
+        }
+    }
     useEffect(() => {
         profileLoad()
+        GetAppointments()
     }, [])
 
 
     return (
         userLogin == "Medico" ?
             <Container>
-                <Header nome={'Dr. Joao'} ProfileImage={require('../../assets/medico.png')} onPress={() => navigation.replace("Profile")}/>
+                <Header nome={'Dr. Joao'} ProfileImage={require('../../assets/medico.png')} onPress={() => navigation.replace("Profile")} />
 
                 <CalendarHome />
 
@@ -138,43 +105,43 @@ export const Home = ({ navigation }) => {
 
                 {/* Lista (FlatList)*/}
                 <ListComponent
-                    data={Lista}
+                    data={doctorAppointments}
                     keyExtractor={(item) => item.id}
 
-                    renderItem={({ item }) => {
-                        if (statusList === 'agendada' && item.status === "agendada") {
+                    renderItem={ ({ item }) => {
+                        if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                             return (
                                 <TouchableOpacity onPress={() => { setShowModalAppointment(true) }}>
-                                    <Card name={item.nome}
-                                        status={item.status}
-                                        age={item.idade}
+                                    <Card name={item.paciente.idNavigation.nome}
+                                        status={item.situacao.situacao}
+                                        age={item.paciente.dataNascimento}
                                         hour={item.horarioConsulta}
-                                        typeAppointment={item.tipoConsulta}
+                                        typeAppointment={item.prioridade.prioridade}
                                         onPressCancel={() => setShowModalCancel(true)}
                                     />
                                 </TouchableOpacity>
                             )
-                        } else if (statusList === 'realizada' && item.status === "realizada") {
+                        } else if (statusList === 'realizada' &&item.situacao.situacao === "Cancelados") {
                             return (
-                                    <Card name={item.nome}
-                                        status={item.status}
-                                        age={item.idade}
-                                        hour={item.horarioConsulta}
-                                        typeAppointment={item.tipoConsulta}
-                                        onPressAppointment={() => {
-                                            navigation.replace('MedicalRecord')
-                                        }}
-                                    />
+                                <Card name={item.nome}
+                                    status={item.status}
+                                    age={item.idade}
+                                    hour={item.horarioConsulta}
+                                    typeAppointment={item.tipoConsulta}
+                                    onPressAppointment={() => {
+                                        navigation.replace('MedicalRecord')
+                                    }}
+                                />
 
                             )
-                        } else if (statusList === 'cancelada' && item.status === "cancelada") {
+                        } else if (statusList === 'cancelada' && item.situacao.situacao === "Realizados") {
                             return (
-                                    <Card name={item.nome}
-                                        status={item.status}
-                                        age={item.idade}
-                                        hour={item.horarioConsulta}
-                                        typeAppointment={item.tipoConsulta}
-                                    />
+                                <Card name={item.nome}
+                                    status={item.status}
+                                    age={item.idade}
+                                    hour={item.horarioConsulta}
+                                    typeAppointment={item.tipoConsulta}
+                                />
                             )
                         }
                     }
@@ -199,7 +166,7 @@ export const Home = ({ navigation }) => {
             </Container>
             :
             <Container>
-                <Header nome={'Richard Kosta'} ProfileImage={require('../../assets/garro.jpeg')} onPress={() => navigation.replace("Profile")}/>
+                <Header nome={'Richard Kosta'} ProfileImage={require('../../assets/garro.jpeg')} onPress={() => navigation.replace("Profile")} />
                 <CalendarHome />
 
                 <FilterAppointment>
@@ -223,7 +190,7 @@ export const Home = ({ navigation }) => {
                 </FilterAppointment>
 
                 <ListComponent
-                    data={Lista}
+                    data={patientAppointments}
                     keyExtractor={(item) => item.id}
 
 
@@ -244,26 +211,26 @@ export const Home = ({ navigation }) => {
                                 </TouchableOpacity>
                             )
                         } else if (statusList === 'realizada' && item.status === "realizada") {
-                            return(
-                                    <Card name={item.nome}
-                                        status={item.status}
-                                        age={item.idade}
-                                        hour={item.horarioConsulta}
-                                        typeAppointment={item.tipoConsulta}
-                                        onPressAppointment={() => {
-                                            navigation.replace('SeePrescription')
-                                        }}
-                                    />
+                            return (
+                                <Card name={item.nome}
+                                    status={item.status}
+                                    age={item.idade}
+                                    hour={item.horarioConsulta}
+                                    typeAppointment={item.tipoConsulta}
+                                    onPressAppointment={() => {
+                                        navigation.replace('SeePrescription')
+                                    }}
+                                />
                             )
                         } else if (statusList === 'cancelada' && item.status === "cancelada") {
-                            return(
-                                    <Card name={item.nome}
-                                        status={item.status}
-                                        age={item.idade}
-                                        hour={item.horarioConsulta}
-                                        typeAppointment={item.tipoConsulta}
-                                        
-                                    />
+                            return (
+                                <Card name={item.nome}
+                                    status={item.status}
+                                    age={item.idade}
+                                    hour={item.horarioConsulta}
+                                    typeAppointment={item.tipoConsulta}
+
+                                />
                             )
                         }
                     }}

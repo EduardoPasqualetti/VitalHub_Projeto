@@ -8,12 +8,14 @@ import { useEffect, useState } from "react"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import api from "../../service/Service"
 
 export const Profile = ({ navigation }) => {
     const [profileEdit, setProfileEdit] = useState(false)
     const [role, setRole] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [idUser,setIdUser] = useState('')
     const [dtNasc, setDtNasc] = useState('04/05/1999')
     const [cpf, setCpf] = useState('859********')
     const [crm, setCrm] = useState('824981')
@@ -21,16 +23,10 @@ export const Profile = ({ navigation }) => {
 
     async function profileLoad() {
         const token = await UserDecodeToken();
-
         setName(token.name)
         setEmail(token.email)
         setRole(token.role)
-    }
-
-    async function GetProfile() {
-        if (role == 'Paciente') {
-            await api.get("/")
-        }
+        setIdUser(token.jti)
 
     }
 
@@ -50,7 +46,7 @@ export const Profile = ({ navigation }) => {
                 <>
 
                     <ProfileImage source={require("../../assets/photo.png")} />
-
+                    
                     <ContainerProfile>
                         <TitleProfile>{name}</TitleProfile>
                         <SubTitleProfile>{email}</SubTitleProfile>
