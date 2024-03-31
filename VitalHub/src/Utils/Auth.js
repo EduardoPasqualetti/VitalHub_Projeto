@@ -2,11 +2,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { decode, encode } from 'base-64'
 
-if ( !global.atob ){
+if (!global.atob) {
     global.atob = decode
 }
 
-if ( !global.btoa ){
+if (!global.btoa) {
     global.btoa = encode
 }
 
@@ -16,7 +16,7 @@ export const userDecodeToken = async () => {
     // Capturando o token
     const token = await AsyncStorage.getItem('token')
 
-    if ( token === null ){
+    if (token === null) {
         return null
     }
 
@@ -24,7 +24,10 @@ export const userDecodeToken = async () => {
     const decoded = jwtDecode(token)
 
     return {
-        role : decoded.role,
-        name : decoded.name
+        role: decoded.role,
+        name: decoded.name,
+        email: decode.email,
+        jti: decode.jti,
+        token: token
     }
 }

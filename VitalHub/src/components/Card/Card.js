@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 export const Card = ({
-    status = "agendada",
+    status = "Pendentes",
     onPressCancel,
     onPressAppointment,
     name, age, hour, typeAppointment}) => {
@@ -21,15 +21,15 @@ export const Card = ({
                 <DataProfile>   
                     <ProfileName>{name}</ProfileName>
                     <ProfileData>
-                        <TextAge>{age} anos</TextAge>
+                        <TextAge>{age}</TextAge>
                         <ImagePoint source={require('../../assets/point.png')} />
                         <TextBold>{typeAppointment}</TextBold>
                     </ProfileData>
                 </DataProfile>
                 <ViewRow>
                     <ClockCard status={status}>
-                        <AntDesign name="clockcircle" size={18} color={status == "agendada" ? '#49B3BA' : '#4E4B59'} />
-                        <TextBold status={status}>{hour}</TextBold>
+                        <AntDesign name="clockcircle" size={18} color={status == "Pendestes" ? '#49B3BA' : '#4E4B59'} />
+                        <TextBold status={status}>14:00</TextBold>
                     </ClockCard>
 
 
@@ -39,7 +39,7 @@ export const Card = ({
                         status == "cancelada" ? (
                             <>
                             </>
-                        ) : status == "agendada" ? (
+                        ) : status == "Pendentes" ? (
                             <ButtonCard onPress={onPressCancel} >
                                 <ButtonText status={status}>Cancelar</ButtonText>
                             </ButtonCard>

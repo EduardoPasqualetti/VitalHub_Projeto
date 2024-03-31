@@ -13,75 +13,6 @@ import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
 import { TouchableOpacity } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
 
-const Lista = [
-    {
-        id: "1",
-        nome: "Gabriel Victor",
-        idade: "22",
-        horarioConsulta: "14:00",
-        tipoConsulta: "Rotina",
-        status: "agendada",
-        typeUser: "paciente"
-    },
-    {
-        id: "4",
-        nome: "Walter",
-        idade: "22",
-        horarioConsulta: "14:00",
-        tipoConsulta: "Exame",
-        status: "agendada",
-        typeUser: "paciente"
-    },
-    {
-        id: "2",
-        nome: "Richard Kosta",
-        idade: "28",
-        horarioConsulta: "15:00",
-        tipoConsulta: "Urgencia",
-        status: "realizada",
-        typeUser: "paciente"
-    },
-    {
-        id: "3",
-        nome: "Rubens",
-        idade: "28",
-        horarioConsulta: "15:00",
-        tipoConsulta: "Urgencia",
-        status: "cancelada",
-        typeUser: "paciente"
-    },
-    {
-        id: "5",
-        nome: "Dr. Murilo",
-        idade: "22",
-        horarioConsulta: "14:00",
-        tipoConsulta: "Rotina",
-        status: "agendada",
-        typeUser: "medico",
-
-    },
-    {
-        id: "6",
-        nome: "Dra. Vanessa",
-        idade: "36",
-        horarioConsulta: "15:20",
-        tipoConsulta: "Urgencia",
-        status: "realizada",
-        typeUser: "medico",
-
-    },
-    {
-        id: "7",
-        nome: "Dra. Rafaela",
-        idade: "28",
-        horarioConsulta: "16:00",
-        tipoConsulta: "Urgencia",
-        status: "cancelada",
-        typeUser: "medico",
-
-    }
-]
-
 export const Home = ({ navigation }) => {
 
     const [statusList, setStatusList] = useState("agendada")
@@ -91,7 +22,50 @@ export const Home = ({ navigation }) => {
     const [showModalSchedule, setShowModalSchedule] = useState(false)
     const [showModalSeeDoctor, setShowModalSeeDoctor] = useState(false)
 
-    const [userLogin, setUserLogin] = useState("paciente")
+    const [userLogin, setUserLogin] = useState("")
+    const [doctorAppointments, setDoctorAppointments] = useState([])
+    const [patientAppointments, setPatientAppointments] = useState([])
+    const [token, setToken] = useState('')
+
+    async function ChangeProfile() {
+        const token = await UserDecodeToken();
+
+        setUserLogin(token.role)
+        
+        
+        setToken( token.token )
+    }
+
+    async function GetAppointments() {
+        const token = await AsyncStorage.getItem('token')
+
+        if (userLogin === "Medico") {
+            console.log(token);
+            await api.get("/Consultas/ConsultasMedico", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(response => setDoctorAppointments(response.data))
+                .catch(error => console.log(error))
+            console.log('doctor', doctorAppointments);
+
+        } else if (userLogin === "Paciente") {
+
+            await api.get("/Consultas/ConsultasPaciente", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(response => setPatientAppointments(response.data))
+                .catch(error => console.log(error))
+            console.log('paciente', patientAppointments);
+        }
+    }
+    useEffect(() => {
+        ChangeProfile()
+        GetAppointments()
+    }, [])
 
 
     return (

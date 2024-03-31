@@ -5,27 +5,32 @@ import { Btn } from "../../components/Button/Button"
 import { ButtonTitle } from "../../components/Title/Style"
 import { ListComponent } from "../../components/List/List"
 import { CardClinic } from "../../components/CardClinic/CardClinic"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
-
-
-const Clinicas = [
-    { id: 1, nome: "Clínica Natureh", Localizacao: "São Paulo, SP", Avaliacao: "4,5", Abertura: "Seg-Sex" },
-    { id: 2, nome: "Diamond Pró-Mulher", Localizacao: "São Paulo, SP", Avaliacao: "4,8", Abertura: "Seg-Sex" },
-    { id: 3, nome: "Clinica Villa Lobos", Localizacao: "Taboão, SP", Avaliacao: "4,2", Abertura: "Seg-Sab" },
-    { id: 4, nome: "SP Oncologia Clínica", Localizacao: "Taboão, SP", Avaliacao: "4,2", Abertura: "Seg-Sab" },
-]
+import api from "../../service/Service"
 
 export const SelectClinic = ({ navigation }) => {
 
     const [selectedClinic, setSelectedClinic] = useState(null);
     const [showModalSchedule, setShowModalSchedule] = useState(false)
+    const [clinicList,setClinicList] = useState([])
+
+
+async function GetClinics() {
+    await api.get('/Clinica/ListarTodas')
+    .then(response => setClinicList(response.data))
+    .catch(error => console.log(error))
+    console.log(clinicList);
+}
 
     const onPressHandle = () => {
         setShowModalSchedule(true)
         navigation.navigate("Main");
-        
       }
+
+      useEffect(() => {
+        GetClinics()
+      },[])
 
 
     return (
@@ -33,18 +38,20 @@ export const SelectClinic = ({ navigation }) => {
             <Title>Selecionar clinica</Title>
 
             {<ListComponent
-                data={Clinicas}
+                data={clinicList}
                 renderItem={({ item }) =>
                 (
                     <BtnSelect onPress={() => setSelectedClinic(item.id)}>
-                        <CardClinic name={item.nome}
-                            loc={item.Localizacao}
+                        <CardClinic name={item.nomeFantasia}
+                            logradouro={item.endereco.logradouro}
+                            numero={item.endereco.numero}
                             aval={item.Avaliacao}
                             date={item.Abertura}
                             isSelected={item.id == selectedClinic}
 
                         />
                     </BtnSelect>
+                    
                 )}
             />}
 
@@ -55,11 +62,11 @@ export const SelectClinic = ({ navigation }) => {
             />
 
             <Btn onPress={() => { navigation.replace("SelectDoctor") }}>
-                <ButtonTitle >CONTINUAR</ButtonTitle>
+                <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
             <Cancel onPress={() => onPressHandle()}>Cancelar</Cancel>
         </Container>
-
+ 
 
     )
 }

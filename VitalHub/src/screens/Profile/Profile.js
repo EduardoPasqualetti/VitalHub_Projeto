@@ -13,18 +13,32 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 export const Profile = ({ navigation }) => {
 
     const [profileEdit, setProfileEdit] = useState(false) 
+    const [role, setRole] = useState('')
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [senha, setSenha] = useState('')   
+    const [idUser,setIdUser] = useState('')  
+    const [nasc, setNasc] = useState('04/05/1999')
+    const [cpf, setCpf] = useState('859********')
+    const [docCrm, setDocCrm] = useState('824981')
+    const [endereco, setEndereco] = useState('Rua Vicenso Silva, 987')
 
     async function LogOut() {
-        const response = api.delete('/Login', {
-            email: email,
-            senha: senha
-        })
-
-        await AsyncStorage.removeItem('token', JSON.stringify(response.data))
+        await AsyncStorage.removeItem('token')
         navigation.replace("Login")
     }
+
+    async function ChangeProfile() {
+        const token = await UserDecodeToken();
+        setName(token.name)
+        setEmail(token.email)
+        setRole(token.role)
+        setIdUser(token.jti)
+
+    }
+
+    useEffect(() => {
+        ChangeProfile()
+    }, [])
 
     return (
         <ContainerScroll>
@@ -35,24 +49,32 @@ export const Profile = ({ navigation }) => {
 
                     <ContainerProfile>
 
-                        <TitleProfile></TitleProfile>
-                        <SubTitleProfile>richard.kosta@gmail.com</SubTitleProfile>
+                        <TitleProfile>{name}</TitleProfile>
+                        <SubTitleProfile>{email}</SubTitleProfile>
                         
                         {/* style={styles.textPlaceholder} */}
                         
                         <BoxInput 
                             textLabel={'Data de nascimento:'}
-                            placeholder={'04/05/1999'} 
+                            fieldValue={nasc}
                         />
 
-                        <BoxInput
-                            textLabel={'CPF'}
-                            placeholder={'859********'}
-                        />
+                        {
+                            role == 'Paciente' ? 
+                                <BoxInput
+                                    textLabel={'CPF'}
+                                    fieldValue={cpf}
+                                />
+                             : 
+                             <BoxInput
+                                    textLabel={'CRM'}
+                                    fieldValue={crm}
+                                />
+                        }
 
                         <BoxInput
                             textLabel={'Endereço'}
-                            placeholder={'Rua Vicenso Silva, 987'}
+                            placeholder={endereco}
                         />
 
                         <ViewFormat>
@@ -88,25 +110,25 @@ export const Profile = ({ navigation }) => {
                     <ProfileImage source={require("../../assets/photo.png")} />
 
                     <ViewTitle>
-                        <TitleProfile>Richard Kosta</TitleProfile>
-                        <SubTitleProfile>richard.kosta@gmail.com</SubTitleProfile>
+                        <TitleProfile>{name}</TitleProfile>
+                        <SubTitleProfile>{email}</SubTitleProfile>
                     </ViewTitle>
 
                     <ContainerSafeEdit>
                         <BoxInput
                             textLabel={'Data de nascimento:'}
-                            placeholder={'04/05/1999'}
+                            fieldValue={nasc}
                             editable={true}
 
                         />
                         <BoxInput
                             textLabel={'CPF'}
-                            placeholder={'859********'}
+                            fieldValue={cpf}
                             editable={true}
                         />
                         <BoxInput
                             textLabel={'Endereço'}
-                            placeholder={'Rua Vicenso Silva, 987'}
+                            fieldValue={endereco}
                             editable={true}
                         />
                         <ViewFormat>
