@@ -15,23 +15,41 @@ export const Profile = ({ navigation }) => {
     const [role, setRole] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [idUser,setIdUser] = useState('')
-    const [dtNasc, setDtNasc] = useState('04/05/1999')
-    const [cpf, setCpf] = useState('859********')
-    const [crm, setCrm] = useState('824981')
-    const [endereco, setEndereco] = useState('Rua Vicenso Silva, 987')
-
+    const [idUser, setIdUser] = useState('')
+    const [userData, setUserData] = useState('')
+    const [dtNasc, setDtNasc] = useState('')
+    const [cpf, setCpf] = useState('')
+    const [crm, setCrm] = useState('')
+    const [logradouro, setLogradouro] = useState('')
+    const [cep,setCep] = useState('')
+    const [cidade, setCidade] = useState("")
     async function profileLoad() {
         const token = await UserDecodeToken();
         setName(token.name)
         setEmail(token.email)
         setRole(token.role)
         setIdUser(token.jti)
+        console.log(idUser);
+    }
 
+    async function getUser() {
+        try {
+            const response = await api.get(`/Medicos/BuscarPorID?id=${idUser}`);
+            setUserData(response.data);
+            console.log(response.data);
+            setCrm(response.data.crm);
+            setLogradouro(response.data.endereco.logradouro)
+            setCep(response.data.endereco.cep)
+            
+            
+        } catch (error) {
+            console.log('Erro ao buscar usuário:', error);
+        }
     }
 
     useEffect(() => {
-        profileLoad()
+        profileLoad();
+        getUser();
     }, [])
 
 
@@ -46,7 +64,7 @@ export const Profile = ({ navigation }) => {
                 <>
 
                     <ProfileImage source={require("../../assets/photo.png")} />
-                    
+
                     <ContainerProfile>
                         <TitleProfile>{name}</TitleProfile>
                         <SubTitleProfile>{email}</SubTitleProfile>
@@ -57,13 +75,13 @@ export const Profile = ({ navigation }) => {
 
                         />
                         {
-                            role == 'Paciente' ? 
+                            role == 'Paciente' ?
                                 <BoxInput
                                     textLabel={'CPF'}
                                     fieldValue={cpf}
                                 />
-                             : 
-                             <BoxInput
+                                :
+                                <BoxInput
                                     textLabel={'CRM'}
                                     fieldValue={crm}
                                 />
@@ -71,16 +89,18 @@ export const Profile = ({ navigation }) => {
 
                         <BoxInput
                             textLabel={'Endereço'}
-                            fieldValue={endereco}
+                            fieldValue={logradouro}
                         />
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Cep'}
+                                fieldValue={cep}
                                 placeholder={'06548-909'}
                                 fieldWidth={'45'}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
+                                fieldValue={cidade}
                                 placeholder={'Moema-SP'}
                                 fieldWidth={'45'}
                             />

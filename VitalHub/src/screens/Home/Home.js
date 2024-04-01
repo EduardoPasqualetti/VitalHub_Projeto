@@ -27,247 +27,196 @@ export const Home = ({ navigation }) => {
     const [showModalSeeDoctor, setShowModalSeeDoctor] = useState(false)
 
     const [userLogin, setUserLogin] = useState("")
-    const [doctorAppointments, setDoctorAppointments] = useState([])
-    const [patientAppointments, setPatientAppointments] = useState([])
+    const [appointments, setAppointments] = useState([])
     const [token, setToken] = useState('')
 
     async function profileLoad() {
         const token = await UserDecodeToken();
 
         setUserLogin(token.role)
-        
-        
-        setToken( token.token )
+
+        setToken(token.token)
     }
 
     async function GetAppointments() {
-        const token = await AsyncStorage.getItem('token')
-
         if (userLogin === "Medico") {
-            console.log(token);
             await api.get("/Consultas/ConsultasMedico", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
-                .then(response => setDoctorAppointments(response.data))
+                .then(response => setAppointments(response.data))
                 .catch(error => console.log(error))
-            console.log('doctor', doctorAppointments);
 
-        } else if (userLogin === "Paciente") {
+            console.log(appointments);
+        } else
 
             await api.get("/Consultas/ConsultasPaciente", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
-                .then(response => setPatientAppointments(response.data))
+                .then(response => setAppointments(response.data))
                 .catch(error => console.log(error))
-            console.log('paciente', patientAppointments);
-        }
+        console.log(appointments);
     }
+
     useEffect(() => {
-        profileLoad()
-        GetAppointments()
+        profileLoad();
+        GetAppointments();
     }, [])
 
 
     return (
-        userLogin == "Medico" ?
-            <Container>
-                <Header nome={'Dr. Joao'} ProfileImage={require('../../assets/medico.png')} onPress={() => navigation.replace("Profile")} />
 
-                <CalendarHome />
+        <Container>
+            <Header nome={'Dr. Joao'} ProfileImage={userLogin === "Medico" ? require('../../assets/doctor.png') : require('../../assets/nicole.png')} onPress={() => navigation.replace("Profile")} />
 
-
-                <FilterAppointment>
-
-                    <BtnAppointment
-                        textButton={'Agendadas'}
-                        clickButton={statusList === 'agendada'}
-                        onPress={() => setStatusList('agendada')}
-                    />
-
-                    <BtnAppointment
-                        textButton={'Realizadas'}
-                        clickButton={statusList === 'realizada'}
-                        onPress={() => setStatusList('realizada')}
-                    />
-
-                    <BtnAppointment
-                        textButton={'Canceladas'}
-                        clickButton={statusList === 'cancelada'}
-                        onPress={() => setStatusList('cancelada')} />
+            <CalendarHome />
 
 
-                </FilterAppointment>
+            <FilterAppointment>
+
+                <BtnAppointment
+                    textButton={'Agendadas'}
+                    clickButton={statusList === 'agendada'}
+                    onPress={() => setStatusList('agendada')}
+                />
+
+                <BtnAppointment
+                    textButton={'Realizadas'}
+                    clickButton={statusList === 'realizada'}
+                    onPress={() => setStatusList('realizada')}
+                />
+
+                <BtnAppointment
+                    textButton={'Canceladas'}
+                    clickButton={statusList === 'cancelada'}
+                    onPress={() => setStatusList('cancelada')} />
 
 
-                {/* Lista (FlatList)*/}
+            </FilterAppointment>
+
+            {userLogin === "Medico" ?
                 <ListComponent
-                    data={doctorAppointments}
+                    data={appointments}
                     keyExtractor={(item) => item.id}
 
-                    renderItem={ ({ item }) => {
+                    renderItem={({ item }) => {
                         if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                             return (
                                 <TouchableOpacity onPress={() => { setShowModalAppointment(true) }}>
                                     <Card name={item.paciente.idNavigation.nome}
                                         status={item.situacao.situacao}
                                         age={item.paciente.dataNascimento}
-                                        hour={item.horarioConsulta}
                                         typeAppointment={item.prioridade.prioridade}
                                         onPressCancel={() => setShowModalCancel(true)}
+                                        photo={require('../../assets/nicole.png')}
                                     />
                                 </TouchableOpacity>
                             )
-                        } else if (statusList === 'realizada' &&item.situacao.situacao === "Cancelados") {
+                        } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
                             return (
-                                <Card name={item.nome}
-                                    status={item.status}
-                                    age={item.idade}
-                                    hour={item.horarioConsulta}
-                                    typeAppointment={item.tipoConsulta}
+                                <Card name={item.paciente.idNavigation.nome}
+                                    status={item.situacao.situacao}
+                                    age={item.paciente.dataNascimento}
+                                    typeAppointment={item.prioridade.prioridade}
+                                    photo={require('../../assets/nicole.png')}
                                     onPressAppointment={() => {
                                         navigation.replace('MedicalRecord')
                                     }}
                                 />
 
                             )
-                        } else if (statusList === 'cancelada' && item.situacao.situacao === "Realizados") {
+                        } else if (statusList === 'cancelada' && item.situacao.situacao === "Cancelados") {
                             return (
-                                <Card name={item.nome}
-                                    status={item.status}
-                                    age={item.idade}
-                                    hour={item.horarioConsulta}
-                                    typeAppointment={item.tipoConsulta}
-                                />
-                            )
-                        }
-                    }
-
-
-                    }
-                />
-
-                <ModalCancel
-                    visible={showModalCancel}
-                    setShowModalCancel={setShowModalCancel}
-                />
-
-                <ModalAppointment
-                    visible={showModalAppointment}
-                    setShowModalAppointment={setShowModalAppointment}
-                    navigation={navigation}
-
-                />
-
-
-            </Container>
-            :
-            <Container>
-                <Header nome={'Richard Kosta'} ProfileImage={require('../../assets/garro.jpeg')} onPress={() => navigation.replace("Profile")} />
-                <CalendarHome />
-
-                <FilterAppointment>
-                    <BtnAppointment
-                        textButton={'Agendadas'}
-                        clickButton={statusList === 'agendada'}
-                        onPress={() => setStatusList('agendada')}
-                    />
-
-                    <BtnAppointment
-                        textButton={'Realizadas'}
-                        clickButton={statusList === 'realizada'}
-                        onPress={() => setStatusList('realizada')}
-                    />
-
-                    <BtnAppointment
-                        textButton={'Canceladas'}
-                        clickButton={statusList === 'cancelada'}
-                        onPress={() => setStatusList('cancelada')}
-                    />
-                </FilterAppointment>
-
-                <ListComponent
-                    data={patientAppointments}
-                    keyExtractor={(item) => item.id}
-
-
-
-
-
-                    renderItem={({ item }) => {
-                        if (statusList === 'agendada' && item.status === "agendada") {
-                            return (
-                                <TouchableOpacity onPress={() => { setShowModalSeeDoctor(true) }}>
-                                    <Card name={item.nome}
-                                        status={item.status}
-                                        age={item.idade}
-                                        hour={item.horarioConsulta}
-                                        typeAppointment={item.tipoConsulta}
-                                        onPressCancel={() => setShowModalCancel(true)}
-                                    />
-                                </TouchableOpacity>
-                            )
-                        } else if (statusList === 'realizada' && item.status === "realizada") {
-                            return (
-                                <Card name={item.nome}
-                                    status={item.status}
-                                    age={item.idade}
-                                    hour={item.horarioConsulta}
-                                    typeAppointment={item.tipoConsulta}
-                                    onPressAppointment={() => {
-                                        navigation.replace('SeePrescription')
-                                    }}
-                                />
-                            )
-                        } else if (statusList === 'cancelada' && item.status === "cancelada") {
-                            return (
-                                <Card name={item.nome}
-                                    status={item.status}
-                                    age={item.idade}
-                                    hour={item.horarioConsulta}
-                                    typeAppointment={item.tipoConsulta}
-
+                                <Card name={item.paciente.idNavigation.nome}
+                                    status={item.situacao.situacao}
+                                    age={item.paciente.dataNascimento}
+                                    typeAppointment={item.prioridade.prioridade}
+                                    photo={require('../../assets/nicole.png')}
                                 />
                             )
                         }
                     }}
                 />
+                :
+                <>
+                    <ListComponent
+                        data={appointments}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => {
+                            if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
+                                return (
+                                    <TouchableOpacity onPress={() => { setShowModalSeeDoctor(true) }}>
+                                        <Card name={item.medicoClinica.medico.idNavigation.nome}
+                                            status={item.situacao.situacao}
+                                            age={item.medico}
+                                            typeAppointment={item.prioridade.prioridade}
+                                            photo={require('../../assets/doctor.png')}
+                                            onPressCancel={() => setShowModalCancel(true)}
+                                        />
+                                    </TouchableOpacity>
+                                )
+                            } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
+                                return (
+                                    <Card name={item.medicoClinica.medico.idNavigation.nome}
+                                        status={item.situacao.situacao}
+                                        age={item.medico}
+                                        typeAppointment={item.prioridade.prioridade}
+                                        photo={require('../../assets/doctor.png')}
+                                        onPressAppointment={() => {
+                                            navigation.replace('SeePrescription')
+                                        }}
+                                    />
+                                )
+                            } else if (statusList === 'cancelada' && item.situacao.situacao === "Cancelados") {
+                                return (
+                                    <Card name={item.medicoClinica.medico.idNavigation.nome}
+                                        status={item.situacao.situacao}
+                                        age={item.medico}
+                                        typeAppointment={item.prioridade.prioridade}
+                                        photo={require('../../assets/doctor.png')}
+                                    />
+                                )
+                            }
+                        }}
+                    />
+
+                    <BtnSchedule onPress={() => setShowModalSchedule(true)}>
+                        <FontAwesome name="stethoscope" size={40} color="white" />
+                    </BtnSchedule>
+
+                    <ModalSchedule
+                        visible={showModalSchedule}
+                        navigation={navigation}
+                        setShowModalSchedule={setShowModalSchedule}
+                    />
+
+                    <ModalSeeDoctor
+                        visible={showModalSeeDoctor}
+                        setShowModalSeeDoctor={setShowModalSeeDoctor}
+                        navigation={navigation}
+
+                    />
+                </>
+            }
+
+            <ModalCancel
+                visible={showModalCancel}
+                setShowModalCancel={setShowModalCancel}
+            />
+
+            <ModalAppointment
+                visible={showModalAppointment}
+                setShowModalAppointment={setShowModalAppointment}
+                navigation={navigation}
+
+            />
 
 
-                <ModalCancel
-                    visible={showModalCancel}
-                    setShowModalCancel={setShowModalCancel}
-                />
+        </Container>
 
-                <ModalAppointment
-                    visible={showModalAppointment}
-                    setShowModalAppointment={setShowModalAppointment}
-                    navigation={navigation}
-                />
-
-                <BtnSchedule onPress={() => setShowModalSchedule(true)}>
-                    <FontAwesome name="stethoscope" size={40} color="white" />
-                </BtnSchedule>
-
-                <ModalSchedule
-                    visible={showModalSchedule}
-                    navigation={navigation}
-                    setShowModalSchedule={setShowModalSchedule}
-                />
-
-                <ModalSeeDoctor
-                    visible={showModalSeeDoctor}
-                    setShowModalSeeDoctor={setShowModalSeeDoctor}
-                    navigation={navigation}
-
-                />
-
-
-
-            </Container>
 
     )
 }
