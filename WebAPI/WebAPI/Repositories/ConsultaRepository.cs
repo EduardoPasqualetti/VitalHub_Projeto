@@ -11,6 +11,7 @@ namespace WebAPI.Repositories
     {
 
         public VitalContext ctx = new VitalContext();
+
         public Consulta BuscarPorId(Guid id)
         {
             return ctx.Consultas.Find(id);
@@ -35,7 +36,7 @@ namespace WebAPI.Repositories
         public void EditarStatus(Consulta consulta)
         {
             Consulta buscada = ctx.Consultas.Find(consulta.Id);
-            
+
             buscada.SituacaoId = consulta.SituacaoId;
             ctx.Update(buscada);
             ctx.SaveChanges();
@@ -44,14 +45,14 @@ namespace WebAPI.Repositories
 
         public List<Consulta> ListarPorMedico(Guid IdMedico)
         {
-            
+
             List<Consulta> listaConsultas = ctx.Consultas
                 .Include(x => x.MedicoClinica)
                 .Where(x => x.MedicoClinica != null && x.MedicoClinica.MedicoId == IdMedico)
                 .ToList();
 
             return listaConsultas;
-            
+
         }
 
         public List<Consulta> ListarPorPaciente(Guid IdPaciente)
@@ -59,6 +60,7 @@ namespace WebAPI.Repositories
             List<Consulta> listaConsultas = ctx.Consultas
                 .Include(x => x.MedicoClinica)
                 .Include(x => x.Paciente)
+                .Include(x => x.Situacao)
                 .Where(x => x.PacienteId != null && x.PacienteId == IdPaciente)
                 .ToList();
 

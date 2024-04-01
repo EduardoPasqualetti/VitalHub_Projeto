@@ -18,16 +18,16 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get() 
+        public IActionResult Get()
         {
             return Ok(_repository.Listar());
         }
 
-        [HttpPost] 
-        public ActionResult Post(Especialidade especialidade)
+        [HttpPost]
+        public IActionResult Post(Especialidade especialidade)
         {
             _repository.Cadastrar(especialidade);
-            
+
             return StatusCode(201);
         }
 

@@ -3,7 +3,7 @@ import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn } from "../../components/Button/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { AntDesign } from '@expo/vector-icons';
 

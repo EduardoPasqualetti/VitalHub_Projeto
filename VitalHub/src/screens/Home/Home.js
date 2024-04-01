@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BtnAppointment } from "../../components/BtnAppointment/BtnAppointment"
 import { CalendarHome } from "../../components/CalendarHome/CalendarHome"
 import { Container, FilterAppointment, } from "../../components/Container/Style"
@@ -78,7 +78,7 @@ export const Home = ({ navigation }) => {
 
                 <FilterAppointment>
 
-                    <BtnAppointment
+                    <BtnAppointment 
                         textButton={'Agendadas'}
                         clickButton={statusList === 'agendada'}
                         onPress={() => setStatusList('agendada')}
@@ -101,7 +101,7 @@ export const Home = ({ navigation }) => {
 
                 {/* Lista (FlatList)*/}
                 <ListComponent
-                    data={Lista}
+                    // data={Lista}
                     keyExtractor={(item) => item.id}
 
                     renderItem={({ item }) => {
@@ -186,7 +186,7 @@ export const Home = ({ navigation }) => {
                 </FilterAppointment>
 
                 <ListComponent
-                    data={Lista}
+                    // data={Lista}
                     keyExtractor={(item) => item.id}
 
 

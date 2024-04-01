@@ -25,19 +25,17 @@ namespace WebAPI.Repositories
 
         }
 
-        
-
         public Usuario BuscarPorEmailESenha(string email, string senha)
         {
-           // var user = ctx.Usuarios.FirstOrDefault
-               // (x => x.Email== email);
+            // var user = ctx.Usuarios.FirstOrDefault
+            // (x => x.Email== email);
 
             var user = ctx.Usuarios.Select(u => new Usuario
             {
                 Id = u.Id,
                 Email = u.Email,
                 Senha = u.Senha,
-                Nome =  u.Nome,
+                Nome = u.Nome,
                 TipoUsuario = new TiposUsuario
                 {
                     Id = u.TipoUsuario.Id,
@@ -50,12 +48,12 @@ namespace WebAPI.Repositories
 
             // var senhaInformada = Criptografia.GerarHash(senha);
 
-             if (!Criptografia.CompararHash(senha, user.Senha)) return null;
+            if (!Criptografia.CompararHash(senha, user.Senha)) return null;
 
             // if (!Criptografia.CompararHash(user.Senha, senhaInformada)) return null;
 
             return user;
-            
+
         }
 
         public Usuario BuscarPorId(Guid id)

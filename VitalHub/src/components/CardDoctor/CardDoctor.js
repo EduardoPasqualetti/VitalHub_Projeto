@@ -2,14 +2,13 @@
 import { TextName } from "../CardClinic/Style"
 import { Container, ImageDoctor, TextEspec, ViewData } from "./Style"
 
-export const CardDoctor = ({name, espec, photo, isSelected, selected = true}) => {
+export const CardDoctor = ({name, espec, photo, isSelected}) => {
     return(
-        // Aqui estava o: isSelected
-        <Container selected={selected}>
+        <Container isSelected={isSelected}>
             <ImageDoctor source={photo}/>
             <ViewData>
-                <TextName>{ medico.idNavigation.nome }</TextName>
-                <TextEspec>{ medico.especialidade.especialidade1 }</TextEspec>
+                <TextName>{name}</TextName>
+                <TextEspec>{espec}</TextEspec>
             </ViewData>
         </Container>
     )

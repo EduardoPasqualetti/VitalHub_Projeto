@@ -30,8 +30,6 @@ export const Login = ({ navigation }) => {
         navigation.replace("Main")
     }
 
-    //A função LogOut está em Profile
-
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
