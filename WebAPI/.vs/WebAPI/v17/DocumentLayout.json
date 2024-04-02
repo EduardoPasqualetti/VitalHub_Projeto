@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|c:\\users\\44850641822\\desktop\\vitalhub_projeto\\webapi\\webapi\\repositories\\medicorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\repositories\\medicorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|c:\\users\\44850641822\\desktop\\vitalhub_projeto\\webapi\\webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|c:\\users\\44850641822\\desktop\\vitalhub_projeto\\webapi\\webapi\\contexts\\vitalcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\contexts\\vitalcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|c:\\users\\44850641822\\desktop\\vitalhub_projeto\\webapi\\webapi\\controllers\\pacientescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\pacientescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|c:\\users\\44850641822\\desktop\\vitalhub_projeto\\webapi\\webapi\\repositories\\medicorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{23BAD9E5-81FE-42EB-979F-0F9CF775B74C}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\repositories\\medicorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,40 +31,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "MedicoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Repositories\\MedicoRepository.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Repositories\\MedicoRepository.cs",
+              "ToolTip": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Repositories\\MedicoRepository.cs",
+              "RelativeToolTip": "WebAPI\\Repositories\\MedicoRepository.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAQwC8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T13:30:22.897Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "WebAPI\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Properties\\launchSettings.json",
+              "RelativeToolTip": "WebAPI\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-04-02T11:21:30.509Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "VitalContext.cs",
               "DocumentMoniker": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Contexts\\VitalContext.cs",
               "RelativeDocumentMoniker": "WebAPI\\Contexts\\VitalContext.cs",
               "ToolTip": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Contexts\\VitalContext.cs",
               "RelativeToolTip": "WebAPI\\Contexts\\VitalContext.cs",
-              "ViewState": "AQIAACAAAAAAAAAAAAA0wCsAAAAAAAAA",
+              "ViewState": "AQIAACUAAAAAAAAAAAAcwCgAAABCAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-01T13:14:51.122Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "PacientesController.cs",
               "DocumentMoniker": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Controllers\\PacientesController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\PacientesController.cs",
               "ToolTip": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Controllers\\PacientesController.cs",
               "RelativeToolTip": "WebAPI\\Controllers\\PacientesController.cs",
-              "ViewState": "AQIAAFEAAAAAAAAAAAD4v2UAAAAAAAAA",
+              "ViewState": "AQIAADcAAAAAAAAAAAAtwGUAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-01T13:05:53.832Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MedicoRepository.cs",
-              "DocumentMoniker": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Repositories\\MedicoRepository.cs",
-              "RelativeDocumentMoniker": "WebAPI\\Repositories\\MedicoRepository.cs",
-              "ToolTip": "C:\\Users\\44850641822\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\Repositories\\MedicoRepository.cs",
-              "RelativeToolTip": "WebAPI\\Repositories\\MedicoRepository.cs",
-              "ViewState": "AQIAABEAAAAAAAAAAAD4vyEAAAAmAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-01T13:05:06.045Z",
               "EditorCaption": ""
             }
           ]

@@ -1,4 +1,3 @@
-import { Image, Text } from "react-native";
 import { ButtonCard, ButtonText, ClockCard, ContainerCard, ContentCard, DataProfile, ImagePoint, ProfileData, ProfileImage, ProfileName, TextAge, TextBold, ViewRow } from "./Style"
 import { AntDesign } from '@expo/vector-icons';
 
@@ -9,7 +8,11 @@ export const Card = ({
     status = "Pendentes",
     onPressCancel,
     onPressAppointment,
-    name, age, hour, typeAppointment}) => {
+    name, age, hour, typeAppointment,
+    idNavigation,
+    usuarioConsulta
+
+}) => {
 
     return (
         <ContainerCard>
@@ -19,7 +22,7 @@ export const Card = ({
 
             <ContentCard>
                 <DataProfile>   
-                    <ProfileName>{name}</ProfileName>
+                    <ProfileName>{usuarioConsulta.idNavigation.name}</ProfileName>
                     <ProfileData>
                         <TextAge>{age}</TextAge>
                         <ImagePoint source={require('../../assets/point.png')} />

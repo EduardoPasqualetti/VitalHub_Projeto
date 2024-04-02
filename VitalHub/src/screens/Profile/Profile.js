@@ -68,7 +68,7 @@ export const Profile = ({ navigation }) => {
                              : 
                              <BoxInput
                                     textLabel={'CRM'}
-                                    fieldValue={crm}
+                                    fieldValue={docCrm}
                                 />
                         }
 

@@ -8,12 +8,16 @@ import { Card } from "../../components/Card/Card"
 import { ModalCancel } from "../../components/ModalCancel/ModalCancel"
 import { ModalAppointment } from "../../components/ModalAppointment/ModalAppointment"
 import { BtnSchedule } from "../../components/Button/Button"
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
 import { TouchableOpacity } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
+import { userDecodeToken } from "../../Utils/Auth"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import api from "../../service/Service"
 
 export const Home = ({ navigation }) => {
+    const [dataConsulta, setDataConsulta] = useState()
 
     const [statusList, setStatusList] = useState("agendada")
 
@@ -27,8 +31,11 @@ export const Home = ({ navigation }) => {
     const [patientAppointments, setPatientAppointments] = useState([])
     const [token, setToken] = useState('')
 
+    const [profile, setProfile] = useState({})
+    const [consultas, setConsultas] = useState([])
+
     async function ChangeProfile() {
-        const token = await UserDecodeToken();
+        const token = await userDecodeToken();
 
         setUserLogin(token.role)
         
@@ -62,10 +69,49 @@ export const Home = ({ navigation }) => {
             console.log('paciente', patientAppointments);
         }
     }
+
+
+    async function profileLoad(){
+        const token = await userDecodeToken()
+
+        if (token != null) {
+            setProfile(token);
+
+            setDataConsulta( moment().format('YYYY-MM-DD') )
+        }
+    }
+
+    async function listarConsultas() {
+        const url = (profile.role = 'Medico' ? 'Medicos' : 'Pacientes')
+
+        await api.get(`/${url}/BuscarPorData?data${dataConsulta}&id=${profile.user}`)
+        .then( response => {
+            setConsultas(response.data)
+
+            console.log(response.data)
+
+        }).catch( error => {
+            console.log(error)
+        } )
+    }
+    
+
     useEffect(() => {
         ChangeProfile()
         GetAppointments()
     }, [])
+
+    
+    useEffect(() => {
+        profileLoad()
+    }, [])
+
+
+    useEffect(() => {
+        if ( dataConsulta != '' ) {
+            listarConsultas()
+        }
+    },[dataConsulta])
 
 
     return (
