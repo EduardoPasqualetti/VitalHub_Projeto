@@ -15,21 +15,29 @@ namespace WebAPI.Repositories
 
         public Medico AtualizarPerfil(Guid Id, MedicoViewModel medico)
         {
-            Medico medicoBuscado = ctx.Medicos.FirstOrDefault(x => x.Id == Id);
 
-            if (medicoBuscado == null) return null;
+            Medico medicoBuscado = ctx.Medicos.FirstOrDefault(x => x.Id == Id)!;
 
-            if (medico.Crm != null)
-                medicoBuscado.Crm = medico.Crm;
+
+            if (medicoBuscado == null) return null!;
+
+            if (medico.Foto != null)
+                medicoBuscado.IdNavigation.Foto = medico.Foto;
 
             if (medico.EspecialidadeId != null)
                 medicoBuscado.EspecialidadeId = medico.EspecialidadeId;
 
-            if (medico.Senha != null)
-                medicoBuscado.IdNavigation.Senha = medico.Senha;
+            if (medico.Crm != null)
+                medicoBuscado.Crm = medico.Crm;
 
-            if (medico.Foto != null)
-                medicoBuscado.IdNavigation.Foto = medico.Foto;
+            if (medico.Logradouro != null)
+                medicoBuscado.Endereco!.Logradouro = medico.Logradouro;
+
+            if (medico.Numero != null)
+                medicoBuscado.Endereco!.Numero = medico.Numero;
+
+            if (medico.Cep != null)
+                medicoBuscado.Endereco!.Cep = medico.Cep;
 
             ctx.Medicos.Update(medicoBuscado);
             ctx.SaveChanges();
@@ -42,9 +50,9 @@ namespace WebAPI.Repositories
         {
             //fazer logica para trazer medico e dados de seu usuario
             Medico medicoBuscado = ctx.Medicos.
-                Include(m => m.IdNavigation)
-                .Include(x => x.Endereco)
-                .FirstOrDefault(m => m.Id == Id)!;
+                Include(m => m.IdNavigation).
+                Include(m => m.Endereco).
+                FirstOrDefault(m => m.Id == Id)!;
 
             return medicoBuscado;
 
@@ -88,7 +96,8 @@ namespace WebAPI.Repositories
                     Id=mc.Id,
                     Crm = mc.Medico!.Crm,
                     Especialidade = mc.Medico.Especialidade,
-                    IdNavigation =new Usuario
+
+                    IdNavigation = new Usuario
                     {
                         Id = mc.Medico.IdNavigation.Id,
                         Nome = mc.Medico.IdNavigation.Nome,
@@ -99,6 +108,17 @@ namespace WebAPI.Repositories
                 .ToList();
 
             return medicos;
+        }
+
+        public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid id)
+        {
+            return ctx.Consultas
+                .Include(x => x.Situacao)
+                .Include(x => x.Prioridade)
+                .Include(x => x.Paciente.IdNavigation)
+                .Include(x => x.MedicoClinica.Medico.IdNavigation)
+                .Where(x => x.MedicoClinica.MedicoId == id && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0 )
+                .ToList();
         }
     }
 }

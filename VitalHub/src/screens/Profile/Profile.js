@@ -16,40 +16,30 @@ export const Profile = ({ navigation }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [idUser, setIdUser] = useState('')
+    const [token,setToken] =useState('')
     const [userData, setUserData] = useState('')
     const [dtNasc, setDtNasc] = useState('')
     const [cpf, setCpf] = useState('')
     const [crm, setCrm] = useState('')
     const [logradouro, setLogradouro] = useState('')
-    const [cep,setCep] = useState('')
+    const [cep, setCep] = useState('')
     const [cidade, setCidade] = useState("")
+
+
     async function profileLoad() {
         const token = await UserDecodeToken();
         setName(token.name)
         setEmail(token.email)
         setRole(token.role)
         setIdUser(token.jti)
-        console.log(idUser);
+        setToken(token.token)
+        console.log(token);
     }
 
-    async function getUser() {
-        try {
-            const response = await api.get(`/Medicos/BuscarPorID?id=${idUser}`);
-            setUserData(response.data);
-            console.log(response.data);
-            setCrm(response.data.crm);
-            setLogradouro(response.data.endereco.logradouro)
-            setCep(response.data.endereco.cep)
-            
-            
-        } catch (error) {
-            console.log('Erro ao buscar usuário:', error);
-        }
-    }
+    
 
     useEffect(() => {
         profileLoad();
-        getUser();
     }, [])
 
 

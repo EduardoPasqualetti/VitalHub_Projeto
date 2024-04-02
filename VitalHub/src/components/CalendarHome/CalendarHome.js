@@ -2,7 +2,7 @@ import moment from "moment";
 import { StyleSheet } from "react-native";
 import { StyledCalendarStrip } from "./Style";
 
-export const CalendarHome = () => {
+export const CalendarHome = ({setDataConsulta}) => {
 
       //define padrão pt-br para calendário
   moment.updateLocale("pt-br", {
@@ -39,6 +39,8 @@ export const CalendarHome = () => {
   const endingDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
     return(
         <StyledCalendarStrip
+      
+      onDateSelected={date => setDataConsulta(moment(date).format('YYYY-MM-DD'))}
       // animação e seleção de cada data
       calendarAnimation={{ type: "sequence", duration: 30 }}
       daySelectionAnimation={ styles.selectedAnimationStyle }
@@ -47,6 +49,7 @@ export const CalendarHome = () => {
       iconLeftStyle={styles.iconsStyle}
       iconRightStyle={styles.iconsStyle}
 
+      
       // deixa uma marcação default - data atual
       selectedDate={currentDate}
       // dia que começamos a visualizar a barra
@@ -60,7 +63,6 @@ export const CalendarHome = () => {
       calendarHeaderStyle={ styles.calendarHeaderStyle }
       dateNumberStyle={ styles.numberDateStyle }
       dateNameStyle={ styles.nameDateStyle }
-
       // estilização do item que está selecionado - efeito do item marcado
       highlightDateNameStyle={ styles.selectedDateNameStyle }
       highlightDateNumberStyle={ styles.selectedDateNumberStyle }

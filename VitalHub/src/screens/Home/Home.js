@@ -15,6 +15,7 @@ import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import api from "../../service/Service"
+import moment from 'moment'
 
 
 export const Home = ({ navigation }) => {
@@ -28,51 +29,49 @@ export const Home = ({ navigation }) => {
 
     const [userLogin, setUserLogin] = useState("")
     const [appointments, setAppointments] = useState([])
-    const [token, setToken] = useState('')
+
+    const [dataConsulta,setDataConsulta] = useState('')
 
     async function profileLoad() {
         const token = await UserDecodeToken();
 
-        setUserLogin(token.role)
-
-        setToken(token.token)
+         setUserLogin(token)
+        setDataConsulta( moment().format('YYYY-MM-DD'))
     }
 
-    async function GetAppointments() {
-        if (userLogin === "Medico") {
-            await api.get("/Consultas/ConsultasMedico", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-                .then(response => setAppointments(response.data))
-                .catch(error => console.log(error))
+    async function GetAppointments(){
+        const url = (userLogin.role === 'Medico' ? 'Medicos' : 'Pacientes')
 
-            console.log(appointments);
-        } else
-
-            await api.get("/Consultas/ConsultasPaciente", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-                .then(response => setAppointments(response.data))
-                .catch(error => console.log(error))
+        await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
+        .then( response => {
+            setAppointments(response.data)
+        }).catch(error => {
+            console.log(error);
+        })
         console.log(appointments);
     }
 
+    
+
     useEffect(() => {
         profileLoad();
-        GetAppointments();
     }, [])
+
+    useEffect(() => {
+        if (dataConsulta != '') {
+            GetAppointments();
+        }
+        console.log(dataConsulta);
+        console.log(userLogin.jti);
+    }, [dataConsulta])
 
 
     return (
 
         <Container>
-            <Header nome={'Dr. Joao'} ProfileImage={userLogin === "Medico" ? require('../../assets/doctor.png') : require('../../assets/nicole.png')} onPress={() => navigation.replace("Profile")} />
+            <Header nome={'Dr. Joao'} ProfileImage={userLogin.role === "Medico" ? require('../../assets/doctor.png') : require('../../assets/nicole.png')} onPress={() => navigation.replace("Profile")} />
 
-            <CalendarHome />
+            <CalendarHome setDataConsulta={setDataConsulta}/>
 
 
             <FilterAppointment>
@@ -97,7 +96,7 @@ export const Home = ({ navigation }) => {
 
             </FilterAppointment>
 
-            {userLogin === "Medico" ?
+            {userLogin.role === "Medico" ?
                 <ListComponent
                     data={appointments}
                     keyExtractor={(item) => item.id}
@@ -149,10 +148,10 @@ export const Home = ({ navigation }) => {
                             if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                                 return (
                                     <TouchableOpacity onPress={() => { setShowModalSeeDoctor(true) }}>
-                                        <Card name={item.medicoClinica.medico.idNavigation.nome}
+                                        <Card name={null}
                                             status={item.situacao.situacao}
-                                            age={item.medico}
-                                            typeAppointment={item.prioridade.prioridade}
+                                            
+                                            typeAppointment={null}
                                             photo={require('../../assets/doctor.png')}
                                             onPressCancel={() => setShowModalCancel(true)}
                                         />
@@ -160,10 +159,10 @@ export const Home = ({ navigation }) => {
                                 )
                             } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
                                 return (
-                                    <Card name={item.medicoClinica.medico.idNavigation.nome}
+                                    <Card name={null}
                                         status={item.situacao.situacao}
-                                        age={item.medico}
-                                        typeAppointment={item.prioridade.prioridade}
+                                        
+                                        typeAppointment={null}
                                         photo={require('../../assets/doctor.png')}
                                         onPressAppointment={() => {
                                             navigation.replace('SeePrescription')
@@ -172,10 +171,10 @@ export const Home = ({ navigation }) => {
                                 )
                             } else if (statusList === 'cancelada' && item.situacao.situacao === "Cancelados") {
                                 return (
-                                    <Card name={item.medicoClinica.medico.idNavigation.nome}
+                                    <Card name={null}
                                         status={item.situacao.situacao}
-                                        age={item.medico}
-                                        typeAppointment={item.prioridade.prioridade}
+                                        
+                                        typeAppointment={null}
                                         photo={require('../../assets/doctor.png')}
                                     />
                                 )
