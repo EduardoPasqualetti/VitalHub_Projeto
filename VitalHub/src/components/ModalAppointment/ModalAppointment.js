@@ -3,6 +3,7 @@
     import { Btn } from "../Button/Button"
     import { LinkCancel } from "../Link/Style"
     import { ButtonModal, Cancel, ContentModal, TextAge, TextEmail, ViewData, ViewModal } from "./Style"
+import { Home } from "../../screens/Home/Home"
 
     export const ModalAppointment = ({appointmentData, navigation, visible, setShowModalAppointment, ...rest}) => {
 
@@ -12,6 +13,17 @@
         };
 
         const {nome, idade} = appointmentData || {};
+
+        async function handleClose( screen ) {
+            await setShowModalAppointment(false)
+
+            if ( screen == "rota local consulta" ) {
+                navigation.replace( screen, { clinicaid : consulta.medicoClinica.clinicaid } )
+            }
+            else {
+                navigation.replace( Home )
+            }
+        }
 
         return(
             <Modal {...rest} visible={visible} transparent={true} animationType="fade">

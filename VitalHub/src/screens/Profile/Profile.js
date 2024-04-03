@@ -30,6 +30,7 @@ export const Profile = ({ navigation }) => {
         const token = await UserDecodeToken();
         setName(token.name)
         setEmail(token.email)
+
         setRole(token.role)
         setIdUser(token.jti)
         setToken(token.token)
