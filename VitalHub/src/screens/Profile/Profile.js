@@ -16,13 +16,14 @@ export const Profile = ({ navigation }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [idUser, setIdUser] = useState('')
-    const [token,setToken] =useState('')
+    const [token, setToken] = useState('')
     const [userData, setUserData] = useState('')
-    const [dtNasc, setDtNasc] = useState('')
     const [cpf, setCpf] = useState('')
+    const [dtNasc, setDtNasc] = useState('')
     const [crm, setCrm] = useState('')
-    const [logradouro, setLogradouro] = useState('')
+    const [especialidade, setEspecialidade] = useState("")
     const [cep, setCep] = useState('')
+    const [logradouro, setLogradouro] = useState('')
     const [cidade, setCidade] = useState("")
 
 
@@ -33,10 +34,20 @@ export const Profile = ({ navigation }) => {
         setRole(token.role)
         setIdUser(token.jti)
         setToken(token.token)
-        console.log(token);
+        console.log();
+
+        await getUser()
     }
 
+    async function getUser() {
+        const url = (role === 'Medico' ? 'Medicos' : 'Pacientes')
+            await api.get(`/${url}/BuscarPorId/${idUser}`)
+                .then(response => setUserData(response.data))
+                .catch(e => e.error)
+        console.log(userData);
+    }
     
+
 
     useEffect(() => {
         profileLoad();
@@ -59,22 +70,31 @@ export const Profile = ({ navigation }) => {
                         <TitleProfile>{name}</TitleProfile>
                         <SubTitleProfile>{email}</SubTitleProfile>
 
-                        <BoxInput
-                            textLabel={'Data de nascimento:'}
-                            fieldValue={dtNasc}
 
-                        />
                         {
                             role == 'Paciente' ?
-                                <BoxInput
-                                    textLabel={'CPF'}
-                                    fieldValue={cpf}
-                                />
+                                <>
+                                    <BoxInput
+                                        textLabel={'Data de nascimento:'}
+                                        fieldValue={dtNasc}
+
+                                    />
+                                    <BoxInput
+                                        textLabel={'CPF'}
+                                        fieldValue={cpff}
+                                    />
+                                </>
                                 :
-                                <BoxInput
-                                    textLabel={'CRM'}
-                                    fieldValue={crm}
-                                />
+                                <>
+                                    <BoxInput
+                                        textLabel={'Especialidade'}
+                                        fieldValue={especialidade}
+                                    />
+                                    <BoxInput
+                                        textLabel={'CRM'}
+                                        fieldValue={`CRM ${crm}`}
+                                    />
+                                </>
                         }
 
                         <BoxInput
@@ -85,13 +105,11 @@ export const Profile = ({ navigation }) => {
                             <BoxInput
                                 textLabel={'Cep'}
                                 fieldValue={cep}
-                                placeholder={'06548-909'}
                                 fieldWidth={'45'}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
                                 fieldValue={cidade}
-                                placeholder={'Moema-SP'}
                                 fieldWidth={'45'}
                             />
 

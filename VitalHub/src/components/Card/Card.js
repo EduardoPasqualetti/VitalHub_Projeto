@@ -11,8 +11,17 @@ export const Card = ({
     onPressAppointment,
     name,
     typeAppointment,
-    photo
+    photo,
+    ageCrm
 }) => {
+
+    let prioridade
+
+if (typeAppointment === 0) {
+     prioridade = 'Rotina'
+} else if (typeAppointment === 1) {
+    prioridade = 'Exame'
+} else  prioridade = 'Urgencia'
 
     return (
         <ContainerCard>
@@ -24,9 +33,9 @@ export const Card = ({
                 <DataProfile>
                     <ProfileName>{name}</ProfileName>
                     <ProfileData>
-                        <TextAge>30 anos</TextAge>
+                        <TextAge>{ageCrm}</TextAge>
                         <ImagePoint source={require('../../assets/point.png')} />
-                        <TextBold>{typeAppointment}</TextBold>
+                        <TextBold>{prioridade}</TextBold>
                     </ProfileData>
                 </DataProfile>
                 <ViewRow>

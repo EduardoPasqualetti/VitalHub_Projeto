@@ -6,23 +6,28 @@ import { ViewDataDoctor, ViewTitleRecord } from "../Container/Style"
 import { Btn, BtnModalSeeDoctor } from "../Button/Button"
 import { LinkCancelMargin } from "../Link/Style"
 
-export const ModalSeeDoctor = ({ navigation, visible, setShowModalSeeDoctor, ...rest }) => {
+export const ModalSeeDoctor = ({doctorInfo, navigation, visible, setShowModalSeeDoctor, ...rest }) => {
 
     const onPressHandle = () => {
         setShowModalSeeDoctor(false)
-        navigation.navigate("SeeLocalAppointment");
+       
+        navigation.navigate("SeeLocalAppointment", {clinicaid : idClinica});
       }
+    const idClinica = doctorInfo ? doctorInfo.clinica : ''
+    const name = doctorInfo ? doctorInfo.name : '';
+    const crm = doctorInfo ? doctorInfo.crm : '';
+    const especialidade = doctorInfo ? doctorInfo.especialidade : '';
 
     return (
     <Modal {...rest} visible={visible} transparent={true} animationType="fade">
         <ViewModal>
             <ContentModal>
                 <ImageDoctor source={require("../../assets/doctor.png")}/>
-                <TitleProfile>Dr.Claudio</TitleProfile>
+                <TitleProfile>{name}</TitleProfile>
 
                 <ViewDataDoctor>
-                    <SubtitleRecord>Cliníco geral</SubtitleRecord>
-                    <SubtitleRecord>CRM-15286</SubtitleRecord>
+                    <SubtitleRecord>{especialidade}</SubtitleRecord>
+                    <SubtitleRecord>CRM{crm}</SubtitleRecord>
                 </ViewDataDoctor>
 
                 <BtnModalSeeDoctor onPress={() => {onPressHandle()}}>

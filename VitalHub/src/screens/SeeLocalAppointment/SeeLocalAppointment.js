@@ -16,7 +16,7 @@ import {
 import { useEffect, useRef, useState } from "react"
 import MapViewDirections from "react-native-maps-directions"
 
-export const SeeLocalAppointment = ({ navigation }) => {
+export const SeeLocalAppointment = ({ navigation, route }) => {
     const mapReference = useRef(null)
     const [initialPosition, setInitialPosition] = useState(null)
     const [finalPosition, setFinalPosition] = useState({
@@ -73,6 +73,10 @@ export const SeeLocalAppointment = ({ navigation }) => {
             )
         }
     }
+
+    useEffect(()=> {
+        console.log(route);
+    },[route.params])
 
     return (
         <Container>
