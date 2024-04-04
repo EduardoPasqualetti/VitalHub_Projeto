@@ -15,8 +15,30 @@ import {
 } from 'expo-location'
 import { useEffect, useRef, useState } from "react"
 import MapViewDirections from "react-native-maps-directions"
+import api from "../../service/Service"
 
-export const SeeLocalAppointment = ({ navigation }) => {
+export const SeeLocalAppointment = ({ navigation, route }) => {
+    const [clinica, setClinica] = useState(null)
+
+    useEffect(() => {
+        if (clinica == null) {
+            BuscarClinica()
+        }
+            
+    }, [clinica])
+
+    async function BuscarClinica() {
+        await api.get(`/Clinica/BuscarPorId?id=${route.params.clinica}`)
+        .then( response => {
+            setClinica( response.data )
+
+            console.log(response.data)
+        } ).catch(error => {
+            console.log(error)
+        })
+    }
+
+
     const mapReference = useRef(null)
     const [initialPosition, setInitialPosition] = useState(null)
     const [finalPosition, setFinalPosition] = useState({
@@ -76,6 +98,9 @@ export const SeeLocalAppointment = ({ navigation }) => {
 
     return (
         <Container>
+            {
+              clinica != null ? (
+           <>
             <ContainerMap>
                 {
                     initialPosition != null
@@ -160,6 +185,11 @@ export const SeeLocalAppointment = ({ navigation }) => {
                 </ViewFormat>
                 <LinkCancelMargin onPress={() => { navigation.navigate("Main") }}>Voltar</LinkCancelMargin>
             </ViewLocal>
+            </>
+        ) : ( 
+            <ActivityIndicator/> 
+        )  
+ }
         </Container>
     )
 }

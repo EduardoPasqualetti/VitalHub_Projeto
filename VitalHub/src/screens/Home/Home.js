@@ -31,6 +31,8 @@ export const Home = ({ navigation }) => {
     const [appointments, setAppointments] = useState([])
 
     const [dataConsulta,setDataConsulta] = useState('')
+    const [patientInfo, setPatientInfo] = useState(null)
+    const [doctorInfo, setDoctorInfo] = useState(null)
 
     async function profileLoad() {
         const token = await UserDecodeToken();
@@ -48,10 +50,8 @@ export const Home = ({ navigation }) => {
         }).catch(error => {
             console.log(error);
         })
-        console.log(appointments);
     }
 
-    
 
     useEffect(() => {
         profileLoad();
@@ -60,9 +60,7 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         if (dataConsulta != '') {
             GetAppointments();
-        }
-        console.log(dataConsulta);
-        console.log(userLogin.jti);
+        };
     }, [dataConsulta])
 
 
@@ -113,6 +111,7 @@ export const Home = ({ navigation }) => {
                                         photo={require('../../assets/nicole.png')}
                                     />
                                 </TouchableOpacity>
+
                             )
                         } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
                             return (
@@ -150,7 +149,6 @@ export const Home = ({ navigation }) => {
                                     <TouchableOpacity onPress={() => { setShowModalSeeDoctor(true) }}>
                                         <Card name={null}
                                             status={item.situacao.situacao}
-                                            
                                             typeAppointment={null}
                                             photo={require('../../assets/doctor.png')}
                                             onPressCancel={() => setShowModalCancel(true)}
@@ -196,6 +194,7 @@ export const Home = ({ navigation }) => {
                         visible={showModalSeeDoctor}
                         setShowModalSeeDoctor={setShowModalSeeDoctor}
                         navigation={navigation}
+                        doctorInfo={doctorInfo}
 
                     />
                 </>
@@ -210,7 +209,7 @@ export const Home = ({ navigation }) => {
                 visible={showModalAppointment}
                 setShowModalAppointment={setShowModalAppointment}
                 navigation={navigation}
-
+                patientInfo={patientInfo}
             />
 
 
