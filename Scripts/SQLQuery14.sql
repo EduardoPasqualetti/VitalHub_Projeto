@@ -10,4 +10,4 @@ SELECT * FROM dbo.Receitas
 INSERT INTO 
 	dbo.Receitas
 VALUES
-	('Med1','Deve ser tomado de 2 vezes ao dia')
+	(NewID(),'Med1','Deve ser tomado de 2 vezes ao dia')
