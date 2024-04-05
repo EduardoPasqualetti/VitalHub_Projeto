@@ -7,12 +7,11 @@ import { ListComponent } from "../../components/List/List"
 import { Card } from "../../components/Card/Card"
 import { ModalCancel } from "../../components/ModalCancel/ModalCancel"
 import { ModalAppointment } from "../../components/ModalAppointment/ModalAppointment"
-import { BtnCard, BtnSchedule } from "../../components/Button/Button"
+import { BtnSchedule } from "../../components/Button/Button"
 import { FontAwesome } from '@expo/vector-icons';
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
-import { Text, TouchableOpacity } from "react-native"
+import { TouchableOpacity } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import api from "../../service/Service"
 import moment from 'moment'
@@ -46,10 +45,12 @@ export const Home = ({ navigation }) => {
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
         .then( response => {
-            setAppointments(response.data)
+            setAppointments(response.data);
+            
+            
         }).catch(error => {
             console.log(error);
-        })
+        }) 
     }
 
 
@@ -60,7 +61,8 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         if (dataConsulta != '') {
             GetAppointments();
-        };
+        }
+        console.log(appointments);
     }, [dataConsulta])
 
 
@@ -102,14 +104,17 @@ export const Home = ({ navigation }) => {
                     renderItem={({ item }) => {
                         if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                             return (
-                                <TouchableOpacity onPress={() => { setShowModalAppointment(true) }}>
+                                <TouchableOpacity onPress={() => { setPatientInfo({
+                                    name: item.paciente.idNavigation.nome,
+                                    email: item.paciente.idNavigation.email
+                                }); setShowModalAppointment(true) }}>
                                     <Card name={item.paciente.idNavigation.nome}
                                         status={item.situacao.situacao}
-                                        age={item.paciente.dataNascimento}
                                         typeAppointment={item.prioridade.prioridade}
                                         onPressCancel={() => setShowModalCancel(true)}
                                         photo={require('../../assets/nicole.png')}
                                     />
+
                                 </TouchableOpacity>
 
                             )
