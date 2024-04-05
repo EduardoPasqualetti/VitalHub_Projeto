@@ -9,8 +9,8 @@ import { LinkCancelMargin } from "../Link/Style"
 export const ModalSeeDoctor = ({ navigation, visible, setShowModalSeeDoctor, ...rest }) => {
 
     const onPressHandle = () => {
-        navigation.navigate("SeeLocalAppointment");
         setShowModalSeeDoctor(false)
+        navigation.navigate("SeeLocalAppointment");
       }
 
     return (

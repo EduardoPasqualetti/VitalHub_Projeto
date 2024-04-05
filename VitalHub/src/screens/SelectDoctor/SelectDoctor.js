@@ -37,7 +37,6 @@ export const SelectDoctor = ({ navigation }) => {
     return (
         <Container>
             <Title>Selecionar Medico</Title>
-            {/* Card doctor ==> espec={item.especialidade.especialidade1} */}
 
             {<ListComponent
                 data={doctorList}
@@ -45,7 +44,7 @@ export const SelectDoctor = ({ navigation }) => {
                 (
                     <BtnSelect onPress={() => setSelectedDoctor(item.id)}>
                         <CardDoctor name={item.idNavigation.nome}
-                            espec={item.especialidade}
+                            espec={item.especialidade.especialidade1}
                             isSelected={item.id == selectedDoctor}
                             photo={require("../../assets/doctor.png")}
                         />

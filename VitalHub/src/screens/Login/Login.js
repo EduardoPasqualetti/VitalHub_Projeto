@@ -1,38 +1,64 @@
+
 import { Container, ContentAccount } from "../../components/Container/Style"
 import { Logo } from "../../components/Logo/Style"
-import { ButtonGoogleTitle, ButtonTitle, ImgGoogle, TextAccount, Title } from "../../components/Title/Style"
+import { ButtonGoogleTitle, ButtonTitle, ImgGoogle, TextAccount, TextFieldNull, Title } from "../../components/Title/Style"
 import { Input } from "../../components/Input/Style"
 import { LinkCreate, LinkMedium } from "../../components/Link/Style"
 import { Btn, BtnGoogle } from "../../components/Button/Button"
-import { Keyboard, TouchableWithoutFeedback } from "react-native"
+import { ActivityIndicator, Alert, Keyboard, Text, TouchableWithoutFeedback } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
-import { useState } from 'react'
-
+import { useState } from "react"
 import api from "../../service/Service"
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import asyncStorage from '@react-native-async-storage/async-storage'
 
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('edu.Paciente@Paciente.com')
+    const [email, setEmail] = useState('carlão.Medico@Medico.com')
     const [senha, setSenha] = useState('1234')
+    const [loading, setLoading] = useState(false)
+    const [emailError, setEmailError] = useState(false);
+    const [senhaError, setSenhaError] = useState(false);
 
-    // Função Login
-
+    // Funcao de login
     async function Login() {
 
-        // Chamar a api de 3
-        const response = await api.post('/Login', {
-            email: email,
-            senha: senha
-        })
+        if (!email || !senha) {
+            setEmailError(!email) // true se email nulo
+            setSenhaError(!senha) // true se senha nulo
+            return
+        }
 
-        await AsyncStorage.setItem('token', JSON.stringify( response.data ))
-        navigation.replace("Main")
+        // Definir que o estado do carregamento sera true e aparecera
+        setLoading(true)
+        try {
+            // Chamar a api de Login
+            const response = await api.post('Login', {
+                email: email,
+                senha: senha
+            })
+
+            await asyncStorage.setItem('token', JSON.stringify(response.data))
+
+            navigation.replace("Main")
+        } catch (error) {
+            Alert.alert(`Email ou Senha invalido`)
+        } finally {
+            // Ao encerrar a requisicao torna o estado do carregamento false
+            setLoading(false)
+            setEmailError(false)
+            setSenhaError(false)
+        }
+        
+    }
+
+    function handleLogin() {
+        !loading ? Login() : alert(`Requisicao do Login ja feita, aguarde um retorno`)
     }
 
 
+
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>
 
                 <Logo source={require('../../assets/logo.png')} />
@@ -40,27 +66,31 @@ export const Login = ({ navigation }) => {
                 <Title>Entrar ou criar conta</Title>
 
 
+
                 <Input
                     placeholder={"Usuário ou E-mail"}
-
                     value={email}
                     onChangeText={(txt) => setEmail(txt)}
-                // onChange={ event => event.nativeEvent.text }
                 />
+                {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>} 
                 <Input
                     placeholder={"Senha"}
-
+                    secureTextEntry={true}
                     value={senha}
                     onChangeText={(txt) => setSenha(txt)}
-                // onChange={ event => event.nativeEvent.text }
-
                 />
+                {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 
+
 
                 <LinkMedium onPress={() => navigation.replace("Recover")} >Esqueceu sua senha?</LinkMedium>
 
 
-                <Btn onPress={() => Login()}>
-                    <ButtonTitle>ENTRAR</ButtonTitle>
+                <Btn onPress={() => handleLogin()} >
+                    {loading ? (
+                        <ActivityIndicator size="small" color="#ffffff" />
+                    ) : (
+                        <ButtonTitle>ENTRAR</ButtonTitle>
+                    )}
                 </Btn>
 
                 <BtnGoogle>
@@ -76,5 +106,6 @@ export const Login = ({ navigation }) => {
 
             </Container>
         </TouchableWithoutFeedback>
+
     )
 }   

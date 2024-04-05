@@ -3,15 +3,29 @@
     import { Btn } from "../Button/Button"
     import { LinkCancel } from "../Link/Style"
     import { ButtonModal, Cancel, ContentModal, TextAge, TextEmail, ViewData, ViewModal } from "./Style"
+import { Home } from "../../screens/Home/Home"
 
-    export const ModalAppointment = ({appointmentData, navigation, visible, setShowModalAppointment, ...rest}) => {
+    export const ModalAppointment = ({patientInfo, appointmentData, clinicaid, medicoClinica, consulta, situacao, visible, navigation, setShowModalAppointment, typeProfile = "paciente", ...rest}) => {
+
+        async function handleClose( screen ) {
+            await setShowModalAppointment(false)
+
+            if (screen == "SeeLocalAppointment") {
+                navigation.replace( screen, {clinica : consulta.medicoClinica.clinicaid} )
+            } else {
+                navigation.replace( screen )
+            }
+
+        }
+
 
         const onPressHandler = () => {
             navigation.navigate("InsertRecord");
             setShowModalAppointment(false)
         };
 
-        const {nome, idade} = appointmentData || {};
+        const name = patientInfo ? patientInfo.name : '';
+        const email = patientInfo ? patientInfo.email : '';
 
         return(
             <Modal {...rest} visible={visible} transparent={true} animationType="fade">
@@ -19,11 +33,11 @@
                     <ContentModal>
                         <Image source={require('../../assets/nicole.png')}/>
 
-                        <TitleProfile>Gabriel Victor</TitleProfile>
+                        <TitleProfile>{name}</TitleProfile>
 
                         <ViewData>
                             <TextAge>17</TextAge>
-                            <TextEmail>gabriel@gmail.com</TextEmail>
+                            <TextEmail>{email}</TextEmail>
                         </ViewData>
 
                         <ButtonModal onPress={() => {onPressHandler()}} >

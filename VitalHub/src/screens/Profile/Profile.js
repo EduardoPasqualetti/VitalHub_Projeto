@@ -1,44 +1,52 @@
+import { Button, Text } from "react-native"
 import { ContainerProfile, ContainerSafeEdit, ContainerScroll, ViewFormat, ViewTitle } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
-import { Btn } from "../../components/Button/Button"
+import { Btn, ButtonGoOut } from "../../components/Button/Button"
 import { useEffect, useState } from "react"
 import { LinkCancelMargin } from "../../components/Link/Style"
-import { AntDesign } from '@expo/vector-icons';
-
-import api from "../../service/Service"
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { UserDecodeToken } from "../../Utils/Auth/auth"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const Profile = ({ navigation }) => {
-
-    const [profileEdit, setProfileEdit] = useState(false) 
+    const [profileEdit, setProfileEdit] = useState(false)
     const [role, setRole] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [idUser,setIdUser] = useState('')  
-    const [nasc, setNasc] = useState('04/05/1999')
-    const [cpf, setCpf] = useState('859********')
-    const [docCrm, setDocCrm] = useState('824981')
-    const [endereco, setEndereco] = useState('Rua Vicenso Silva, 987')
+    const [idUser, setIdUser] = useState('')
+    const [token,setToken] =useState('')
+    const [userData, setUserData] = useState('')
+    const [dtNasc, setDtNasc] = useState('')
+    const [cpf, setCpf] = useState('')
+    const [crm, setCrm] = useState('')
+    const [logradouro, setLogradouro] = useState('')
+    const [cep, setCep] = useState('')
+    const [cidade, setCidade] = useState("")
 
-    async function LogOut() {
-        await AsyncStorage.removeItem('token')
-        navigation.replace("Login")
-    }
 
-    async function ChangeProfile() {
+    async function profileLoad() {
         const token = await UserDecodeToken();
         setName(token.name)
         setEmail(token.email)
+
         setRole(token.role)
         setIdUser(token.jti)
-
+        setToken(token.token)
+        console.log(token);
     }
 
+    
+
     useEffect(() => {
-        ChangeProfile()
+        profileLoad();
     }, [])
+
+
+    async function closeApp() {
+        await AsyncStorage.removeItem('token')
+        navigation.replace("Login")
+    }
 
     return (
         <ContainerScroll>
@@ -48,44 +56,41 @@ export const Profile = ({ navigation }) => {
                     <ProfileImage source={require("../../assets/photo.png")} />
 
                     <ContainerProfile>
-
                         <TitleProfile>{name}</TitleProfile>
                         <SubTitleProfile>{email}</SubTitleProfile>
-                        
-                        {/* style={styles.textPlaceholder} */}
-                        
-                        <BoxInput 
-                            textLabel={'Data de nascimento:'}
-                            fieldValue={nasc}
-                        />
 
+                        <BoxInput
+                            textLabel={'Data de nascimento:'}
+                            fieldValue={dtNasc}
+
+                        />
                         {
-                            role == 'Paciente' ? 
+                            role == 'Paciente' ?
                                 <BoxInput
                                     textLabel={'CPF'}
                                     fieldValue={cpf}
                                 />
-                             : 
-                             <BoxInput
+                                :
+                                <BoxInput
                                     textLabel={'CRM'}
-                                    fieldValue={docCrm}
+                                    fieldValue={crm}
                                 />
                         }
 
                         <BoxInput
                             textLabel={'Endereço'}
-                            placeholder={endereco}
+                            fieldValue={logradouro}
                         />
-
                         <ViewFormat>
-
                             <BoxInput
                                 textLabel={'Cep'}
+                                fieldValue={cep}
                                 placeholder={'06548-909'}
                                 fieldWidth={'45'}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
+                                fieldValue={cidade}
                                 placeholder={'Moema-SP'}
                                 fieldWidth={'45'}
                             />
@@ -95,19 +100,17 @@ export const Profile = ({ navigation }) => {
                         <Btn onPress={() => setProfileEdit(true)}>
                             <ButtonTitle>EDITAR</ButtonTitle>
                         </Btn>
+                        <Btn onPress={() => { closeApp() }}>
+                            <ButtonTitle>SAIR DO APP</ButtonTitle>
+                        </Btn>
 
                         <LinkCancelMargin onPress={() => navigation.replace("Main")}>Voltar</LinkCancelMargin>
-
-                        <AntDesign style={{marginTop: -30, marginRight: 280, borderColor: "black"}} onPress={() => LogOut()}
-                            name="logout" size={24} 
-                            color="black" 
-                        />
-
                     </ContainerProfile>
                 </>
             ) : (
                 <>
                     <ProfileImage source={require("../../assets/photo.png")} />
+
 
                     <ViewTitle>
                         <TitleProfile>{name}</TitleProfile>
@@ -117,7 +120,7 @@ export const Profile = ({ navigation }) => {
                     <ContainerSafeEdit>
                         <BoxInput
                             textLabel={'Data de nascimento:'}
-                            fieldValue={nasc}
+                            fieldValue={dtNasc}
                             editable={true}
 
                         />
@@ -155,22 +158,7 @@ export const Profile = ({ navigation }) => {
 
                     </ContainerSafeEdit>
                 </>
-
             )}
         </ContainerScroll>
-
-
     )
 }
-
-// const styles = StyleSheet.create({
-//     map: {
-//     flex: 1,
-//     width: '100%',
-//     },
-    
-//     textPlaceholder: {
-//         color: "black",
-        
-//     }
-// });

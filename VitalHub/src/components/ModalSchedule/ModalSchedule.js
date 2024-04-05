@@ -29,6 +29,7 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule , ...r
 
   return (
     <Modal {...rest} visible={visible} transparent={true} animationType="fade" animationsOutTiming={0}>
+      
       <ViewModal>
         <ContentModal>
           <TitleProfile>Agendar consulta</TitleProfile>

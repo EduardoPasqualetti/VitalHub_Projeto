@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.View`
 flex-direction: row;
 width: 320px;
-height: 100px;
+height: 110px;
 margin-top: 20px;
 border-radius: 7px;
 background-color:#fff ;
@@ -15,7 +15,7 @@ border: ${props => props.isSelected ? '3px solid #496BBA' : 'none'};
 export const View1 = styled.View`
 width: 62%;
 align-items: flex-start;
-gap: 17px;
+gap: 18px;
 padding-left: 15px;
 `
 export const View2 = styled.View`
