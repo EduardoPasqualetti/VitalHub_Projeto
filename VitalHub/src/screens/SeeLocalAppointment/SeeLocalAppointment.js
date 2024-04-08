@@ -15,6 +15,7 @@ import {
 } from 'expo-location'
 import { useEffect, useRef, useState } from "react"
 import MapViewDirections from "react-native-maps-directions"
+import api from "../../service/Service"
 
 export const SeeLocalAppointment = ({ navigation, route }) => {
     const mapReference = useRef(null)
@@ -23,8 +24,12 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
         latitude: -23.6497517,
         longitude: -46.5624046
     })
-
-
+    const [clinica, setClinica] = useState('')
+    const [idClinica, setIdClinica] = useState('')
+    const [logradouro, setLogradouro] = useState('')
+    const [numero, setNumero] = useState('')
+    const [cidade, setCidade] = useState('')
+    const [nome, setNome] = useState('')
     async function CapturarLocalizacao() {
         const { granted } = await requestForegroundPermissionsAsync()
 
@@ -37,7 +42,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
 
     useEffect(() => {
         CapturarLocalizacao()
-
+        
 
         // monitora em tempo real
         watchPositionAsync({
@@ -74,9 +79,35 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
         }
     }
 
-    useEffect(()=> {
-        console.log(route);
-    },[route.params])
+    useEffect(() => {
+        setIdClinica(route.params.clinicaid)
+    }, [route.params])
+
+    useEffect(() => {
+        if (idClinica) {
+            BuscarClinica();
+        }
+    }, [idClinica]);
+
+    async function BuscarClinica() {
+        try {
+            const response = await api.get(`/Clinica/BuscarPorId?id=${idClinica}`)
+            setClinica(response.data)
+            setFinalPosition({
+                latitude: response.data.endereco.longitude,
+                longitude: response.data.endereco.latitude
+            })
+            setLogradouro(response.data.endereco.logradouro)
+            setNumero(response.data.endereco.numero.toString())
+            setCidade(response.data.endereco.cidade)
+            setNome(response.data.nomeFantasia)
+        } catch (error) {
+            console.log(error);
+        }
+        console.log(clinica);
+    }
+
+
 
     return (
         <Container>
@@ -104,15 +135,15 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                                     longitudeDelta: 0.005,
                                     latitudeDelta: 0.005,
                                 }}
-                                title='Clinica Aqui'
-                                description='Marcador que representa localizacao da clinica'
+                                title='Voce esta aqui'
+                                description='Marcador que representa sua localizacao'
                                 pinColor={'blue'}
                             />
                             <MapViewDirections
                                 origin={initialPosition.coords}
                                 destination={{
-                                    latitude: -23.6497517,
-                                    longitude: -46.5624046,
+                                    latitude: finalPosition.latitude,
+                                    longitude: finalPosition.longitude,
                                     longitudeDelta: 0.005,
                                     latitudeDelta: 0.005,
                                 }}
@@ -127,8 +158,8 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                                     longitudeDelta: 0.005,
                                     latitudeDelta: 0.005,
                                 }}
-                                title='Voce esta aqui'
-                                description='Marcador que representa sua localizacao'
+                                title='Clinica Aqui'
+                                description='Marcador que representa localizacao da clinica'
                                 pinColor={'red'}
                             />
                         </MapView>
@@ -141,23 +172,23 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                 }
             </ContainerMap>
             <ViewLocal>
-                <TitleProfile>Clínica Natureh</TitleProfile>
-                <SubTitleModalResume>São Paulo, SP</SubTitleModalResume>
+                <TitleProfile>{nome}</TitleProfile>
+                <SubTitleModalResume>{cidade}</SubTitleModalResume>
 
                 <BoxInput
                     textLabel={'Endereco'}
-                    placeholder={'Rua Vicenso Silva, 987'}
+                    fieldValue={logradouro}
                 />
                 <ViewFormat>
 
                     <BoxInput
                         textLabel={'Número'}
-                        placeholder={'578'}
+                        fieldValue={numero}
                         fieldWidth={45}
                     />
                     <BoxInput
                         textLabel={'Bairro'}
-                        placeholder={'Moema-SP'}
+                        fieldValue={cidade}
                         fieldWidth={46}
                     />
 

@@ -9,6 +9,7 @@ import { LinkCancelMargin } from "../../components/Link/Style"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
+import moment from 'moment'
 
 export const Profile = ({ navigation }) => {
     const [profileEdit, setProfileEdit] = useState(false)
@@ -16,7 +17,6 @@ export const Profile = ({ navigation }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [idUser, setIdUser] = useState('')
-    const [token, setToken] = useState('')
     const [userData, setUserData] = useState('')
     const [cpf, setCpf] = useState('')
     const [dtNasc, setDtNasc] = useState('')
@@ -33,31 +33,50 @@ export const Profile = ({ navigation }) => {
         setEmail(token.email)
         setRole(token.role)
         setIdUser(token.jti)
-        setToken(token.token)
-        console.log();
 
-        await getUser()
     }
 
     async function getUser() {
         const url = (role === 'Medico' ? 'Medicos' : 'Pacientes')
-            await api.get(`/${url}/BuscarPorId/${idUser}`)
-                .then(response => setUserData(response.data))
-                .catch(e => e.error)
+        try {
+            const response = await api.get(`/${url}/BuscarPorId/${idUser}`)
+            setUserData(response.data)
+            setCep(response.data.endereco.cep)
+            setCidade(response.data.endereco.cidade)
+            setLogradouro(response.data.endereco.logradouro)
+            setDtNasc(response.data.dataNascimento)
+            role === 'Paciente' ?
+                setCpf(response.data.cpf)
+                :
+                setEspecialidade(response.data.especialidade.especialidade1)
+            setCrm(response.data.crm)
+        } catch (error) {
+            console.log(error);
+        }
+
         console.log(userData);
     }
-    
+
 
 
     useEffect(() => {
         profileLoad();
     }, [])
 
+    useEffect(() => {
+        if (idUser != '') {
+            getUser();
+        }
+    }, [idUser])
 
     async function closeApp() {
         await AsyncStorage.removeItem('token')
         navigation.replace("Login")
     }
+
+    function formatarData(data) {
+        return moment(data).format('DD/MM/YYYY');
+      }
 
     return (
         <ContainerScroll>
@@ -76,12 +95,12 @@ export const Profile = ({ navigation }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        fieldValue={dtNasc}
+                                        fieldValue={formatarData(dtNasc)}
 
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
-                                        fieldValue={cpff}
+                                        fieldValue={cpf}
                                     />
                                 </>
                                 :
@@ -92,7 +111,7 @@ export const Profile = ({ navigation }) => {
                                     />
                                     <BoxInput
                                         textLabel={'CRM'}
-                                        fieldValue={`CRM ${crm}`}
+                                        fieldValue={crm}
                                     />
                                 </>
                         }
@@ -136,35 +155,49 @@ export const Profile = ({ navigation }) => {
                     </ViewTitle>
 
                     <ContainerSafeEdit>
-                        <BoxInput
-                            textLabel={'Data de nascimento:'}
-                            fieldValue={dtNasc}
-                            editable={true}
+                    {
+                            role == 'Paciente' ?
+                                <>
+                                    <BoxInput
+                                        textLabel={'Data de nascimento:'}
+                                        placeholder={formatarData(dtNasc)}
 
-                        />
-                        <BoxInput
-                            textLabel={'CPF'}
-                            fieldValue={cpf}
-                            editable={true}
-                        />
+                                    />
+                                    <BoxInput
+                                        textLabel={'CPF'}
+                                        placeholder={cpf}
+                                    />
+                                </>
+                                :
+                                <>
+                                    <BoxInput
+                                        textLabel={'Especialidade'}
+                                        placeholder={especialidade}
+                                    />
+                                    <BoxInput
+                                        textLabel={'CRM'}
+                                        placeholder={crm}
+                                    />
+                                </>
+                        }
                         <BoxInput
                             textLabel={'Endereço'}
-                            fieldValue={endereco}
+                            placeholder={logradouro}
                             editable={true}
                         />
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Cep'}
-                                placeholder={'06548-909'}
+                                placeholder={cep}
                                 fieldWidth={'45'}
                                 editable={true}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
-                                placeholder={'Moema-SP'}
+                                placeholder={cidade}
                                 fieldWidth={'45'}
                                 editable={true}
-
+                                
                             />
                         </ViewFormat>
 

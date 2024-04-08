@@ -46,8 +46,7 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
         .then( response => {
             setAppointments(response.data);
-            
-            
+            console.log(appointments);
         }).catch(error => {
             console.log(error);
         })
@@ -62,7 +61,6 @@ export const Home = ({ navigation }) => {
         if (dataConsulta != '') {
             GetAppointments();
         }
-        console.log(appointments);
     }, [dataConsulta])
 
 
@@ -179,7 +177,10 @@ export const Home = ({ navigation }) => {
                                         typeAppointment={item.prioridade.prioridade}
                                         photo={require('../../assets/doctor.png')}
                                         onPressAppointment={() => {
-                                            navigation.replace('SeePrescription')
+                                            navigation.replace('SeePrescription', {
+                                                descricao: item.descricao,
+                                                diagnostico: item.diagnostico
+                                            })
                                         }}
                                     />
                                 )

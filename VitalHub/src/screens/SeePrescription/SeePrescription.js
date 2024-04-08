@@ -7,12 +7,13 @@ import { BtnCancelPhoto, BtnInsertPhoto } from "../../components/Button/Button"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { Image } from "react-native"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { InputExame } from "../../components/Input/Style"
 
 export const SeePrescription = ({ navigation, route }) => {
     const { photoUri } = route.params || {};
     const[isPhoto,setIsPhoto] = useState(true)
+    const [descricao, setDescricao] = useState('')
 
     function onPressPhoto() {
         navigation.navigate("CameraPhoto");
@@ -23,6 +24,9 @@ export const SeePrescription = ({ navigation, route }) => {
         setIsPhoto(false);
         route.params = null
     }
+    useEffect(() => {
+        console.log(route.params.descricao);
+    },[route.params])
 
     return (
         <ContainerScroll>
