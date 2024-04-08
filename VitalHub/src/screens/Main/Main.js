@@ -1,4 +1,4 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+    import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import {ContentIcon, TextIcon} from './Style'
 
 const BottomTab = createBottomTabNavigator()

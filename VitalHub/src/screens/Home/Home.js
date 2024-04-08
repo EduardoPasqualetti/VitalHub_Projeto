@@ -50,9 +50,9 @@ export const Home = ({ navigation }) => {
             
         }).catch(error => {
             console.log(error);
-        }) 
+        })
+        
     }
-
 
     useEffect(() => {
         profileLoad();

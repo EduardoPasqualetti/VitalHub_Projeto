@@ -66,7 +66,6 @@ export const Login = ({ navigation }) => {
                 <Title>Entrar ou criar conta</Title>
 
 
-
                 <Input
                     placeholder={"Usuário ou E-mail"}
                     value={email}
