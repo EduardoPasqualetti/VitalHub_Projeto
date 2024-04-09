@@ -12,8 +12,13 @@ import { InputExame } from "../../components/Input/Style"
 
 export const SeePrescription = ({ navigation, route }) => {
     const { photoUri } = route.params || {};
-    const[isPhoto,setIsPhoto] = useState(true)
+    const [isPhoto, setIsPhoto] = useState(true)
     const [descricao, setDescricao] = useState('')
+    const [diagnostico, setDiagnostico] = useState('')
+    const [receita, setReceita] = useState('')
+    const [nome, setNome] = useState('')
+    const [crm, setCrm] = useState('')
+    const [especialidade, setEspecialidade] = useState('')
 
     function onPressPhoto() {
         navigation.navigate("CameraPhoto");
@@ -24,8 +29,14 @@ export const SeePrescription = ({ navigation, route }) => {
         setIsPhoto(false);
         route.params = null
     }
+
     useEffect(() => {
-        console.log(route.params.descricao);
+        setDescricao(route.params.descricao)
+        setDiagnostico(route.params.diagnostico)
+        setReceita(route.params.receita)
+        setNome(route.params.nome)
+        setCrm(route.params.crm)
+        setEspecialidade(route.params.especialidade)
     },[route.params])
 
     return (
@@ -33,28 +44,28 @@ export const SeePrescription = ({ navigation, route }) => {
             <DoctorImage source={require("../../assets/doctor.png")} />
             <ContainerProfile>
 
-                <TitleProfile>Dr Claudio</TitleProfile>
+                <TitleProfile>{nome}</TitleProfile>
                 <ViewSuBTitlePrescription>
-                    <SubtitleRecord>Cliníco geral</SubtitleRecord>
-                    <SubtitleRecord>CRM-15286</SubtitleRecord>
+                    <SubtitleRecord>{especialidade}</SubtitleRecord>
+                    <SubtitleRecord>CRM-{crm}</SubtitleRecord>
                 </ViewSuBTitlePrescription>
 
                 <BoxInput
                     multiline={true}
                     textLabel={"Descrição da consulta"}
-                    placeholder={`O paciente possuí uma infecção no ouvido. Necessário repouse de 2 dias e acompanhamento médico constante`}
+                    fieldValue={descricao}
                     fieldHeight={150}
                 />
                 <BoxInput
                     multiline={true}
                     textLabel={"Diagnóstico do paciente"}
-                    placeholder={`Infecção no ouvido`}
+                    fieldValue={diagnostico}
                     fieldHeight={80}
                 />
                 <BoxInput
                     multiline={true}
                     textLabel={"Prescrição médica"}
-                    placeholder={`Medicamento: Advil Dosagem: 50 mg Frequência: 3 vezes ao dia Duração: 3 dias`}
+                    fieldValue={receita}
                     fieldHeight={150}
                 />
                 <InputExame>Exame medico</InputExame>

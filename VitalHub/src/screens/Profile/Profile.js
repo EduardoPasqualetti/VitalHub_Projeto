@@ -18,13 +18,15 @@ export const Profile = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [idUser, setIdUser] = useState('')
     const [userData, setUserData] = useState('')
-    const [cpf, setCpf] = useState('')
+    const [cpf, setCpf] = useState()
+    const [rg, setRg] = useState('')
     const [dtNasc, setDtNasc] = useState('')
     const [crm, setCrm] = useState('')
     const [especialidade, setEspecialidade] = useState("")
     const [cep, setCep] = useState('')
     const [logradouro, setLogradouro] = useState('')
     const [cidade, setCidade] = useState("")
+    const [numero, setNumero] = useState('')
 
 
     async function profileLoad() {
@@ -40,21 +42,44 @@ export const Profile = ({ navigation }) => {
         const url = (role === 'Medico' ? 'Medicos' : 'Pacientes')
         try {
             const response = await api.get(`/${url}/BuscarPorId/${idUser}`)
+            console.log(response.data);
+
             setUserData(response.data)
             setCep(response.data.endereco.cep)
             setCidade(response.data.endereco.cidade)
             setLogradouro(response.data.endereco.logradouro)
+            setNumero(response.data.endereco.numero.toString())
             setDtNasc(response.data.dataNascimento)
             role === 'Paciente' ?
                 setCpf(response.data.cpf)
                 :
                 setEspecialidade(response.data.especialidade.especialidade1)
             setCrm(response.data.crm)
+            setRg(response.data.rg)
         } catch (error) {
             console.log(error);
         }
 
-        console.log(userData);
+    }
+
+    async function updateProfile() {
+        const token = JSON.parse(await AsyncStorage.getItem('token')).token;
+            console.log(token);
+
+        try {
+            await api.put("Pacientes", {
+                
+                cpf: cpf
+                
+
+            },{ headers: { Authorization: `Bearer ${token}` } });
+            console.log('Perfil atualizado');
+
+            
+            setProfileEdit(false);
+        } catch (error) {
+            console.log(error + " erro para atualizar paciente");
+        }
     }
 
 
@@ -69,6 +94,10 @@ export const Profile = ({ navigation }) => {
         }
     }, [idUser])
 
+    useEffect(() => {
+        console.log(cpf);
+    },[cpf])
+
     async function closeApp() {
         await AsyncStorage.removeItem('token')
         navigation.replace("Login")
@@ -76,7 +105,7 @@ export const Profile = ({ navigation }) => {
 
     function formatarData(data) {
         return moment(data).format('DD/MM/YYYY');
-      }
+    }
 
     return (
         <ContainerScroll>
@@ -100,7 +129,11 @@ export const Profile = ({ navigation }) => {
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
-                                        fieldValue={cpf}
+                                        placeholder={cpf}
+                                    />
+                                    <BoxInput
+                                        textLabel={'RG'}
+                                        fieldValue={rg}
                                     />
                                 </>
                                 :
@@ -115,11 +148,18 @@ export const Profile = ({ navigation }) => {
                                     />
                                 </>
                         }
-
-                        <BoxInput
-                            textLabel={'Endereço'}
-                            fieldValue={logradouro}
-                        />
+                        <ViewFormat>
+                            <BoxInput
+                                textLabel={'Logradouro'}
+                                fieldValue={logradouro}
+                                fieldWidth={'60'}
+                            />
+                            <BoxInput
+                                textLabel={'Numero'}
+                                fieldValue={numero}
+                                fieldWidth={'30'}
+                            />
+                        </ViewFormat>
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Cep'}
@@ -155,53 +195,79 @@ export const Profile = ({ navigation }) => {
                     </ViewTitle>
 
                     <ContainerSafeEdit>
-                    {
+                        {
                             role == 'Paciente' ?
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        placeholder={formatarData(dtNasc)}
-
+                                        
+                                        editable={true}
+                                        onChangeText={(txt) => setDtNasc(txt)}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
-                                        placeholder={cpf}
+                                        
+                                        editable={true}
+                                        onChangeText={setCpf}
+                                    />
+                                    <BoxInput
+                                        textLabel={'RG'}
+                                        
+                                        editable={true}
+                                        onChangeText={(txt) => setRg(txt)}
                                     />
                                 </>
                                 :
                                 <>
                                     <BoxInput
                                         textLabel={'Especialidade'}
-                                        placeholder={especialidade}
+                                        
+                                        editable={true}
+                                        onChangeText={(txt) => setEspecialidade(txt)}
                                     />
                                     <BoxInput
                                         textLabel={'CRM'}
-                                        placeholder={crm}
+                                        
+                                        editable={true}
+                                        onChangeText={(txt) => setCrm(txt)}
                                     />
                                 </>
                         }
-                        <BoxInput
-                            textLabel={'Endereço'}
-                            placeholder={logradouro}
-                            editable={true}
-                        />
+                        <ViewFormat>
+                            <BoxInput
+                                textLabel={'Logradouro'}
+                                
+                                fieldWidth={'60'}
+                                editable={true}
+                                onChangeText={(txt) => setLogradouro(txt)}
+                            />
+                            <BoxInput
+                                textLabel={'Numero'}
+                                
+                                fieldWidth={'30'}
+                                editable={true}
+                                onChangeText={(txt) => setNumero(txt)}
+                            />
+                        </ViewFormat>
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Cep'}
-                                placeholder={cep}
+                               
                                 fieldWidth={'45'}
                                 editable={true}
+                                onChangeText={(txt) => setCep(txt)}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
-                                placeholder={cidade}
+                                
                                 fieldWidth={'45'}
                                 editable={true}
-                                
+                                onChangeText={(txt) => setCidade(txt)}
                             />
+
                         </ViewFormat>
 
-                        <Btn onPress={() => setProfileEdit(false)}>
+                        <Btn onPress={() => updateProfile()}>
                             <ButtonTitle>SALVAR</ButtonTitle>
                         </Btn>
 

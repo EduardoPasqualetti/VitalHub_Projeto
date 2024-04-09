@@ -44,6 +44,7 @@ export const ViewFormat = styled.View`
 flex-direction: row;
 gap: 35px;
 height: 100px;
+margin-bottom: 25px;
 `
 
 export const ViewTitle = styled.View`

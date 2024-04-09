@@ -179,7 +179,11 @@ export const Home = ({ navigation }) => {
                                         onPressAppointment={() => {
                                             navigation.replace('SeePrescription', {
                                                 descricao: item.descricao,
-                                                diagnostico: item.diagnostico
+                                                diagnostico: item.diagnostico,
+                                                nome: item.medicoClinica.medico.idNavigation.nome,
+                                                crm: item.medicoClinica.medico.crm,
+                                                especialidade: item.medicoClinica.medico.especialidade.especialidade1,
+                                                receita: item.receita.medicamento
                                             })
                                         }}
                                     />
