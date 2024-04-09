@@ -7,11 +7,14 @@ namespace WebAPI.Repositories
     public class EspecialidadeRepository : IEspecialidadeRepository
     {
         VitalContext ctx = new VitalContext();
-        
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> Developer
         public Especialidade BuscarPorId(Guid id)
         {
-            return ctx.Especialidades.FirstOrDefault(x=> x.Id==id);
+            return ctx.Especialidades.FirstOrDefault(x => x.Id == id);
         }
 
         public void Cadastrar(Especialidade especialidade)

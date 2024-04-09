@@ -25,6 +25,21 @@ namespace WebAPI.Controllers
             return Ok(_medicoRepository.ListarTodos());
         }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+        [HttpGet("BuscarPorId/{id}")]
+=======
+        [HttpGet("BuscarPorId")]
+>>>>>>> Developer
+=======
+        [HttpGet("BuscarPorId/{id}")]
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
+        public IActionResult GetById(Guid id)
+        {
+
+            return Ok(_medicoRepository.BuscarPorId(id)); ;
+        }
+
         [Authorize]
         [HttpPut]
         public IActionResult AtualizarPerfil(MedicoViewModel medico)
@@ -35,10 +50,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastrar(MedicoViewModel medicoModel)
+        public IActionResult Post(MedicoViewModel medicoModel)
         {
             Usuario user = new Usuario();
-
             user.Nome = medicoModel.Nome;
             user.Email = medicoModel.Email;
             user.TipoUsuarioId = medicoModel.IdTipoUsuario;
@@ -46,15 +60,39 @@ namespace WebAPI.Controllers
             user.Senha = medicoModel.Senha;
 
             user.Medico = new Medico();
-
             user.Medico.Crm = medicoModel.Crm;
             user.Medico.EspecialidadeId = medicoModel.EspecialidadeId;
+
+
+            user.Medico.Endereco = new Endereco();
+            user.Medico.Endereco.Logradouro = medicoModel.Logradouro;
+            user.Medico.Endereco.Numero = medicoModel.Numero;
+            user.Medico.Endereco.Cep = medicoModel.Cep;
+<<<<<<< HEAD
+            user.Medico.Endereco.Cidade = medicoModel.Cidade;
+=======
+>>>>>>> Developer
 
             _medicoRepository.Cadastrar(user);
 
             return Ok();
         }
 
+        [HttpGet("BuscarPorIdClinica")]
+        public IActionResult GetByIdClinica(Guid id)
+        {
 
+            return Ok(_medicoRepository.ListarPorClinica(id)); ;
+        }
+<<<<<<< HEAD
+
+
+        [HttpGet("BuscarPorData")]
+        public IActionResult BuscarPorData(DateTime data, Guid id)
+        {
+            return Ok(_medicoRepository.BuscarPorData(data, id));
+        }
+=======
+>>>>>>> Developer
     }
 }

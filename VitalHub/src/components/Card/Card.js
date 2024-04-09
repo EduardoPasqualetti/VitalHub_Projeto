@@ -6,40 +6,52 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 export const Card = ({
-    status = "agendada",
+    status = "Pendentes",
     onPressCancel,
     onPressAppointment,
-    name, age, hour, typeAppointment}) => {
+    name,
+    typeAppointment,
+    photo,
+    ageCrm
+}) => {
+
+    let prioridade
+
+if (typeAppointment === 0) {
+     prioridade = 'Rotina'
+} else if (typeAppointment === 1) {
+    prioridade = 'Exame'
+} else  prioridade = 'Urgencia'
 
     return (
         <ContainerCard>
             {/* Imagem do Card */}
-            <ProfileImage source={require('../../assets/nicole.png')} />
+            <ProfileImage source={photo} />
 
 
             <ContentCard>
-                <DataProfile>   
+                <DataProfile>
                     <ProfileName>{name}</ProfileName>
                     <ProfileData>
-                        <TextAge>{age} anos</TextAge>
+                        <TextAge>{ageCrm}</TextAge>
                         <ImagePoint source={require('../../assets/point.png')} />
-                        <TextBold>{typeAppointment}</TextBold>
+                        <TextBold>{prioridade}</TextBold>
                     </ProfileData>
                 </DataProfile>
                 <ViewRow>
                     <ClockCard status={status}>
-                        <AntDesign name="clockcircle" size={18} color={status == "agendada" ? '#49B3BA' : '#4E4B59'} />
-                        <TextBold status={status}>{hour}</TextBold>
+                        <AntDesign name="clockcircle" size={18} color={status == "Pendentes" ? '#49B3BA' : '#4E4B59'} />
+                        <TextBold status={status}>14:00</TextBold>
                     </ClockCard>
 
 
                     {/* valida e mostra o tipo de botao conforme a status */}
 
                     {
-                        status == "cancelada" ? (
+                        status === "Cancelados" ? (
                             <>
                             </>
-                        ) : status == "agendada" ? (
+                        ) : status == "Pendentes" ? (
                             <ButtonCard onPress={onPressCancel} >
                                 <ButtonText status={status}>Cancelar</ButtonText>
                             </ButtonCard>
