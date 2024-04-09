@@ -54,8 +54,11 @@ namespace WebAPI.Repositories
 <<<<<<< HEAD
                 Include(m => m.Endereco).
                 Include(m => m.Especialidade).
+<<<<<<< HEAD
 =======
 >>>>>>> Developer
+=======
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                 FirstOrDefault(m => m.Id == Id)!;
 
             return medicoBuscado;

@@ -3,6 +3,7 @@
     import { ButtonModal, Cancel, ContentModal, TextAge, TextEmail, ViewData, ViewModal } from "./Style"
 import { Home } from "../../screens/Home/Home"
 
+<<<<<<< HEAD
     export const ModalAppointment = ({patientInfo, appointmentData, clinicaid, medicoClinica, consulta, situacao, visible, navigation, setShowModalAppointment, typeProfile = "paciente", ...rest}) => {
 
         async function handleClose( screen ) {
@@ -31,6 +32,9 @@ import { Home } from "../../screens/Home/Home"
 
 =======
 >>>>>>> Developer
+=======
+    export const ModalAppointment = ({patientInfo,appointmentData, navigation, visible, setShowModalAppointment, ...rest}) => {
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
 
         const onPressHandler = () => {
             navigation.navigate("InsertRecord");

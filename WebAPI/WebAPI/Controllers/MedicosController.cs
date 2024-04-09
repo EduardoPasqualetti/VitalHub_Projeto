@@ -26,10 +26,14 @@ namespace WebAPI.Controllers
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         [HttpGet("BuscarPorId/{id}")]
 =======
         [HttpGet("BuscarPorId")]
 >>>>>>> Developer
+=======
+        [HttpGet("BuscarPorId/{id}")]
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
         public IActionResult GetById(Guid id)
         {
 

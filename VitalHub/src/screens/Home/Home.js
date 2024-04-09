@@ -20,7 +20,6 @@ import { UserDecodeToken } from "../../Utils/Auth/auth"
 import api from "../../service/Service"
 import moment from 'moment'
 
-
 export const Home = ({ navigation }) => {
 
     const [statusList, setStatusList] = useState("agendada")
@@ -34,8 +33,13 @@ export const Home = ({ navigation }) => {
     const [appointments, setAppointments] = useState([])
 
     const [dataConsulta,setDataConsulta] = useState('')
+<<<<<<< HEAD
     const [patientInfo, setPatientInfo] = useState(null)
     const [doctorInfo, setDoctorInfo] = useState(null)
+=======
+    const [patientInfo, setPatientInfo] = useState(null);
+    const [doctorInfo,setDoctorInfo] = useState(null)
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
 
     async function profileLoad() {
         const token = await UserDecodeToken();
@@ -49,6 +53,7 @@ export const Home = ({ navigation }) => {
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
         .then( response => {
+<<<<<<< HEAD
 <<<<<<< HEAD
             setAppointments(response.data);
             
@@ -68,6 +73,16 @@ export const Home = ({ navigation }) => {
 
 
 >>>>>>> Developer
+=======
+            setAppointments(response.data);
+            console.log(appointments);
+        }).catch(error => {
+            console.log(error);
+        })
+        
+    }
+
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
     useEffect(() => {
         profileLoad();
     }, [])
@@ -77,12 +92,22 @@ export const Home = ({ navigation }) => {
             GetAppointments();
 <<<<<<< HEAD
         }
+<<<<<<< HEAD
         console.log(appointments);
 =======
         };
 >>>>>>> Developer
+=======
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
     }, [dataConsulta])
 
+
+    const calculateAge = (dateOfBirth) => {
+        const today = moment();
+        const birthDate = moment(dateOfBirth);
+        const years = today.diff(birthDate, 'years');
+        return years;
+    };
 
     return (
 
@@ -123,10 +148,14 @@ export const Home = ({ navigation }) => {
                         if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                             return (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                                 <TouchableOpacity onPress={() => { setPatientInfo({
                                     name: item.paciente.idNavigation.nome,
                                     email: item.paciente.idNavigation.email
                                 }); setShowModalAppointment(true) }}>
+<<<<<<< HEAD
                                     <Card name={item.paciente.idNavigation.nome}
                                         status={item.situacao.situacao}
 =======
@@ -135,6 +164,11 @@ export const Home = ({ navigation }) => {
                                         status={item.situacao.situacao}
                                         age={item.paciente.dataNascimento}
 >>>>>>> Developer
+=======
+                                    <Card name={item.paciente.idNavigation.nome}
+                                        status={item.situacao.situacao}
+                                        ageCrm={calculateAge(item.paciente.dataNascimento)}
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                                         typeAppointment={item.prioridade.prioridade}
                                         onPressCancel={() => setShowModalCancel(true)}
                                         photo={require('../../assets/nicole.png')}
@@ -147,20 +181,19 @@ export const Home = ({ navigation }) => {
                             return (
                                 <Card name={item.paciente.idNavigation.nome}
                                     status={item.situacao.situacao}
-                                    age={item.paciente.dataNascimento}
+                                    ageCrm={calculateAge(item.paciente.dataNascimento)}
                                     typeAppointment={item.prioridade.prioridade}
                                     photo={require('../../assets/nicole.png')}
                                     onPressAppointment={() => {
                                         navigation.replace('MedicalRecord')
                                     }}
                                 />
-
                             )
                         } else if (statusList === 'cancelada' && item.situacao.situacao === "Cancelados") {
                             return (
                                 <Card name={item.paciente.idNavigation.nome}
                                     status={item.situacao.situacao}
-                                    age={item.paciente.dataNascimento}
+                                    ageCrm={calculateAge(item.paciente.dataNascimento)}
                                     typeAppointment={item.prioridade.prioridade}
                                     photo={require('../../assets/nicole.png')}
                                 />
@@ -176,10 +209,20 @@ export const Home = ({ navigation }) => {
                         renderItem={({ item }) => {
                             if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                                 return (
-                                    <TouchableOpacity onPress={() => { setShowModalSeeDoctor(true) }}>
-                                        <Card name={null}
+                                    <TouchableOpacity onPress={() => {setDoctorInfo({
+                                        name: item.medicoClinica.medico.idNavigation.nome,
+                                        crm: item.medicoClinica.medico.crm,
+                                        especialidade: item.medicoClinica.medico.especialidade.especialidade1,
+                                        clinica: item.medicoClinica.clinicaId
+                                    }); setShowModalSeeDoctor(true) }}>
+                                        <Card name={item.medicoClinica.medico.idNavigation.nome}
                                             status={item.situacao.situacao}
+<<<<<<< HEAD
                                             typeAppointment={null}
+=======
+                                            ageCrm={item.medicoClinica.medico.crm}
+                                            typeAppointment={item.prioridade.prioridade}
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                                             photo={require('../../assets/doctor.png')}
                                             onPressCancel={() => setShowModalCancel(true)}
                                         />
@@ -187,22 +230,25 @@ export const Home = ({ navigation }) => {
                                 )
                             } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
                                 return (
-                                    <Card name={null}
+                                    <Card name={item.medicoClinica.medico.idNavigation.nome}
                                         status={item.situacao.situacao}
-                                        
-                                        typeAppointment={null}
+                                        ageCrm={item.medicoClinica.medico.crm}
+                                        typeAppointment={item.prioridade.prioridade}
                                         photo={require('../../assets/doctor.png')}
                                         onPressAppointment={() => {
-                                            navigation.replace('SeePrescription')
+                                            navigation.replace('SeePrescription', {
+                                                descricao: item.descricao,
+                                                diagnostico: item.diagnostico
+                                            })
                                         }}
                                     />
                                 )
                             } else if (statusList === 'cancelada' && item.situacao.situacao === "Cancelados") {
                                 return (
-                                    <Card name={null}
+                                    <Card name={item.medicoClinica.medico.idNavigation.nome}
                                         status={item.situacao.situacao}
-                                        
-                                        typeAppointment={null}
+                                        ageCrm={item.medicoClinica.medico.crm}
+                                        typeAppointment={item.prioridade.prioridade}
                                         photo={require('../../assets/doctor.png')}
                                     />
                                 )
@@ -225,7 +271,10 @@ export const Home = ({ navigation }) => {
                         setShowModalSeeDoctor={setShowModalSeeDoctor}
                         navigation={navigation}
                         doctorInfo={doctorInfo}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                     />
                 </>
             }
