@@ -80,6 +80,23 @@ export const Login = ({ navigation }) => {
                 />
                 {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 
 
+<<<<<<< HEAD
+=======
+                <Input
+                    placeholder={"Usuário ou E-mail"}
+                    value={email}
+                    onChangeText={(txt) => setEmail(txt)}
+                />
+                {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>} 
+                <Input
+                    placeholder={"Senha"}
+                    secureTextEntry={true}
+                    value={senha}
+                    onChangeText={(txt) => setSenha(txt)}
+                />
+                {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 
+
+>>>>>>> Developer
 
                 <LinkMedium onPress={() => navigation.replace("Recover")} >Esqueceu sua senha?</LinkMedium>
 

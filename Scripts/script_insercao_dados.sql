@@ -22,7 +22,11 @@ SELECT * FROM dbo.Usuarios;
 INSERT INTO
 	dbo.Usuarios
 VALUES
+<<<<<<< HEAD
 	(NEWID(), 'FA5552A3-8A5E-4D5B-91F3-03DA8560E556', 'Lucão', 'lucas.Medico@Medico.com', '1234', 'string'),
+=======
+	(NEWID(), 'FA5552A3-8A5E-4D5B-91F3-03DA8560E556', 'Lucas Silveira Portal', 'lucas.portal@gmail.com', 'medico123', 'string'),
+>>>>>>> Developer
 	(NEWID(), 'FA5552A3-8A5E-4D5B-91F3-03DA8560E556', 'Carlos Roque', 'carlos.roque@gmail.com', 'medico123', 'string'),
 	(NEWID(), '7BD5C0F1-84E1-4C61-B790-967F8AB6E703', 'Martin Lorenzo', 'martin_ferreira@gmail.com', 'paciente123', 'string'),
 	(NEWID(), '7BD5C0F1-84E1-4C61-B790-967F8AB6E703', 'Heitor Paulo Campos', 'heitor-campos80@gmail.com', 'paciente123', 'string');

@@ -25,7 +25,11 @@ namespace WebAPI.Controllers
             return Ok(_medicoRepository.ListarTodos());
         }
 
+<<<<<<< HEAD
         [HttpGet("BuscarPorId/{id}")]
+=======
+        [HttpGet("BuscarPorId")]
+>>>>>>> Developer
         public IActionResult GetById(Guid id)
         {
 
@@ -60,7 +64,10 @@ namespace WebAPI.Controllers
             user.Medico.Endereco.Logradouro = medicoModel.Logradouro;
             user.Medico.Endereco.Numero = medicoModel.Numero;
             user.Medico.Endereco.Cep = medicoModel.Cep;
+<<<<<<< HEAD
             user.Medico.Endereco.Cidade = medicoModel.Cidade;
+=======
+>>>>>>> Developer
 
             _medicoRepository.Cadastrar(user);
 
@@ -73,6 +80,7 @@ namespace WebAPI.Controllers
 
             return Ok(_medicoRepository.ListarPorClinica(id)); ;
         }
+<<<<<<< HEAD
 
 
         [HttpGet("BuscarPorData")]
@@ -80,5 +88,7 @@ namespace WebAPI.Controllers
         {
             return Ok(_medicoRepository.BuscarPorData(data, id));
         }
+=======
+>>>>>>> Developer
     }
 }

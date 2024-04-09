@@ -56,7 +56,11 @@ namespace WebAPI.Controllers
         }
 
         //[Authorize]
+<<<<<<< HEAD
         [HttpGet("BuscarPorId/{id}")]
+=======
+        [HttpGet("BuscarPorId")]
+>>>>>>> Developer
         public IActionResult BuscarPorId(Guid id)
         {
             return Ok(pacienteRepository.BuscarPorId(id));

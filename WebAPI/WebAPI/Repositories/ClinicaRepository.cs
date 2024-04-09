@@ -47,9 +47,17 @@ namespace WebAPI.Repositories
                     NomeFantasia = c.NomeFantasia,
                     Endereco = c.Endereco
                 })
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> Developer
                .Where(c => c.Endereco!.Cidade == cidade)
                 .ToList();
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> Developer

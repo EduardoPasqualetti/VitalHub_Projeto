@@ -41,4 +41,8 @@ namespace WebAPI.Controllers
             return Ok(clinicaRepository.ListarPorCidade(cidade));
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> Developer

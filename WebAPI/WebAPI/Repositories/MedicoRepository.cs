@@ -51,8 +51,11 @@ namespace WebAPI.Repositories
             //fazer logica para trazer medico e dados de seu usuario
             Medico medicoBuscado = ctx.Medicos.
                 Include(m => m.IdNavigation).
+<<<<<<< HEAD
                 Include(m => m.Endereco).
                 Include(m => m.Especialidade).
+=======
+>>>>>>> Developer
                 FirstOrDefault(m => m.Id == Id)!;
 
             return medicoBuscado;
@@ -110,6 +113,7 @@ namespace WebAPI.Repositories
 
             return medicos;
         }
+<<<<<<< HEAD
 
         public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid id)
         {
@@ -121,5 +125,7 @@ namespace WebAPI.Repositories
                 .Where(x => x.MedicoClinica.MedicoId == id && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
                 .ToList();
         }
+=======
+>>>>>>> Developer
     }
 }
