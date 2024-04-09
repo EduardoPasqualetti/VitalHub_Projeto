@@ -25,18 +25,10 @@ namespace WebAPI.Controllers
             return Ok(_medicoRepository.ListarTodos());
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         [HttpGet("BuscarPorId/{id}")]
-=======
-        [HttpGet("BuscarPorId")]
->>>>>>> Developer
-=======
-        [HttpGet("BuscarPorId/{id}")]
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
         public IActionResult GetById(Guid id)
         {
-
+           
             return Ok(_medicoRepository.BuscarPorId(id)); ;
         }
 
@@ -68,10 +60,7 @@ namespace WebAPI.Controllers
             user.Medico.Endereco.Logradouro = medicoModel.Logradouro;
             user.Medico.Endereco.Numero = medicoModel.Numero;
             user.Medico.Endereco.Cep = medicoModel.Cep;
-<<<<<<< HEAD
             user.Medico.Endereco.Cidade = medicoModel.Cidade;
-=======
->>>>>>> Developer
 
             _medicoRepository.Cadastrar(user);
 
@@ -84,7 +73,6 @@ namespace WebAPI.Controllers
 
             return Ok(_medicoRepository.ListarPorClinica(id)); ;
         }
-<<<<<<< HEAD
 
 
         [HttpGet("BuscarPorData")]
@@ -92,7 +80,5 @@ namespace WebAPI.Controllers
         {
             return Ok(_medicoRepository.BuscarPorData(data, id));
         }
-=======
->>>>>>> Developer
     }
 }

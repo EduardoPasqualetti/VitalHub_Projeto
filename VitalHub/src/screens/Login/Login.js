@@ -13,8 +13,8 @@ import asyncStorage from '@react-native-async-storage/async-storage'
 
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('carlão.Medico@Medico.com')
-    const [senha, setSenha] = useState('1234')
+    const [email, setEmail] = useState('gustavopasqualetti@gmail.com')
+    const [senha, setSenha] = useState('gustavo123')
     const [loading, setLoading] = useState(false)
     const [emailError, setEmailError] = useState(false);
     const [senhaError, setSenhaError] = useState(false);
@@ -66,6 +66,7 @@ export const Login = ({ navigation }) => {
                 <Title>Entrar ou criar conta</Title>
 
 
+
                 <Input
                     placeholder={"Usuário ou E-mail"}
                     value={email}
@@ -80,23 +81,6 @@ export const Login = ({ navigation }) => {
                 />
                 {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 
 
-<<<<<<< HEAD
-=======
-                <Input
-                    placeholder={"Usuário ou E-mail"}
-                    value={email}
-                    onChangeText={(txt) => setEmail(txt)}
-                />
-                {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>} 
-                <Input
-                    placeholder={"Senha"}
-                    secureTextEntry={true}
-                    value={senha}
-                    onChangeText={(txt) => setSenha(txt)}
-                />
-                {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 
-
->>>>>>> Developer
 
                 <LinkMedium onPress={() => navigation.replace("Recover")} >Esqueceu sua senha?</LinkMedium>
 

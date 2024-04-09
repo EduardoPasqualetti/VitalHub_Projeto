@@ -8,7 +8,7 @@ using WebAPI.ViewModels;
 
 namespace WebAPI.Repositories
 {
-
+    
     public class MedicoRepository : IMedicoRepository
     {
         VitalContext ctx = new VitalContext();
@@ -42,7 +42,7 @@ namespace WebAPI.Repositories
             ctx.Medicos.Update(medicoBuscado);
             ctx.SaveChanges();
 
-            return medicoBuscado;
+            return medicoBuscado;   
 
         }
 
@@ -51,14 +51,8 @@ namespace WebAPI.Repositories
             //fazer logica para trazer medico e dados de seu usuario
             Medico medicoBuscado = ctx.Medicos.
                 Include(m => m.IdNavigation).
-<<<<<<< HEAD
                 Include(m => m.Endereco).
                 Include(m => m.Especialidade).
-<<<<<<< HEAD
-=======
->>>>>>> Developer
-=======
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                 FirstOrDefault(m => m.Id == Id)!;
 
             return medicoBuscado;
@@ -75,7 +69,7 @@ namespace WebAPI.Repositories
                     Crm = m.Crm,
                     Especialidade = m.Especialidade,
 
-
+                    
                     IdNavigation = new Usuario
                     {
                         Nome = m.IdNavigation.Nome,
@@ -94,13 +88,13 @@ namespace WebAPI.Repositories
 
         public List<Medico> ListarPorClinica(Guid id)
         {
-            List<Medico> medicos = ctx.MedicosClinicas
-
+            List<Medico> medicos = ctx.MedicosClinicas  
+                
                 .Where(mc => mc.ClinicaId == id)
 
                 .Select(mc => new Medico
                 {
-                    Id = mc.Id,
+                    Id=mc.Id,
                     Crm = mc.Medico!.Crm,
                     Especialidade = mc.Medico.Especialidade,
 
@@ -116,7 +110,6 @@ namespace WebAPI.Repositories
 
             return medicos;
         }
-<<<<<<< HEAD
 
         public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid id)
         {
@@ -125,10 +118,8 @@ namespace WebAPI.Repositories
                 .Include(x => x.Prioridade)
                 .Include(x => x.Paciente.IdNavigation)
                 .Include(x => x.MedicoClinica.Medico.IdNavigation)
-                .Where(x => x.MedicoClinica.MedicoId == id && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
+                .Where(x => x.MedicoClinica.MedicoId == id && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0 )
                 .ToList();
         }
-=======
->>>>>>> Developer
     }
 }

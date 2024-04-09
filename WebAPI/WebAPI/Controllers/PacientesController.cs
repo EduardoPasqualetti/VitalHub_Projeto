@@ -56,15 +56,7 @@ namespace WebAPI.Controllers
         }
 
         //[Authorize]
-<<<<<<< HEAD
-<<<<<<< HEAD
         [HttpGet("BuscarPorId/{id}")]
-=======
-        [HttpGet("BuscarPorId")]
->>>>>>> Developer
-=======
-        [HttpGet("BuscarPorId/{id}")]
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
         public IActionResult BuscarPorId(Guid id)
         {
             return Ok(pacienteRepository.BuscarPorId(id));
@@ -102,7 +94,7 @@ namespace WebAPI.Controllers
         [HttpGet("BuscarPorData")]
         public IActionResult BuscarPorData(DateTime data, Guid id)
         {
-            return Ok(pacienteRepository.BuscarPorData(data, id));
+            return Ok(pacienteRepository.BuscarPorData(data,id));
         }
     }
 }

@@ -7,15 +7,12 @@ import { ListComponent } from "../../components/List/List"
 import { Card } from "../../components/Card/Card"
 import { ModalCancel } from "../../components/ModalCancel/ModalCancel"
 import { ModalAppointment } from "../../components/ModalAppointment/ModalAppointment"
-import { BtnSchedule } from "../../components/Button/Button"
+import { BtnCard, BtnSchedule } from "../../components/Button/Button"
 import { FontAwesome } from '@expo/vector-icons';
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
-import { TouchableOpacity } from "react-native"
+import { Text, TouchableOpacity } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
-<<<<<<< HEAD
-=======
 import AsyncStorage from "@react-native-async-storage/async-storage"
->>>>>>> Developer
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import api from "../../service/Service"
 import moment from 'moment'
@@ -33,13 +30,8 @@ export const Home = ({ navigation }) => {
     const [appointments, setAppointments] = useState([])
 
     const [dataConsulta,setDataConsulta] = useState('')
-<<<<<<< HEAD
-    const [patientInfo, setPatientInfo] = useState(null)
-    const [doctorInfo, setDoctorInfo] = useState(null)
-=======
     const [patientInfo, setPatientInfo] = useState(null);
     const [doctorInfo,setDoctorInfo] = useState(null)
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
 
     async function profileLoad() {
         const token = await UserDecodeToken();
@@ -53,27 +45,6 @@ export const Home = ({ navigation }) => {
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
         .then( response => {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            setAppointments(response.data);
-            
-            
-        }).catch(error => {
-            console.log(error);
-        })
-        
-    }
-
-=======
-            setAppointments(response.data)
-        }).catch(error => {
-            console.log(error);
-        })
-    }
-
-
->>>>>>> Developer
-=======
             setAppointments(response.data);
             console.log(appointments);
         }).catch(error => {
@@ -82,7 +53,6 @@ export const Home = ({ navigation }) => {
         
     }
 
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
     useEffect(() => {
         profileLoad();
     }, [])
@@ -90,15 +60,7 @@ export const Home = ({ navigation }) => {
     useEffect(() => {
         if (dataConsulta != '') {
             GetAppointments();
-<<<<<<< HEAD
         }
-<<<<<<< HEAD
-        console.log(appointments);
-=======
-        };
->>>>>>> Developer
-=======
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
     }, [dataConsulta])
 
 
@@ -147,35 +109,18 @@ export const Home = ({ navigation }) => {
                     renderItem={({ item }) => {
                         if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                             return (
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                                 <TouchableOpacity onPress={() => { setPatientInfo({
                                     name: item.paciente.idNavigation.nome,
                                     email: item.paciente.idNavigation.email
                                 }); setShowModalAppointment(true) }}>
-<<<<<<< HEAD
-                                    <Card name={item.paciente.idNavigation.nome}
-                                        status={item.situacao.situacao}
-=======
-                                <TouchableOpacity onPress={() => { setShowModalAppointment(true) }}>
-                                    <Card name={item.paciente.idNavigation.nome}
-                                        status={item.situacao.situacao}
-                                        age={item.paciente.dataNascimento}
->>>>>>> Developer
-=======
                                     <Card name={item.paciente.idNavigation.nome}
                                         status={item.situacao.situacao}
                                         ageCrm={calculateAge(item.paciente.dataNascimento)}
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                                         typeAppointment={item.prioridade.prioridade}
                                         onPressCancel={() => setShowModalCancel(true)}
                                         photo={require('../../assets/nicole.png')}
                                     />
-
                                 </TouchableOpacity>
-
                             )
                         } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
                             return (
@@ -217,12 +162,8 @@ export const Home = ({ navigation }) => {
                                     }); setShowModalSeeDoctor(true) }}>
                                         <Card name={item.medicoClinica.medico.idNavigation.nome}
                                             status={item.situacao.situacao}
-<<<<<<< HEAD
-                                            typeAppointment={null}
-=======
                                             ageCrm={item.medicoClinica.medico.crm}
                                             typeAppointment={item.prioridade.prioridade}
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                                             photo={require('../../assets/doctor.png')}
                                             onPressCancel={() => setShowModalCancel(true)}
                                         />
@@ -271,10 +212,6 @@ export const Home = ({ navigation }) => {
                         setShowModalSeeDoctor={setShowModalSeeDoctor}
                         navigation={navigation}
                         doctorInfo={doctorInfo}
-<<<<<<< HEAD
-
-=======
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
                     />
                 </>
             }

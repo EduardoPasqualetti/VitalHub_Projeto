@@ -8,15 +8,8 @@ import { useEffect, useState } from "react"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { Colors } from "react-native/Libraries/NewAppScreen"
-=======
->>>>>>> Developer
-=======
 import api from "../../service/Service"
 import moment from 'moment'
->>>>>>> 2b30b7a2953ac92de032937ad2b32e6f02bc7f6c
 
 export const Profile = ({ navigation }) => {
     const [profileEdit, setProfileEdit] = useState(false)
@@ -38,7 +31,6 @@ export const Profile = ({ navigation }) => {
         const token = await UserDecodeToken();
         setName(token.name)
         setEmail(token.email)
-
         setRole(token.role)
         setIdUser(token.jti)
 
