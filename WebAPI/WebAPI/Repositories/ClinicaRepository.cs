@@ -8,17 +8,27 @@ namespace WebAPI.Repositories
     public class ClinicaRepository : IClinicaRepository
     {
         public VitalContext ctx = new VitalContext();
-        public Clinica BuscarPorId(Guid id)
+        public Consulta BuscarPorId(Guid id)
         {
-            return ctx.Clinicas
-                .Select(c => new Clinica
-                {
-                    Id = id,
-                    NomeFantasia = c.NomeFantasia,
-                    Endereco = c.Endereco
-                })
-                .FirstOrDefault(c => c.Id == id)!;
+            try
+            {
+                return ctx.Consultas
+                    .Include(x => x.Exames)
+                    .Include(x => x.MedicoClinica!.Medico!.Especialidade)
+                    .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
+                    .Include(x => x.Paciente!.IdNavigation)
+                    .Include(x => x.Prioridade)
+                    .Include(x => x.Situacao)
+                    .Include(x => x.Receita)
+                    .FirstOrDefault(x => x.Id == id)!;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
+
 
         public void Cadastrar(Clinica clinica)
         {
@@ -50,6 +60,11 @@ namespace WebAPI.Repositories
                 
                .Where(c => c.Endereco!.Cidade == cidade)
                 .ToList();
+        }
+
+        Clinica IClinicaRepository.BuscarPorId(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

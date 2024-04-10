@@ -15,35 +15,45 @@ namespace WebAPI.Repositories
 
         public Medico AtualizarPerfil(Guid Id, MedicoViewModel medico)
         {
+            try
+            {
+                Medico medicoBuscado = ctx.Medicos
+                    .Include(x => x.Endereco)
+                    .FirstOrDefault(x => x.Id == Id)!;
 
-            Medico medicoBuscado = ctx.Medicos.FirstOrDefault(x => x.Id == Id)!;
 
+                if (medicoBuscado == null) return null!;
 
-            if (medicoBuscado == null) return null!;
+                //if (medico.Foto != null)
+                //    medicoBuscado.IdNavigation.Foto = medico.Foto;
 
-            if (medico.Foto != null)
-                medicoBuscado.IdNavigation.Foto = medico.Foto;
+                if (medico.EspecialidadeId != null)
+                    medicoBuscado.EspecialidadeId = medico.EspecialidadeId;
 
-            if (medico.EspecialidadeId != null)
-                medicoBuscado.EspecialidadeId = medico.EspecialidadeId;
+                if (medico.Crm != null)
+                    medicoBuscado.Crm = medico.Crm;
 
-            if (medico.Crm != null)
-                medicoBuscado.Crm = medico.Crm;
+                if (medico.Logradouro != null)
+                    medicoBuscado.Endereco!.Logradouro = medico.Logradouro;
 
-            if (medico.Logradouro != null)
-                medicoBuscado.Endereco!.Logradouro = medico.Logradouro;
+                if (medico.Numero != null)
+                    medicoBuscado.Endereco!.Numero = medico.Numero;
 
-            if (medico.Numero != null)
-                medicoBuscado.Endereco!.Numero = medico.Numero;
+                if (medico.Cep != null)
+                    medicoBuscado.Endereco!.Cep = medico.Cep;
 
-            if (medico.Cep != null)
-                medicoBuscado.Endereco!.Cep = medico.Cep;
+                if (medico.Cidade != null)
+                    medicoBuscado.Endereco!.Cidade = medico.Cidade;
 
-            ctx.Medicos.Update(medicoBuscado);
-            ctx.SaveChanges();
+                ctx.Medicos.Update(medicoBuscado);
+                ctx.SaveChanges();
 
-            return medicoBuscado;   
-
+                return medicoBuscado;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public Medico BuscarPorId(Guid Id)
@@ -113,13 +123,22 @@ namespace WebAPI.Repositories
 
         public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid id)
         {
-            return ctx.Consultas
-                .Include(x => x.Situacao)
-                .Include(x => x.Prioridade)
-                .Include(x => x.Paciente.IdNavigation)
-                .Include(x => x.MedicoClinica.Medico.IdNavigation)
-                .Where(x => x.MedicoClinica.MedicoId == id && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0 )
-                .ToList();
+
+            try
+            {
+                return ctx.Consultas
+               .Include(x => x.Situacao)
+               .Include(x => x.Prioridade)
+               .Include(x => x.Paciente.IdNavigation)
+               .Include(x => x.MedicoClinica.Medico.IdNavigation)
+               .Where(x => x.MedicoClinica.MedicoId == id && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
+               .ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+           
         }
     }
 }

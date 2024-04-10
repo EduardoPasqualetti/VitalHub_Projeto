@@ -20,29 +20,27 @@ namespace WebAPI.Controllers
             pacienteRepository = new PacienteRepository();
         }
 
-
         [HttpGet("PerfilLogado")]
-        public IActionResult BuscarLogado()
+        public IActionResult GetLogged()
         {
-            Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
+            try
+            {
+                Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
 
-            return Ok(pacienteRepository.BuscarPorId(idUsuario));
+                return Ok(pacienteRepository.BuscarPorId(idUsuario));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //[Authorize]
-        [HttpGet("BuscarPorId/{id}")]
+        [HttpGet("BuscarPorId")]
         public IActionResult BuscarPorId(Guid id)
         {
             return Ok(pacienteRepository.BuscarPorId(id));
-        }
-
-        [Authorize]
-        [HttpPut]
-        public IActionResult AtualizarPerfil(PacienteViewModel paciente)
-        {
-            Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
-
-            return Ok(pacienteRepository.AtualizarPerfil(idUsuario, paciente));
         }
 
         [HttpPost]
@@ -75,9 +73,30 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("BuscarPorData")]
-        public IActionResult BuscarPorData(DateTime data, Guid id)
+        public IActionResult GetByDate(DateTime data, Guid id)
         {
-            return Ok(pacienteRepository.BuscarPorData(data,id));
+            try
+            {
+                return Ok(pacienteRepository.BuscarPorData(data, id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateProfile( PacienteViewModel paciente)
+        {
+            try
+            {
+                Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
+                return Ok(pacienteRepository.AtualizarPerfil(idUsuario, paciente));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

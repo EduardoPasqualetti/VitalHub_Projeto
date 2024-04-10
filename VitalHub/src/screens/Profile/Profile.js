@@ -41,7 +41,7 @@ export const Profile = ({ navigation }) => {
     async function getUser() {
         const url = (role === 'Medico' ? 'Medicos' : 'Pacientes')
         try {
-            const response = await api.get(`/${url}/BuscarPorId/${idUser}`)
+            const response = await api.get(`/${url}/BuscarPorId?id=${idUser}`)
             console.log(response.data);
 
             setUserData(response.data)
@@ -62,12 +62,12 @@ export const Profile = ({ navigation }) => {
 
     }
 
-    async function updateProfile() {
+    async function updatePatient() {
         const token = JSON.parse(await AsyncStorage.getItem('token')).token;
             console.log(token);
 
         try {
-            await api.put("Pacientes", {
+            await api.put(`Pacientes/AtualizarPerfil`, {
                 
                 cpf: cpf
                 
@@ -267,7 +267,7 @@ export const Profile = ({ navigation }) => {
 
                         </ViewFormat>
 
-                        <Btn onPress={() => updateProfile()}>
+                        <Btn onPress={() => updatePatient()}>
                             <ButtonTitle>SALVAR</ButtonTitle>
                         </Btn>
 
