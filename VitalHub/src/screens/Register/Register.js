@@ -1,4 +1,4 @@
-import { Text } from "react-native"
+import { Alert, Text } from "react-native"
 import { Container } from "../../components/Container/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
@@ -6,6 +6,8 @@ import { Input } from "../../components/Input/Style"
 import { Btn } from "../../components/Button/Button"
 import { LinkCancel } from "../../components/Link/Style"
 import * as Notifications from "expo-notifications"
+import { useState } from "react"
+import api from "../../service/Service"
 
 Notifications.requestPermissionsAsync()
 
@@ -20,7 +22,12 @@ Notifications.setNotificationHandler({
     })
 })
 
-export const Register = ({navigation}) => {
+export const Register = ({ navigation }) => {
+    const [nome, setNome] = useState();
+    const [email, setEmail] = useState();
+    const [senha, setSenha] = useState();
+    const [confirmarSenha, setConfirmarSenha] = useState();
+    const [idTipoUsuario, setIdTipoUsuario] = useState("F9B134B7-B074-4159-8434-2F280F5B08E1");
 
     const handleCallNotifications = async () => {
 
@@ -31,7 +38,7 @@ export const Register = ({navigation}) => {
             return
         }
 
-0
+        0
 
         // const token = await Notifications.getExpoPushTokenAsync()
 
@@ -48,11 +55,31 @@ export const Register = ({navigation}) => {
     }
 
     async function Register() {
-        navigation.replace("Main")
-        handleCallNotifications()
+        if (confirmarSenha === senha) {
+            const formData = new FormData();
+            formData.append('Nome', nome);
+            formData.append('Email', email);
+            formData.append('Senha', senha);
+            formData.append('IdTipoUsuario', idTipoUsuario);
+            try {
+                await api.post("Pacientes", formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                navigation.replace("Login");
+                handleCallNotifications();
+            } catch (error) {
+                
+            }
+        }
+        else {
+            Alert.alert("Senha de confirmacao nao corresponde a sua senha")
+        }
+
     }
 
-    return(
+    return (
         <Container>
             <Logo source={require('../../assets/logo.png')}></Logo>
 
@@ -60,9 +87,10 @@ export const Register = ({navigation}) => {
 
             <TextRec>Insira seu endereço de e-mail e senha para realizar seu cadastro.</TextRec>
 
-            <Input placeholder={"Usuario ou Email"}/>
-            <Input placeholder={"Senha"}/>
-            <Input placeholder={"Confirmar senha"}/>
+            <Input placeholder={"Nome"} value={nome} onChangeText={setNome} />
+            <Input placeholder={"Email"} value={email} onChangeText={setEmail} />
+            <Input placeholder={"Senha"} value={senha} onChangeText={setSenha} secureTextEntry={true} />
+            <Input placeholder={"Confirmar senha"} value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry={true} />
 
             <Btn onPress={() => Register()}>
                 <ButtonTitle>CADASTRAR</ButtonTitle>
