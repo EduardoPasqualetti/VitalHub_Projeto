@@ -1,4 +1,6 @@
-﻿using WebAPI.Domains;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using WebAPI.Domains;
 
 namespace WebAPI.ViewModels
 {
@@ -28,7 +30,9 @@ namespace WebAPI.ViewModels
 
         public string? Foto { get; set; }
 
-
+        [JsonIgnore]
+        [NotMapped]
+        public IFormFile? File { get; set; }
 
     }
 }

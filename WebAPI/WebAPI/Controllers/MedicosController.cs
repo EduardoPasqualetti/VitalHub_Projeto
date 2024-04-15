@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
 using WebAPI.Repositories;
+using WebAPI.Utils.Blob;
 using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
@@ -46,13 +47,19 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(MedicoViewModel medicoModel)
+        public async Task<IActionResult> Post([FromForm] MedicoViewModel medicoModel)
         {
             Usuario user = new Usuario();
             user.Nome = medicoModel.Nome;
             user.Email = medicoModel.Email;
             user.TipoUsuarioId = medicoModel.IdTipoUsuario;
-            user.Foto = medicoModel.Foto;
+
+            var containerName = "";
+
+            var connectionString = "";
+
+            user.Foto = await AzureBlobStorageHelper.UploadImage(medicoModel.File!, connectionString, containerName);
+
             user.Senha = medicoModel.Senha;
 
             user.Medico = new Medico();
