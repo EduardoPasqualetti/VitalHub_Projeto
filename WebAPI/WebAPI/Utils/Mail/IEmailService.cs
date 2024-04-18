@@ -5,6 +5,5 @@
         //Método asincrono para envio de email que recebe o MailRequest
         Task sendEmailAsync(MailRequest mailRequest);
 
-
     }
 }

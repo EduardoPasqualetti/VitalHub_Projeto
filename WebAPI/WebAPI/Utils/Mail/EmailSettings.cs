@@ -9,12 +9,12 @@
         public string? Password { get; set; }
 
         //Host do servidor SMTP
-        public string? Host { get; set;}
+        public string? Host { get; set; }
 
         //Nome exibido do remetente
         public string? DisplayName { get; set; }
 
         //Porta do servidor SMTP
-        public int? Port { get; set;}
+        public int Port { get; set; }
     }
 }

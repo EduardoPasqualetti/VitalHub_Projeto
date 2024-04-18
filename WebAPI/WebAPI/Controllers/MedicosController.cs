@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
 using WebAPI.Repositories;
+using WebAPI.Utils.BlobStorage;
 using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
@@ -20,7 +21,7 @@ namespace WebAPI.Controllers
             _medicoRepository = new MedicoRepository();
         }
 
-        [HttpGet]
+        [HttpGet("ListaMedico")]
         public IActionResult Get()
         {
             try
@@ -47,7 +48,7 @@ namespace WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPut("AtualizarPerfilMedico")]
         public IActionResult AtualizarPerfil(MedicoViewModel medico)
         {
             Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
@@ -56,13 +57,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(MedicoViewModel medicoModel)
+        public async Task <IActionResult> Post([FromForm] MedicoViewModel medicoModel)
         {
             Usuario user = new Usuario();
             user.Nome = medicoModel.Nome;
             user.Email = medicoModel.Email;
             user.TipoUsuarioId = medicoModel.IdTipoUsuario;
-            user.Foto = medicoModel.Foto;
+
+
+            var conectionString = "";
+
+            var conteinerName = "blobvitalconteineredu";
+
+            user.Foto = await AzureBlobStorageHelper.UploadImageBlobAsync(medicoModel.Arquivo!, conectionString, conteinerName);
+
+
+
             user.Senha = medicoModel.Senha;
 
             user.Medico = new Medico();

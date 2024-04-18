@@ -3,7 +3,7 @@
     public class MailRequest
     {
         //Destinatário do Email
-        public string? toEmail { get; set; }
+        public string? ToEmail { get; set; }
 
         //Assunto do Email
         public string? Subject { get; set; }
