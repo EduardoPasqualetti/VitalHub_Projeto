@@ -65,7 +65,7 @@ export const ViewTitleRecord = styled.View`
 flex-direction: row;
 justify-content: space-between;
 align-items: center;
-width: 85%;
+width: 95%;
 height: 50px;
 padding: 3%;
 margin-bottom: 30px;

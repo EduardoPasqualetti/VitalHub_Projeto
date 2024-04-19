@@ -74,7 +74,7 @@ export const Home = ({ navigation }) => {
     return (
 
         <Container>
-            <Header nome={'Dr. Joao'} ProfileImage={userLogin.role === "Medico" ? require('../../assets/doctor.png') : require('../../assets/nicole.png')} onPress={() => navigation.replace("Profile")} />
+            <Header ProfileImage={userLogin.role === "Medico" ? require('../../assets/doctor.png') : require('../../assets/nicole.png')} onPress={() => navigation.replace("Profile")} />
 
             <CalendarHome setDataConsulta={setDataConsulta}/>
 
@@ -130,7 +130,16 @@ export const Home = ({ navigation }) => {
                                     typeAppointment={item.prioridade.prioridade}
                                     photo={require('../../assets/nicole.png')}
                                     onPressAppointment={() => {
-                                        navigation.replace('MedicalRecord')
+                                        navigation.replace('MedicalRecord',{
+                                            descricao: item.descricao,
+                                            diagnostico: item.diagnostico,
+                                            receita: item.receita.medicamento,
+                                            idReceita: item.receita.id,
+                                            dtNasc: item.paciente.dataNascimento,
+                                            nome: item.paciente.idNavigation.nome,
+                                            email: item.paciente.idNavigation.email,
+                                            idConsulta: item.id
+                                        })
                                     }}
                                 />
                             )

@@ -27,6 +27,7 @@ export const Profile = ({ navigation }) => {
     const [logradouro, setLogradouro] = useState('')
     const [cidade, setCidade] = useState("")
     const [numero, setNumero] = useState('')
+    const [foto, setFoto] = useState('')
 
 
     async function profileLoad() {
@@ -35,16 +36,15 @@ export const Profile = ({ navigation }) => {
         setEmail(token.email)
         setRole(token.role)
         setIdUser(token.jti)
-
     }
 
     async function getUser() {
         const url = (role === 'Medico' ? 'Medicos' : 'Pacientes')
         try {
             const response = await api.get(`/${url}/BuscarPorId?id=${idUser}`)
-            console.log(response.data);
 
             setUserData(response.data)
+            setFoto(response.data.idNavigation.foto)
             setCep(response.data.endereco.cep)
             setCidade(response.data.endereco.cidade)
             setLogradouro(response.data.endereco.logradouro)
@@ -64,12 +64,15 @@ export const Profile = ({ navigation }) => {
 
     async function updatePatient() {
         const token = JSON.parse(await AsyncStorage.getItem('token')).token;
-            console.log(token);
+        console.log(token);
+        
+        const url = (role === 'Medico' ? '/Medicos/AtualizarPerfil' : 'Pacientes')
 
         try {
-            await api.put(`Pacientes/AtualizarPerfil`, {
+            console.log(crm);
+            await api.put(url, {
                 
-                cpf: cpf
+                crm: crm
                 
 
             },{ headers: { Authorization: `Bearer ${token}` } });
@@ -86,7 +89,7 @@ export const Profile = ({ navigation }) => {
 
     useEffect(() => {
         profileLoad();
-    }, [])
+    }, [idUser])
 
     useEffect(() => {
         if (idUser != '') {
@@ -94,9 +97,6 @@ export const Profile = ({ navigation }) => {
         }
     }, [idUser])
 
-    useEffect(() => {
-        console.log(cpf);
-    },[cpf])
 
     async function closeApp() {
         await AsyncStorage.removeItem('token')
@@ -112,7 +112,7 @@ export const Profile = ({ navigation }) => {
             {!profileEdit ? (
                 <>
 
-                    <ProfileImage source={require("../../assets/photo.png")} />
+                    <ProfileImage source={foto ? { uri: foto } : null}/>
 
                     <ContainerProfile>
                         <TitleProfile>{name}</TitleProfile>
@@ -186,7 +186,7 @@ export const Profile = ({ navigation }) => {
                 </>
             ) : (
                 <>
-                    <ProfileImage source={require("../../assets/photo.png")} />
+                    <ProfileImage source={{ uri: foto }}/>
 
 
                     <ViewTitle>
