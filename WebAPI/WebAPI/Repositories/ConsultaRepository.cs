@@ -14,23 +14,7 @@ namespace WebAPI.Repositories
 
         public Consulta BuscarPorId(Guid id)
         {
-            try
-            {
-                return ctx.Consultas
-                    .Include(x => x.Exames)
-                    .Include(x => x.MedicoClinica!.Medico!.Especialidade)
-                    .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
-                    .Include(x => x.Paciente!.IdNavigation)
-                    .Include(x => x.Prioridade)
-                    .Include(x => x.Situacao)
-                    .Include(x => x.Receita)
-                    .FirstOrDefault(x => x.Id == id)!;
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return ctx.Consultas.Find(id);
         }
 
         public void Cadastrar(Consulta clinica)
@@ -87,7 +71,6 @@ namespace WebAPI.Repositories
             }
         }
 
-
         public List<Consulta> ListarPorMedico(Guid IdMedico)
         {
             try
@@ -110,33 +93,33 @@ namespace WebAPI.Repositories
 
         public List<Consulta> ListarPorPaciente(Guid IdPaciente)
         {
-            List<Consulta> listaConsultas = ctx.Consultas
-                .Include(x => x.MedicoClinica)
-                .Include(x => x.Paciente)
-                .Include(x => x.Situacao)
-                .Where(x => x.PacienteId != null && x.PacienteId == IdPaciente)
-                .ToList();
+            try
+            {
+                List<Consulta> listaConsultas = ctx.Consultas
+                    .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
+                    .Include(x => x.Situacao)
+                    .Include(x => x.Prioridade)
+                    .Where(x => x.PacienteId != null && x.PacienteId == IdPaciente)
+                    .ToList();
 
-            return listaConsultas;
+                return listaConsultas;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public List<Consulta> ListarTodos()
         {
             return ctx.Consultas.ToList();
         }
-
-        public List<Clinica> ListarPorCidade(string cidade)
-        {
-            return ctx.Clinicas
-                .Select(c => new Clinica
-                {
-                    Id = c.Id,
-                    NomeFantasia = c.NomeFantasia,
-                    Endereco = c.Endereco
-                })
-
-               .Where(c => c.Endereco!.Cidade == cidade)
-                .ToList();
-        }
     }
+
+
+
+
+
+
 }

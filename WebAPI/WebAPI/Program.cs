@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using System.Reflection;
 using WebAPI.Contexts;
 using WebAPI.Interfaces;
 using WebAPI.Repositories;
@@ -55,6 +56,10 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = "Vital-WebAPI"
     };
 });
+
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
 
 
 //Adicione o gerador do Swagger à coleção de serviços
