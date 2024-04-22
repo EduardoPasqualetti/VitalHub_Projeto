@@ -1,9 +1,11 @@
+import { useState } from "react"
 import { Btn, BtnReturn, IconClose } from "../../components/Button/Button"
 import { Container } from "../../components/Container/Style"
 import { Input } from "../../components/Input/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
 import * as Notifications from "expo-notifications"
+import api from "../../service/Service"
 
 Notifications.requestPermissionsAsync()
 
@@ -19,7 +21,27 @@ Notifications.setNotificationHandler({
     })
 })
 
-export const ResetPwd = ({ navigation }) => {
+
+export const ResetPwd = ({ navigation, route }) => {
+
+    const [senha, setSenha] = useState('')
+    const [confirmar, setConfirmar] = useState('')
+
+    
+    async function UpdatePassword() {
+        if (senha === confirmar) {
+            await api.post(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
+                {})
+                .then(() => {
+
+                    navigation.replace("Login");
+
+                }).catch(error => {
+                    console.log(error)
+                })
+        }
+    }
+
 
     const handleCallNotifications = async () => {
 
@@ -46,10 +68,6 @@ export const ResetPwd = ({ navigation }) => {
         })
     }
 
-    function onPressHandle() {
-        navigation.replace("Login")
-        handleCallNotifications()
-    }
 
     return (
         <Container>
@@ -65,10 +83,19 @@ export const ResetPwd = ({ navigation }) => {
 
             <TextRec>Insira e confirme a sua nova senha</TextRec>
 
-            <Input placeholder={"Nova senha"} />
-            <Input placeholder={"Confirmar nova senha"} />
+            <Input
+                placeholder={"Nova senha"}
+                value={senha}
+                onChangeText={(txt) => setConfirmar(txt)}
+            />
+            <Input
+                placeholder={"Confirmar nova senha"}
+                value={confirmar}
+                onChangeText={(txt) => setConfirmar(txt)}
 
-            <Btn onPress={() => onPressHandle()}>
+            />
+
+            <Btn onPress={() => UpdatePassword()}>
                 <ButtonTitle>Confirmar nova senha</ButtonTitle>
             </Btn>
 

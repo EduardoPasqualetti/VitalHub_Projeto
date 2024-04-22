@@ -11,9 +11,8 @@ import { useState } from "react"
 import api from "../../service/Service"
 import asyncStorage from '@react-native-async-storage/async-storage'
 
-
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('eduardo.Paciente@Paciente.com')
+    const [email, setEmail] = useState('eduardo.brenn2006@gmail.com')
     const [senha, setSenha] = useState('paciente123')
     const [loading, setLoading] = useState(false)
     const [emailError, setEmailError] = useState(false);
@@ -71,14 +70,12 @@ export const Login = ({ navigation }) => {
 
                 <Input
                     placeholder={"Usuário ou E-mail"}
-                    value={email}
                     onChangeText={(txt) => setEmail(txt)}
                 />
                 {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>} 
                 <Input
                     placeholder={"Senha"}
                     secureTextEntry={true}
-                    value={senha}
                     onChangeText={(txt) => setSenha(txt)}
                 />
                 {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 
