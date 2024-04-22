@@ -105,7 +105,7 @@ namespace WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut("AtualizarPerfil")]
+        [HttpPut]
         public IActionResult UpdateProfile(MedicoViewModel medico)
         {
             try

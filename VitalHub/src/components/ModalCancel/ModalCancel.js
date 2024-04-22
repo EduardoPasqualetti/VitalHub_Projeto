@@ -6,6 +6,7 @@ import { ContentModal, ViewModal } from "./Style"
 
 // Importar a biblioteca
 import * as Notifications from "expo-notifications"
+import api from "../../service/Service"
 
 // Solicitar as permissoes de notificacao ao iniciar o app
 Notifications.requestPermissionsAsync()
@@ -24,27 +25,18 @@ Notifications.setNotificationHandler({
   })
 })
 
-export const ModalCancel = ({ visible, setShowModalCancel, ...rest }) => {
+export const ModalCancel = ({idConsulta, visible, setShowModalCancel, ...rest }) => {
 
-    // Funcao para lidar com a chamada da notificacao
   const handleCallNotifications = async () => {
 
-    // Pega o status da permissao
     const { status } = await Notifications.getPermissionsAsync()
 
-    // Verifica se o usuario concedeu a permissao para o uso de notificacoes
     if (status !== "granted") {
       alert("Voce nao permitiu as notificacoes estarem ativas")
       return
     }
 
-    
-    
 
-    // obter o token de envio de notificacao
-    // const token = await Notifications.getExpoPushTokenAsync()
-
-    // Agendar uma notificacao para ser exibida apos 5 segundos
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Consulta Cancelada",
@@ -60,6 +52,18 @@ export const ModalCancel = ({ visible, setShowModalCancel, ...rest }) => {
   async function onPressHandle() {
     handleCallNotifications(),
     setShowModalCancel(false)
+    UpdateStatus()
+  }
+
+  const consulta = idConsulta;
+
+
+  async function UpdateStatus() {
+    try {
+      await api.put(`/Consultas/Status?idConsulta=${consulta}&status=Cancelados`)
+    } catch (error) {
+      console.log(error + 'erro ao atualizar status');
+    }
   }
 
 

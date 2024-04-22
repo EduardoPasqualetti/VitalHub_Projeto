@@ -21,7 +21,7 @@ export const Profile = ({ navigation }) => {
     const [cpf, setCpf] = useState()
     const [rg, setRg] = useState('')
     const [dtNasc, setDtNasc] = useState('')
-    const [crm, setCrm] = useState('')
+    const [crm, setCrm] = useState()
     const [especialidade, setEspecialidade] = useState("")
     const [cep, setCep] = useState('')
     const [logradouro, setLogradouro] = useState('')
@@ -65,20 +65,31 @@ export const Profile = ({ navigation }) => {
     async function updatePatient() {
         const token = JSON.parse(await AsyncStorage.getItem('token')).token;
         console.log(token);
-        
-        const url = (role === 'Medico' ? '/Medicos/AtualizarPerfil' : 'Pacientes')
 
         try {
-            console.log(crm);
-            await api.put(url, {
-                
-                crm: crm
-                
-
-            },{ headers: { Authorization: `Bearer ${token}` } });
+            if (role === 'Medico') {
+                await api.put('/Medicos', {
+                    crm: crm,
+                    logradouro: logradouro,
+                    numero: numero,
+                    cep: cep,
+                    cidade: cidade,
+                    especialidade: especialidade
+                }, { headers: { Authorization: `Bearer ${token}` } });
+            } else {
+                await api.put('/Pacientes', {
+                    rg: rg,
+                    cpf: cpf,
+                    dataNascimento: dtNasc,
+                    logradouro: logradouro,
+                    numero: numero,
+                    cep: cep,
+                    cidade: cidade
+                }, { headers: { Authorization: `Bearer ${token}` } });
+            }
             console.log('Perfil atualizado');
 
-            
+
             setProfileEdit(false);
         } catch (error) {
             console.log(error + " erro para atualizar paciente");
@@ -92,7 +103,7 @@ export const Profile = ({ navigation }) => {
     }, [idUser])
 
     useEffect(() => {
-        if (idUser != '') {
+        if (idUser) {
             getUser();
         }
     }, [idUser])
@@ -112,7 +123,7 @@ export const Profile = ({ navigation }) => {
             {!profileEdit ? (
                 <>
 
-                    <ProfileImage source={foto ? { uri: foto } : null}/>
+                    <ProfileImage source={foto ? { uri: foto } : null} />
 
                     <ContainerProfile>
                         <TitleProfile>{name}</TitleProfile>
@@ -124,12 +135,12 @@ export const Profile = ({ navigation }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        fieldValue={formatarData(dtNasc)}
+                                        fieldValue={dtNasc ? formatarData(dtNasc) : null}
 
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
-                                        placeholder={cpf}
+                                        fieldValue={cpf}
                                     />
                                     <BoxInput
                                         textLabel={'RG'}
@@ -186,7 +197,7 @@ export const Profile = ({ navigation }) => {
                 </>
             ) : (
                 <>
-                    <ProfileImage source={{ uri: foto }}/>
+                    <ProfileImage source={{ uri: foto }} />
 
 
                     <ViewTitle>
@@ -200,19 +211,19 @@ export const Profile = ({ navigation }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        
+                                        placeholder={dtNasc}
                                         editable={true}
                                         onChangeText={(txt) => setDtNasc(txt)}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
-                                        
+                                        placeholder={cpf}
                                         editable={true}
                                         onChangeText={setCpf}
                                     />
                                     <BoxInput
                                         textLabel={'RG'}
-                                        
+                                        placeholder={rg}
                                         editable={true}
                                         onChangeText={(txt) => setRg(txt)}
                                     />
@@ -221,29 +232,29 @@ export const Profile = ({ navigation }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Especialidade'}
-                                        
+                                        placeholder={especialidade}
                                         editable={true}
                                         onChangeText={(txt) => setEspecialidade(txt)}
                                     />
                                     <BoxInput
                                         textLabel={'CRM'}
-                                        
+                                        placeholder={crm}
                                         editable={true}
-                                        onChangeText={(txt) => setCrm(txt)}
+                                        onChangeText={setCrm}
                                     />
                                 </>
                         }
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Logradouro'}
-                                
+                                placeholder={logradouro}
                                 fieldWidth={'60'}
                                 editable={true}
                                 onChangeText={(txt) => setLogradouro(txt)}
                             />
                             <BoxInput
                                 textLabel={'Numero'}
-                                
+                                placeholder={numero}
                                 fieldWidth={'30'}
                                 editable={true}
                                 onChangeText={(txt) => setNumero(txt)}
@@ -252,14 +263,14 @@ export const Profile = ({ navigation }) => {
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Cep'}
-                               
+                                placeholder={cep}
                                 fieldWidth={'45'}
                                 editable={true}
                                 onChangeText={(txt) => setCep(txt)}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
-                                
+                                placeholder={cidade}
                                 fieldWidth={'45'}
                                 editable={true}
                                 onChangeText={(txt) => setCidade(txt)}

@@ -3,16 +3,26 @@
     import { Btn } from "../Button/Button"
     import { LinkCancel } from "../Link/Style"
     import { ButtonModal, Cancel, ContentModal, TextAge, TextEmail, ViewData, ViewModal } from "./Style"
+    import moment from 'moment'
 
     export const ModalAppointment = ({patientInfo,appointmentData, navigation, visible, setShowModalAppointment, ...rest}) => {
 
         const onPressHandler = () => {
-            navigation.navigate("InsertRecord");
+            navigation.navigate("InsertRecord",{name: name, email: email, idade: idade, idConsulta: idConsulta});
             setShowModalAppointment(false)
+        };
+
+        const calculateAge = (dateOfBirth) => {
+            const today = moment();
+            const birthDate = moment(dateOfBirth);
+            const years = today.diff(birthDate, 'years');
+            return years;
         };
 
         const name = patientInfo ? patientInfo.name : '';
         const email = patientInfo ? patientInfo.email : '';
+        const idade = patientInfo ? calculateAge(patientInfo.dtNasc) : '';
+        const idConsulta = patientInfo ? patientInfo.idConsulta : '';
 
         return(
             <Modal {...rest} visible={visible} transparent={true} animationType="fade">
@@ -23,7 +33,7 @@
                         <TitleProfile>{name}</TitleProfile>
 
                         <ViewData>
-                            <TextAge>17</TextAge>
+                            <TextAge>{idade}</TextAge>
                             <TextEmail>{email}</TextEmail>
                         </ViewData>
 

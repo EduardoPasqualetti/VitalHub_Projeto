@@ -7,6 +7,7 @@ import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn } from "../../components/Button/Button"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import moment from 'moment'
+import api from "../../service/Service"
 
 export const MedicalRecord = ({navigation, route}) => {
 
@@ -40,6 +41,25 @@ export const MedicalRecord = ({navigation, route}) => {
     };
 
     const idade = calculateAge(dtNasc)
+
+    async function UpdateRecord() {
+        try {
+            await api.put('/Consultas/Prontuario',{
+                consultaId: idConsulta,
+                descricao: descricao,
+                diagnostico: diagnostico
+            })
+            console.log("Prontuario atualizado com sucesso");
+            navigation.replace("Main")
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function OnPressHandle() {
+        UpdateRecord();
+        setRecordEdit(true)
+    }
 
     return (
         <ContainerScroll>
@@ -96,6 +116,7 @@ export const MedicalRecord = ({navigation, route}) => {
 
                         <BoxInput
                             textLabel={'Descrição da consulta'}
+                            placeholder={descricao}
                             onChangeText={setDescricao}
                             fieldHeight={150}
                             editable={true}
@@ -103,6 +124,7 @@ export const MedicalRecord = ({navigation, route}) => {
                         />
                         <BoxInput
                             textLabel={'Diagnóstico do paciente'}
+                            placeholder={diagnostico}
                             onChangeText={setDiagnostico}
                             fieldHeight={80}                  
                             editable={true}
@@ -110,16 +132,17 @@ export const MedicalRecord = ({navigation, route}) => {
                         />
                         <BoxInput
                             textLabel={'Prescrição médica'}
+                            placeholder={receita}
                             onChangeText={setReceita}
                             fieldHeight={150}
                             editable={true}
                             multiline={true}
                         />
-                        <Btn onPress={() => setRecordEdit(true)}>
+                        <Btn onPress={() => OnPressHandle()}>
                             <ButtonTitle>SALVAR</ButtonTitle>
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => {setRecordEdit(true)}}>Cancelar Edição</LinkCancelMargin>
+                        <LinkCancelMargin onPress={() => setRecordEdit(true)}>Cancelar Edição</LinkCancelMargin>
                     </ContainerProfile>
                 </>
             )}

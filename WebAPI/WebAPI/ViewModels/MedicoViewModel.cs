@@ -23,6 +23,8 @@ namespace WebAPI.ViewModels
 
         public Guid? EspecialidadeId { get; set; }
 
+        public string? Especialidade { get; set; }
+
         public string? Crm { get; set; }
 
         public Guid? IdTipoUsuario { get; set; }

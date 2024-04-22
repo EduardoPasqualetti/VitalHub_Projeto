@@ -32,6 +32,7 @@ export const Home = ({ navigation }) => {
     const [dataConsulta,setDataConsulta] = useState('')
     const [patientInfo, setPatientInfo] = useState(null);
     const [doctorInfo,setDoctorInfo] = useState(null)
+    const [idConsulta, setIdConsulta] = useState(null)
 
     async function profileLoad() {
         const token = await UserDecodeToken();
@@ -111,13 +112,15 @@ export const Home = ({ navigation }) => {
                             return (
                                 <TouchableOpacity onPress={() => { setPatientInfo({
                                     name: item.paciente.idNavigation.nome,
-                                    email: item.paciente.idNavigation.email
+                                    email: item.paciente.idNavigation.email,
+                                    idConsulta: item.id,
+                                    dtNasc: item.paciente.dataNascimento,
                                 }); setShowModalAppointment(true) }}>
                                     <Card name={item.paciente.idNavigation.nome}
                                         status={item.situacao.situacao}
                                         ageCrm={calculateAge(item.paciente.dataNascimento)}
                                         typeAppointment={item.prioridade.prioridade}
-                                        onPressCancel={() => setShowModalCancel(true)}
+                                        onPressCancel={() => {setIdConsulta(item.id); setShowModalCancel(true)}}
                                         photo={require('../../assets/nicole.png')}
                                     />
                                 </TouchableOpacity>
@@ -232,6 +235,7 @@ export const Home = ({ navigation }) => {
             <ModalCancel
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
+                idConsulta={idConsulta}
             />
 
             <ModalAppointment
