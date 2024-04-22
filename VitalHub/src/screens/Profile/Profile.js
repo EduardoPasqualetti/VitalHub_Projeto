@@ -21,10 +21,10 @@ export const Profile = ({ navigation }) => {
     const [cpf, setCpf] = useState('')
     const [dtNasc, setDtNasc] = useState('')
     const [crm, setCrm] = useState('')
-    const [especialidade, setEspecialidade] = useState("")
+    const [especialidade, setEspecialidade] = useState('')
     const [cep, setCep] = useState('')
     const [logradouro, setLogradouro] = useState('')
-    const [cidade, setCidade] = useState("")
+    const [cidade, setCidade] = useState('')
 
 
     async function profileLoad() {
@@ -33,13 +33,12 @@ export const Profile = ({ navigation }) => {
         setEmail(token.email)
         setRole(token.role)
         setIdUser(token.jti)
-
     }
 
     async function getUser() {
         const url = (role === 'Medico' ? 'Medicos' : 'Pacientes')
         try {
-            const response = await api.get(`/${url}/BuscarPorId/${idUser}`)
+            const response = await api.get(`/${url}/BuscarPorId?id=${idUser}`)
             setUserData(response.data)
             setCep(response.data.endereco.cep)
             setCidade(response.data.endereco.cidade)
@@ -57,8 +56,6 @@ export const Profile = ({ navigation }) => {
         console.log(userData);
     }
 
-
-
     useEffect(() => {
         profileLoad();
     }, [])
@@ -75,7 +72,7 @@ export const Profile = ({ navigation }) => {
     }
 
     function formatarData(data) {
-        return moment(data).format('DD/MM/YYYY');
+        return moment(data).format('YYYY/MM/DD');
       }
 
     return (
