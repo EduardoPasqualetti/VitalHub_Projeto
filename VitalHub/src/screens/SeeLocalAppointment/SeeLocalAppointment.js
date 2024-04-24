@@ -81,6 +81,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
 
     useEffect(() => {
         setIdClinica(route.params.clinicaid)
+        console.log(route.params.clinicaid);
     }, [route.params])
 
     useEffect(() => {
@@ -101,10 +102,11 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
             setNumero(response.data.endereco.numero.toString())
             setCidade(response.data.endereco.cidade)
             setNome(response.data.nomeFantasia)
+            console.log(clinica);
         } catch (error) {
             console.log(error);
         }
-        console.log(clinica);
+        
     }
 
 
@@ -187,7 +189,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                         fieldWidth={45}
                     />
                     <BoxInput
-                        textLabel={'Bairro'}
+                        textLabel={'Cidade'}
                         fieldValue={cidade}
                         fieldWidth={46}
                     />

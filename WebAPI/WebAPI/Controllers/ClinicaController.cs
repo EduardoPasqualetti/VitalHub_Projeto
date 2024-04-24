@@ -34,11 +34,12 @@ namespace WebAPI.Controllers
         {
             try
             {
-                return Ok(clinicaRepository.BuscarPorId(id));
-
+                Clinica clinica = clinicaRepository.BuscarPorId(id);
+                return Ok(clinica);
             }
             catch (Exception ex)
             {
+
                 return BadRequest(ex.Message);
             }
         }

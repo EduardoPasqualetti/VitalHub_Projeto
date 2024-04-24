@@ -34,6 +34,7 @@ width: 90%;
 height: 100%;
 align-self: center;
 align-items: center;
+margin-top: 30px;
 `
 export const ContainerSafeEdit = styled(ContainerProfile)`
 margin-top: 120px;
@@ -127,4 +128,15 @@ margin-top: 40px;
 export const ContainerMap = styled.View`
 width: 100%;
 height: 50%;
+`
+
+
+export const ContainerImage = styled.View`
+width: 100%;
+height: 260px;
+margin-bottom: 20px;
+position: relative;
+align-items: center;
+justify-content: flex-start;
+border: 2px solid black;
 `

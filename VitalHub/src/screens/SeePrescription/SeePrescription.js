@@ -27,17 +27,19 @@ export const SeePrescription = ({ navigation, route }) => {
 
     function onPressCancel() {
         setIsPhoto(false);
-        route.params = null
     }
 
     useEffect(() => {
-        setDescricao(route.params.descricao)
-        setDiagnostico(route.params.diagnostico)
-        setReceita(route.params.receita)
-        setNome(route.params.nome)
-        setCrm(route.params.crm)
-        setEspecialidade(route.params.especialidade)
-    },[route.params])
+        if (route.params) {
+            setDescricao(route.params.descricao)
+            setDiagnostico(route.params.diagnostico)
+            setReceita(route.params.receita)
+            setNome(route.params.nome)
+            setCrm(route.params.crm)
+            setEspecialidade(route.params.especialidade)
+        }
+
+    }, [route.params])
 
     return (
         <ContainerScroll>
@@ -85,7 +87,7 @@ export const SeePrescription = ({ navigation, route }) => {
 
                 <ViewInsertPhoto>
 
-                    <BtnInsertPhoto onPress={() => {!photoUri ? onPressPhoto() : null}}>
+                    <BtnInsertPhoto onPress={() => { !photoUri ? onPressPhoto() : null }}>
                         <MaterialCommunityIcons name="camera-plus-outline" size={26} color="white" />
                         <BtnProfile>Enviar</BtnProfile>
                     </BtnInsertPhoto>

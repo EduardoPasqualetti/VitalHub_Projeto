@@ -1,17 +1,18 @@
 import { Button, Text } from "react-native"
-import { ContainerProfile, ContainerSafeEdit, ContainerScroll, ViewFormat, ViewTitle } from "../../components/Container/Style"
+import { ContainerImage, ContainerProfile, ContainerSafeEdit, ContainerScroll, ViewFormat, ViewTitle } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
-import { Btn, ButtonGoOut } from "../../components/Button/Button"
+import { Btn, ButtonCamera, ButtonGoOut } from "../../components/Button/Button"
 import { useEffect, useState } from "react"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
 import moment from 'moment'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export const Profile = ({ navigation }) => {
+export const Profile = ({ navigation, route }) => {
     const [profileEdit, setProfileEdit] = useState(false)
     const [role, setRole] = useState('')
     const [name, setName] = useState('')
@@ -27,7 +28,9 @@ export const Profile = ({ navigation }) => {
     const [logradouro, setLogradouro] = useState('')
     const [cidade, setCidade] = useState("")
     const [numero, setNumero] = useState('')
-    const [foto, setFoto] = useState('')
+    //const [foto, setFoto] = useState('')
+    const { photoUri } = route.params || {};
+
 
 
     async function profileLoad() {
@@ -44,7 +47,7 @@ export const Profile = ({ navigation }) => {
             const response = await api.get(`/${url}/BuscarPorId?id=${idUser}`)
 
             setUserData(response.data)
-            setFoto(response.data.idNavigation.foto)
+            // setFoto(response.data.idNavigation.foto)
             setCep(response.data.endereco.cep)
             setCidade(response.data.endereco.cidade)
             setLogradouro(response.data.endereco.logradouro)
@@ -108,6 +111,10 @@ export const Profile = ({ navigation }) => {
         }
     }, [idUser])
 
+    useEffect(() => {
+        
+    })
+
 
     async function closeApp() {
         await AsyncStorage.removeItem('token')
@@ -122,8 +129,12 @@ export const Profile = ({ navigation }) => {
         <ContainerScroll>
             {!profileEdit ? (
                 <>
-
-                    <ProfileImage source={foto ? { uri: foto } : null} />
+                    <ContainerImage>
+                        <ProfileImage source={{uri: photoUri}} />
+                        <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", {isProfile: true})}>
+                            <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb"/>
+                        </ButtonCamera>
+                    </ContainerImage>
 
                     <ContainerProfile>
                         <TitleProfile>{name}</TitleProfile>

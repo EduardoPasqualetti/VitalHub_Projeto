@@ -12,28 +12,34 @@ import { ButtonTitle } from "../Title/Style";
 import { LinkCancel } from "../Link/Style";
 import { EvilIcons } from '@expo/vector-icons';
 
-export const CameraPhoto = ({ navigation, }) => {
+
+export const CameraPhoto = ({ navigation, route}) => {
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
     const [openModal, setOpenModal] = useState(false)
     const [tipoCamera, setTipoCamera] = useState(Camera.Constants.Type.front)
     const [flashOn, setFlashOn] = useState(Camera.Constants.FlashMode.off);
+    const [isProfile, setIsProfile] = useState(false)
+    const [latestPhoto, setLatestPhoto] = useState(null)
 
     async function CapturePhoto() {
         if (cameraRef) {
             const photo = await cameraRef.current.takePictureAsync()
             setPhoto(photo.uri)
-
-
             setOpenModal(true)
-
         }
     }
 
     async function onPressToSend() {
         await setOpenModal(false)
+        isProfile ? navigation.navigate("Profile", { photoUri: photo }) : navigation.navigate("SeePrescription", { photoUri: photo })
+        
+    }
 
-        navigation.navigate("SeePrescription", { photoUri: photo })
+    async function GetLastPhoto(){
+        const assets = await MediaLibrary.getAssetsAsync({sortBy : [[MediaLibrary.SortBy.creationTime, false]], first: 1})
+
+        console.log(assets);
     }
 
     useEffect(() => {
@@ -43,6 +49,18 @@ export const CameraPhoto = ({ navigation, }) => {
             const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         })();
     }, [])
+
+    useEffect(() => {
+            console.log(route.params.isProfile);
+        setIsProfile(route.params.isProfile)
+        
+    },[route.params])
+
+    useEffect(() => {
+        if (isProfile) {
+            GetLastPhoto()
+        }
+    })
 
     return (
         <Container>

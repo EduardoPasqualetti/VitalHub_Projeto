@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Contexts;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
@@ -8,27 +9,11 @@ namespace WebAPI.Repositories
     public class ClinicaRepository : IClinicaRepository
     {
         public VitalContext ctx = new VitalContext();
-        public Consulta BuscarPorId(Guid id)
+
+        public Clinica BuscarPorId(Guid id)
         {
-            try
-            {
-                return ctx.Consultas
-                    .Include(x => x.Exames)
-                    .Include(x => x.MedicoClinica!.Medico!.Especialidade)
-                    .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
-                    .Include(x => x.Paciente!.IdNavigation)
-                    .Include(x => x.Prioridade)
-                    .Include(x => x.Situacao)
-                    .Include(x => x.Receita)
-                    .FirstOrDefault(x => x.Id == id)!;
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return ctx.Clinicas.Find(id)!;
         }
-
 
         public void Cadastrar(Clinica clinica)
         {
@@ -62,9 +47,5 @@ namespace WebAPI.Repositories
                 .ToList();
         }
 
-        Clinica IClinicaRepository.BuscarPorId(Guid id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
