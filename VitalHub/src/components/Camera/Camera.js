@@ -3,7 +3,6 @@ import { Container } from "../Container/Style"
 import { useEffect, useRef, useState } from "react"
 import { BoxCamera, BtnCapture, BtnFlash, BtnFlip, ConfigBtnCapture } from "./Style"
 import { Camera, CameraType, FlashMode } from 'expo-camera';
-import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import * as MediaLibrary from 'expo-media-library'
 import { Ionicons } from '@expo/vector-icons';
@@ -12,12 +11,14 @@ import { ButtonTitle } from "../Title/Style";
 import { LinkCancel } from "../Link/Style";
 import { EvilIcons } from '@expo/vector-icons';
 
-export const CameraPhoto = ({ navigation, }) => {
+export const CameraPhoto = ({ navigation, getMediaLibrary = false}) => {
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
     const [openModal, setOpenModal] = useState(false)
     const [tipoCamera, setTipoCamera] = useState(Camera.Constants.Type.front)
     const [flashOn, setFlashOn] = useState(Camera.Constants.FlashMode.off);
+
+    const[latestPhoto, setLatestPhoto] = useState(null)
 
     async function CapturePhoto() {
         if (cameraRef) {

@@ -1,15 +1,20 @@
-import { Button, Text } from "react-native"
-import { ContainerProfile, ContainerSafeEdit, ContainerScroll, ViewFormat, ViewTitle } from "../../components/Container/Style"
+import { ContainerProfile, ContainerSafeEdit, ContainerScroll, ConteinerTitle, ViewFormat, ViewTitle } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
-import { Btn, ButtonGoOut } from "../../components/Button/Button"
-import { useEffect, useState } from "react"
+import { Btn } from "../../components/Button/Button"
+import { useEffect, useRef, useState } from "react"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
 import moment from 'moment'
+import { ButtonCamera } from "./Style"
+
+import { Camera, CameraType } from "expo-camera";
+import * as MediaLibrary from 'expo-media-library'
+
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 export const Profile = ({ navigation }) => {
     const [profileEdit, setProfileEdit] = useState(false)
@@ -25,6 +30,11 @@ export const Profile = ({ navigation }) => {
     const [cep, setCep] = useState('')
     const [logradouro, setLogradouro] = useState('')
     const [cidade, setCidade] = useState('')
+
+    const cameraRef = useRef(null);
+    const [tipoCamera, setTipoCamera] = useState(Camera.Constants.Type.front);
+    const [photo, setPhoto] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
 
 
     async function profileLoad() {
@@ -73,7 +83,47 @@ export const Profile = ({ navigation }) => {
 
     function formatarData(data) {
         return moment(data).format('YYYY/MM/DD');
+    }
+
+
+    ////////////// CAMERA //////////////
+
+    async function CapturePhoto() {
+        if (cameraRef) {
+          const photo = await cameraRef.current.takePictureAsync();
+          setPhoto(photo.uri);
+    
+          setOpenModal(true);
+    
+          console.log(photo);
+        }
       }
+    
+      function ClearPhoto() {
+        setPhoto(null);
+    
+        setOpenModal(false);
+      }
+    
+      async function SavePhoto() {
+        if( photo ) {
+          await MediaLibrary.createAssetAsync( photo )
+          .then( () => {
+            Alert.alert('Sucesso', 'Foto salva na galeria')
+          } ).catch(error => {
+            alert("Erro ao processar foto")
+          })
+        }
+      }
+    
+      useEffect(() => {
+        (async () => {
+          const { status: cameraStatus } =
+            await Camera.requestCameraPermissionsAsync();
+    
+            const { statu: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
+        })();
+      }, []);
 
     return (
         <ContainerScroll>
@@ -82,11 +132,22 @@ export const Profile = ({ navigation }) => {
 
                     <ProfileImage source={require("../../assets/photo.png")} />
 
-                    <ContainerProfile>
+                    <ConteinerTitle>
                         <TitleProfile>{name}</TitleProfile>
                         <SubTitleProfile>{email}</SubTitleProfile>
 
+                        <ButtonCamera>
+                            <MaterialCommunityIcons
+                                name="camera-plus"
+                                size={20}
+                                color={'#fbfbfb'} />
+                        </ButtonCamera>
 
+                    </ConteinerTitle>
+                    {/* Botão da foto */}
+
+
+                    <ContainerProfile>
                         {
                             role == 'Paciente' ?
                                 <>
@@ -152,7 +213,7 @@ export const Profile = ({ navigation }) => {
                     </ViewTitle>
 
                     <ContainerSafeEdit>
-                    {
+                        {
                             role == 'Paciente' ?
                                 <>
                                     <BoxInput
@@ -194,7 +255,7 @@ export const Profile = ({ navigation }) => {
                                 placeholder={cidade}
                                 fieldWidth={'45'}
                                 editable={true}
-                                
+
                             />
                         </ViewFormat>
 
@@ -207,6 +268,12 @@ export const Profile = ({ navigation }) => {
                     </ContainerSafeEdit>
                 </>
             )}
+
+        <Camera
+            getMediaLibrary={true}
+            // visible={}
+        />
+
         </ContainerScroll>
     )
 }

@@ -41,11 +41,11 @@ margin-top: 3px;
 export const TitleProfile = styled(TextAccount)`
 
 margin-top: 20px;
-font-size: 24px;
+font-size: 22px;
 `
 
 export const SubTitleProfile = styled(TextRec)`
-font-size: 18px;
+font-size: 16px;
 color: #4E4B59;
 margin-bottom: 40px;
 margin-top: 10px;

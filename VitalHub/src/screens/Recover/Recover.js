@@ -10,6 +10,7 @@ export const Recover = ({navigation}) => {
     const [email, setEmail] = useState('eduardo.brenn2006@gmail.com')
 
     async function SendEmail(){
+        console.log()
      await api.post(`/RecuperarSenha/PostRecupSenha?email=${email}`)
      .then( () =>  {
          navigation.replace("VerifyEmail", { emailRecuperacao : email })
@@ -36,7 +37,6 @@ export const Recover = ({navigation}) => {
             <Btn onPress={() => SendEmail()}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>  
-            {/* onPress{() => SendEmail()} */}
         </Container>
     )
 }

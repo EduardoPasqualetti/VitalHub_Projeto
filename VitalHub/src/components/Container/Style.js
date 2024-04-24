@@ -7,6 +7,19 @@ export const Container = styled.View`
     
 `
 
+export const ConteinerTitle = styled.View`
+    width: 80%;
+    height: 150px;
+
+    margin-top: -80px;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 5px;
+
+    align-self: center;
+    align-items: center;
+`
+
 export const ContentAccount = styled.View`
 margin-top: 40px;
 width: 90%;

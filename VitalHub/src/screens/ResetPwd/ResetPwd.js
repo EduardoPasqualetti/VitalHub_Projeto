@@ -29,6 +29,7 @@ export const ResetPwd = ({ navigation, route }) => {
 
     
     async function UpdatePassword() {
+        console.log(route)
         if (senha === confirmar) {
             await api.post(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
                 {})
@@ -85,12 +86,10 @@ export const ResetPwd = ({ navigation, route }) => {
 
             <Input
                 placeholder={"Nova senha"}
-                value={senha}
                 onChangeText={(txt) => setConfirmar(txt)}
             />
             <Input
                 placeholder={"Confirmar nova senha"}
-                value={confirmar}
                 onChangeText={(txt) => setConfirmar(txt)}
 
             />
