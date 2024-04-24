@@ -12,7 +12,11 @@ namespace WebAPI.Repositories
 
         public Clinica BuscarPorId(Guid id)
         {
-            return ctx.Clinicas.Find(id)!;
+
+            Clinica clinica = ctx.Clinicas.Include(x => x.Endereco).FirstOrDefault(x => x.Id == id)!;
+
+            return clinica;
+            
         }
 
         public void Cadastrar(Clinica clinica)

@@ -28,6 +28,7 @@ export const Profile = ({ navigation, route }) => {
     const [logradouro, setLogradouro] = useState('')
     const [cidade, setCidade] = useState("")
     const [numero, setNumero] = useState('')
+    const [fotoUsuario, setFotoUsuario] = useState()
     //const [foto, setFoto] = useState('')
     const { photoUri } = route.params || {};
 
@@ -47,7 +48,7 @@ export const Profile = ({ navigation, route }) => {
             const response = await api.get(`/${url}/BuscarPorId?id=${idUser}`)
 
             setUserData(response.data)
-            // setFoto(response.data.idNavigation.foto)
+            setFotoUsuario(response.data.idNavigation.foto)
             setCep(response.data.endereco.cep)
             setCidade(response.data.endereco.cidade)
             setLogradouro(response.data.endereco.logradouro)
@@ -99,6 +100,27 @@ export const Profile = ({ navigation, route }) => {
         }
     }
 
+    async function AlterarFotoPerfil() {
+        const formData = new FormData();
+        formData.append("Arquivo", {
+            uri: photoUri,
+            name: `image.${ photoUri.split(".")[1]}`,
+            type: `image/${ photoUri.split(".")[1]}`
+        })
+
+        try {
+            const response = await api.put(`/Usuario/AlterarFotoPerfil?id=${idUser}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            })
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
 
 
     useEffect(() => {
@@ -112,8 +134,9 @@ export const Profile = ({ navigation, route }) => {
     }, [idUser])
 
     useEffect(() => {
-        
-    })
+        console.log(route.params);
+        AlterarFotoPerfil()
+    },[photoUri])
 
 
     async function closeApp() {
@@ -130,9 +153,9 @@ export const Profile = ({ navigation, route }) => {
             {!profileEdit ? (
                 <>
                     <ContainerImage>
-                        <ProfileImage source={{uri: photoUri}} />
-                        <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", {isProfile: true})}>
-                            <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb"/>
+                        <ProfileImage source={{ uri: fotoUsuario }} />
+                        <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", { isProfile: true })}>
+                            <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
                         </ButtonCamera>
                     </ContainerImage>
 
@@ -208,7 +231,7 @@ export const Profile = ({ navigation, route }) => {
                 </>
             ) : (
                 <>
-                    <ProfileImage source={{ uri: foto }} />
+                    <ProfileImage source={{ uri: photoUri }} />
 
 
                     <ViewTitle>
@@ -222,7 +245,7 @@ export const Profile = ({ navigation, route }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        placeholder={dtNasc}
+                                        placeholder={formatarData(dtNasc)}
                                         editable={true}
                                         onChangeText={(txt) => setDtNasc(txt)}
                                     />

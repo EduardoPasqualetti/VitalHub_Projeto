@@ -1,9 +1,12 @@
+import { useState } from "react"
 import { Btn, BtnReturn, IconClose } from "../../components/Button/Button"
 import { Container } from "../../components/Container/Style"
 import { Input } from "../../components/Input/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
 import * as Notifications from "expo-notifications"
+import api from "../../service/Service"
+import { Alert } from "react-native"
 
 Notifications.requestPermissionsAsync()
 
@@ -19,7 +22,29 @@ Notifications.setNotificationHandler({
     })
 })
 
-export const ResetPwd = ({ navigation }) => {
+export const ResetPwd = ({ navigation, route }) => {
+    const [senha, setSenha] = useState('')
+    const [confirmar, setConfirmar] = useState('')
+
+    
+    async function UpdatePassword() {
+        if (senha === confirmar) {
+            try {
+                await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
+                {
+                    senhaNova: senha
+                })
+                navigation.replace("Login");
+                handleCallNotifications()
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else {
+            Alert.alert('Senha de confirmação nao coincide com a senha')
+        }
+    }
+    
 
     const handleCallNotifications = async () => {
 
@@ -46,11 +71,6 @@ export const ResetPwd = ({ navigation }) => {
         })
     }
 
-    function onPressHandle() {
-        navigation.replace("Login")
-        handleCallNotifications()
-    }
-
     return (
         <Container>
 
@@ -65,10 +85,17 @@ export const ResetPwd = ({ navigation }) => {
 
             <TextRec>Insira e confirme a sua nova senha</TextRec>
 
-            <Input placeholder={"Nova senha"} />
-            <Input placeholder={"Confirmar nova senha"} />
+            <Input
+                placeholder={"Nova senha"}
+                onChangeText={(txt) => setSenha(txt)}
+            />
+            <Input
+                placeholder={"Confirmar nova senha"}
+                onChangeText={(txt) => setConfirmar(txt)}
 
-            <Btn onPress={() => onPressHandle()}>
+            />
+
+            <Btn onPress={() => UpdatePassword()}>
                 <ButtonTitle>Confirmar nova senha</ButtonTitle>
             </Btn>
 

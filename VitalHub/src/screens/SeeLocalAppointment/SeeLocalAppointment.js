@@ -80,19 +80,18 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        setIdClinica(route.params.clinicaid)
-        console.log(route.params.clinicaid);
+        BuscarClinica();
     }, [route.params])
 
-    useEffect(() => {
-        if (idClinica) {
-            BuscarClinica();
-        }
-    }, [idClinica]);
+    // useEffect(() => {
+    //     if (idClinica) {
+            
+    //     }
+    // }, [idClinica]);
 
     async function BuscarClinica() {
         try {
-            const response = await api.get(`/Clinica/BuscarPorId?id=${idClinica}`)
+            const response = await api.get(`/Clinica/BuscarPorId/${route.params.clinicaid}`)
             setClinica(response.data)
             setFinalPosition({
                 latitude: response.data.endereco.longitude,

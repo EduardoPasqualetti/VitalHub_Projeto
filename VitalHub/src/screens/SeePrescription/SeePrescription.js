@@ -21,7 +21,7 @@ export const SeePrescription = ({ navigation, route }) => {
     const [especialidade, setEspecialidade] = useState('')
 
     function onPressPhoto() {
-        navigation.navigate("CameraPhoto");
+        navigation.navigate("CameraPhoto", {isProfile: false});
         setIsPhoto(true)
     }
 

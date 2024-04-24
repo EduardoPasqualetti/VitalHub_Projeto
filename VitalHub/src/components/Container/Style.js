@@ -138,5 +138,4 @@ margin-bottom: 20px;
 position: relative;
 align-items: center;
 justify-content: flex-start;
-border: 2px solid black;
 `

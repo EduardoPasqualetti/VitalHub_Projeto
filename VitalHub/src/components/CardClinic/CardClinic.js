@@ -8,7 +8,7 @@ export const CardClinic = ({ name, logradouro, numero, isSelected }) => {
             <Container isSelected={isSelected}>
                 <View1>
                     <TextName>{name}</TextName>
-                    <TextLoc>{logradouro}, {numero}</TextLoc>
+                    <TextLoc editable={false}>{logradouro}, {numero}</TextLoc>
                 </View1>
                 <View2>
                     <ViewStar>

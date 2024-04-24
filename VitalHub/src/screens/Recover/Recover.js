@@ -3,8 +3,21 @@ import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
 import { Input } from "../../components/Input/Style"
 import { Btn, BtnReturn, IconReturn } from "../../components/Button/Button"
+import { useState } from "react"
+import api from "../../service/Service"
 
 export const Recover = ({navigation}) => {
+    const [email, setEmail] = useState('eduardopasqualetti9@gmail.com')
+
+    async function SendEmail(){
+        console.log()
+     await api.post(`/RecuperarSenha?email=${email}`)
+     .then( () =>  {
+         navigation.replace("VerifyEmail", { emailRecuperacao : email })
+     }).catch( error => {
+         console.log(error)
+     } )
+ }
     return (
         <Container>
             
@@ -18,9 +31,9 @@ export const Recover = ({navigation}) => {
 
             <TextRec>Digite abaixo seu email cadastrado que enviaremos um link para recuperação de senha</TextRec>
 
-            <Input placeholder={"Usuário ou E-mail"} />
+            <Input value={email} onChangeText={(txt) => setEmail(txt)} />
 
-            <Btn onPress={() => navigation.replace("VerifyEmail")}>
+            <Btn onPress={() => SendEmail()}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>  
 
