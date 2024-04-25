@@ -195,7 +195,8 @@ export const Home = ({ navigation }) => {
                                                 nome: item.medicoClinica.medico.idNavigation.nome,
                                                 crm: item.medicoClinica.medico.crm,
                                                 especialidade: item.medicoClinica.medico.especialidade.especialidade1,
-                                                receita: item.receita.medicamento
+                                                receita: item.receita.medicamento,
+                                                consultaId: item.id
                                             })
                                         }}
                                     />

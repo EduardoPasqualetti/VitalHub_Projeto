@@ -29,23 +29,25 @@ export const Profile = ({ navigation, route }) => {
     const [cidade, setCidade] = useState("")
     const [numero, setNumero] = useState('')
     const [fotoUsuario, setFotoUsuario] = useState()
-    //const [foto, setFoto] = useState('')
-    const { photoUri } = route.params || {};
 
 
 
     async function profileLoad() {
         const token = await UserDecodeToken();
+
         setName(token.name)
         setEmail(token.email)
         setRole(token.role)
         setIdUser(token.jti)
+
+        await getUser(token)
     }
 
-    async function getUser() {
-        const url = (role === 'Medico' ? 'Medicos' : 'Pacientes')
+    async function getUser(token) {
+        const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes');
+
         try {
-            const response = await api.get(`/${url}/BuscarPorId?id=${idUser}`)
+            const response = await api.get(`/${url}/BuscarPorId?id=${token.jti}`);
 
             setUserData(response.data)
             setFotoUsuario(response.data.idNavigation.foto)
@@ -54,21 +56,21 @@ export const Profile = ({ navigation, route }) => {
             setLogradouro(response.data.endereco.logradouro)
             setNumero(response.data.endereco.numero.toString())
             setDtNasc(response.data.dataNascimento)
-            role === 'Paciente' ?
+            token.role === 'Paciente' ?
                 setCpf(response.data.cpf)
                 :
                 setEspecialidade(response.data.especialidade.especialidade1)
             setCrm(response.data.crm)
             setRg(response.data.rg)
         } catch (error) {
+            console.log('user')
             console.log(error);
         }
 
     }
 
-    async function updatePatient() {
+    async function updateUser() {
         const token = JSON.parse(await AsyncStorage.getItem('token')).token;
-        console.log(token);
 
         try {
             if (role === 'Medico') {
@@ -96,47 +98,45 @@ export const Profile = ({ navigation, route }) => {
 
             setProfileEdit(false);
         } catch (error) {
-            console.log(error + " erro para atualizar paciente");
+            console.log(error + " erro para atualizar usuario");
         }
     }
 
     async function AlterarFotoPerfil() {
         const formData = new FormData();
         formData.append("Arquivo", {
-            uri: photoUri,
-            name: `image.${ photoUri.split(".")[1]}`,
-            type: `image/${ photoUri.split(".")[1]}`
+            uri: route.params.photoUri,
+            name: `image.jpg`,
+            type: `image/jpg`
         })
 
         try {
-            const response = await api.put(`/Usuario/AlterarFotoPerfil?id=${idUser}`, formData, {
+            console.log(`/Usuario/AlterarFotoPerfil?id=${idUser}`)
+            await api.put(`/Usuario/AlterarFotoPerfil?id=${idUser}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
+            }).then(() => {
+                setFotoUsuario(route.params.photoUri)
             })
-            console.log(response);
         } catch (error) {
+            console.log('foto')
             console.log(error);
         }
 
     }
 
-
-
     useEffect(() => {
         profileLoad();
-    }, [idUser])
+    }, [])
 
     useEffect(() => {
-        if (idUser) {
-            getUser();
+        if (route.params && idUser != '') {
+            console.log("passou")
+            AlterarFotoPerfil()
         }
-    }, [idUser])
 
-    useEffect(() => {
-        console.log(route.params);
-        AlterarFotoPerfil()
-    },[photoUri])
+    }, [route.params, idUser])
 
 
     async function closeApp() {
@@ -152,12 +152,8 @@ export const Profile = ({ navigation, route }) => {
         <ContainerScroll>
             {!profileEdit ? (
                 <>
-                    <ContainerImage>
-                        <ProfileImage source={{ uri: fotoUsuario }} />
-                        <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", { isProfile: true })}>
-                            <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
-                        </ButtonCamera>
-                    </ContainerImage>
+
+                    <ProfileImage source={{ uri: fotoUsuario }} />
 
                     <ContainerProfile>
                         <TitleProfile>{name}</TitleProfile>
@@ -231,13 +227,16 @@ export const Profile = ({ navigation, route }) => {
                 </>
             ) : (
                 <>
-                    <ProfileImage source={{ uri: photoUri }} />
+                    <ProfileImage source={{ uri: fotoUsuario }} />
 
 
                     <ViewTitle>
                         <TitleProfile>{name}</TitleProfile>
                         <SubTitleProfile>{email}</SubTitleProfile>
                     </ViewTitle>
+                    <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", { isProfile: true })}>
+                        <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
+                    </ButtonCamera>
 
                     <ContainerSafeEdit>
                         {
@@ -312,7 +311,7 @@ export const Profile = ({ navigation, route }) => {
 
                         </ViewFormat>
 
-                        <Btn onPress={() => updatePatient()}>
+                        <Btn onPress={() => updateUser()}>
                             <ButtonTitle>SALVAR</ButtonTitle>
                         </Btn>
 

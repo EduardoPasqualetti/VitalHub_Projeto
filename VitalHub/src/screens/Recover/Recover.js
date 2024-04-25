@@ -7,7 +7,7 @@ import { useState } from "react"
 import api from "../../service/Service"
 
 export const Recover = ({navigation}) => {
-    const [email, setEmail] = useState('eduardopasqualetti9@gmail.com')
+    const [email, setEmail] = useState('')
 
     async function SendEmail(){
         console.log()

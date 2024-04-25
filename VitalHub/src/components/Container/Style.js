@@ -34,7 +34,7 @@ width: 90%;
 height: 100%;
 align-self: center;
 align-items: center;
-margin-top: 30px;
+margin-top: 10px;
 `
 export const ContainerSafeEdit = styled(ContainerProfile)`
 margin-top: 120px;

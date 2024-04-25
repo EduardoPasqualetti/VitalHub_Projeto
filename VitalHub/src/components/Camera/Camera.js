@@ -21,6 +21,7 @@ export const CameraPhoto = ({ navigation, route }) => {
     const [flashOn, setFlashOn] = useState(Camera.Constants.FlashMode.off)
     const [latestPhoto, setLatestPhoto] = useState(null)
 
+    
     async function CapturePhoto() {
         if (cameraRef) {
             const photo = await cameraRef.current.takePictureAsync()
@@ -28,46 +29,46 @@ export const CameraPhoto = ({ navigation, route }) => {
             setOpenModal(true)
         }
     }
-
+    
     async function onPressToSend() {
         await setOpenModal(false)
         route.params.isProfile ? navigation.navigate("Profile", { photoUri: photo }) : navigation.navigate("SeePrescription", { photoUri: photo })
-
+        
     }
-
+    
     async function GetLastPhoto() {
         const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
         if (assets.length > 0) {
             setLatestPhoto(assets[0].uri)
         }
     }
-
+    
     async function SelectImageGallery() {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes : ImagePicker.MediaTypeOptions.Images,
             quality : 1
         });
-
+        
         if (!result.canceled) {
             setPhoto(result.assets[0].uri)
             setOpenModal(true)
         }
     }
-
+    
     useEffect(() => {
         (async () => {
             const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
-
+            
             const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         })();
     }, [])
-
+    
     useEffect(() => {
         if (route.params.isProfile) {
             GetLastPhoto()
         }
     })
-
+    
     return (
         <Container>
             <Camera
@@ -75,7 +76,7 @@ export const CameraPhoto = ({ navigation, route }) => {
                 type={tipoCamera}
                 style={styles.camera}
                 flashMode={flashOn}
-            >
+                >
                 <BoxTop>
                     <BtnReturnPhoto onPress={() => { route.params.isProfile ? navigation.navigate("Profile") : navigation.navigate("SeePrescription") }}>
                         <EvilIcons name="close-o" size={70} color="white" />
