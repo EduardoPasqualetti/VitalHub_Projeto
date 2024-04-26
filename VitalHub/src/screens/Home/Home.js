@@ -177,7 +177,7 @@ export const Home = ({ navigation }) => {
                                             ageCrm={item.medicoClinica.medico.crm}
                                             typeAppointment={item.prioridade.prioridade}
                                             photo={require('../../assets/doctor.png')}
-                                            onPressCancel={() => setShowModalCancel(true)}
+                                            onPressCancel={() => {setIdConsulta(item.id),setShowModalCancel(true)}}
                                         />
                                     </TouchableOpacity>
                                 )

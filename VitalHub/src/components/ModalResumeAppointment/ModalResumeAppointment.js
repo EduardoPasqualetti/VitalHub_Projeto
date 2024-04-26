@@ -5,6 +5,7 @@ import { LinkCancelMargin } from "../Link/Style"
 import { Btn } from "../Button/Button"
 
 import * as Notifications from "expo-notifications"
+import { useEffect } from "react"
 
 Notifications.requestPermissionsAsync()
 
@@ -20,7 +21,7 @@ Notifications.setNotificationHandler({
     })
 })
 
-export const ModalResumeAppointment = ({ dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
+export const ModalResumeAppointment = ({ dados, dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
 
     const handleCallNotifications = async () => {
 
@@ -52,7 +53,12 @@ export const ModalResumeAppointment = ({ dataConsulta, horarioConsulta, navigati
         await setShowModalResume(false)
         navigation.replace("Main")
         handleCallNotifications()
-    }
+    } 
+
+    useEffect(() => {
+        console.log('dados');
+        console.log(dados);
+    },[])
 
     return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade" animationsOutTiming={0}>
@@ -73,11 +79,11 @@ export const ModalResumeAppointment = ({ dataConsulta, horarioConsulta, navigati
                     </ViewData>
                     <ViewData fieldHeight={50}>
                         <TitleData>Local da consulta</TitleData>
-                        <TextData>São Paulo, SP</TextData>
+                        <TextData>{dados.loc}</TextData>
                     </ViewData>
                     <ViewData fieldHeight={50}>
                         <TitleData>Tipo da consulta</TitleData>
-                        <TextData>Rotina</TextData>
+                        <TextData>{dados.type}</TextData>
                     </ViewData>
                     <Btn onPress={() => onPressHandle()}>
                         <ButtonTitle>CONFIRMAR</ButtonTitle>

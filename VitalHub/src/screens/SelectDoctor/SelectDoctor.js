@@ -10,18 +10,18 @@ import api from "../../service/Service"
 
 
 
-export const SelectDoctor = ({ navigation }) => {
+export const SelectDoctor = ({ navigation, route }) => {
 
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [showModalSchedule, setShowModalSchedule] = useState(false)
     const [doctorList,setDoctorList] = useState([])
+    const [medicoClinica, setMedicoClinica] = useState('E5890F4F-ED8F-48EE-B3C7-43C8B168512E')
 
 
     async function GetDoctors() {
-        await api.get('/Medicos')
+        await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.idClinica}`)
         .then(response => {setDoctorList(response.data)})
         .catch(error => {console.log(error)})
-        console.log(doctorList);
         
     }
 
@@ -59,7 +59,13 @@ export const SelectDoctor = ({ navigation }) => {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <Btn onPress={() => navigation.replace("SelectDate")}>
+            <Btn onPress={() => navigation.replace("SelectDate", {
+                medicoClinica: medicoClinica,
+                idPrioridade: route.params.idPrioridade,
+                type: route.params.type,
+                loc: route.params.loc,
+                idMedico: selectedDoctor
+            })}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
             <Cancel onPress={() => onPressHandle()}>Cancelar</Cancel>
