@@ -14,42 +14,45 @@ export const SelectDoctor = ({ navigation, route }) => {
 
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [showModalSchedule, setShowModalSchedule] = useState(false)
-    const [doctorList,setDoctorList] = useState([])
+    const [doctorList, setDoctorList] = useState([])
     const [medicoClinica, setMedicoClinica] = useState('E5890F4F-ED8F-48EE-B3C7-43C8B168512E')
 
 
     async function GetDoctors() {
-        await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.idClinica}`)
-        .then(response => {setDoctorList(response.data)})
-        .catch(error => {console.log(error)})
-        
+        await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
+            .then(response => { setDoctorList(response.data) })
+            .catch(error => { console.log(error) })
+
     }
 
-    const onPressHandle = () => {
+    const onPressCancel = () => {
         setShowModalSchedule(true)
         navigation.navigate("Main");
     }
 
     useEffect(() => {
         GetDoctors()
-    },[])
+    }, [route])
 
     return (
         <Container>
-            <Title>Selecionar Medico</Title>
+            <Title>Selecionar Medico(a)</Title>
 
             {<ListComponent
                 data={doctorList}
                 renderItem={({ item }) =>
                 (
-                    <BtnSelect onPress={() => setSelectedDoctor(item.id)}>
+                    <BtnSelect onPress={() => setSelectedDoctor({
+                        medicoId: item.id,
+                        medicoLabel: item.idNavigation.nome
+                    })}>
                         <CardDoctor name={item.idNavigation.nome}
                             espec={item.especialidade.especialidade1}
-                            isSelected={item.id == selectedDoctor}
+                            isSelected={selectedDoctor ? item.id == selectedDoctor.medicoId : false}
                             photo={require("../../assets/doctor.png")}
                         />
                     </BtnSelect>
-                    
+
                 )}
             />}
 
@@ -60,15 +63,14 @@ export const SelectDoctor = ({ navigation, route }) => {
             />
 
             <Btn onPress={() => navigation.replace("SelectDate", {
-                medicoClinica: medicoClinica,
-                idPrioridade: route.params.idPrioridade,
-                type: route.params.type,
-                loc: route.params.loc,
-                idMedico: selectedDoctor
+                agendamento: {
+                    ...route.params.agendamento,
+                    ...selectedDoctor
+                }
             })}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
-            <Cancel onPress={() => onPressHandle()}>Cancelar</Cancel>
+            <Cancel onPress={() => onPressCancel()}>Cancelar</Cancel>
         </Container>
     )
 }

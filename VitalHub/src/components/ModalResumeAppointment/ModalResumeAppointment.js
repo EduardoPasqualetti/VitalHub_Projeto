@@ -21,7 +21,7 @@ Notifications.setNotificationHandler({
     })
 })
 
-export const ModalResumeAppointment = ({ dados, dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
+export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
 
     const handleCallNotifications = async () => {
 
@@ -49,15 +49,14 @@ export const ModalResumeAppointment = ({ dados, dataConsulta, horarioConsulta, n
     }
 
 
-    async function onPressHandle() {
+    async function onPressConfirm() {
         await setShowModalResume(false)
         navigation.replace("Main")
         handleCallNotifications()
     } 
 
     useEffect(() => {
-        console.log('dados');
-        console.log(dados);
+        console.log(dadosAgendamento);
     },[])
 
     return (
@@ -74,18 +73,18 @@ export const ModalResumeAppointment = ({ dados, dataConsulta, horarioConsulta, n
                     </ViewData>
                     <ViewData fieldHeight={80}>
                         <TitleData>Médico(a) da consulta</TitleData>
-                        <TextData>Dra Alessandra</TextData>
+                        <TextData>{dadosAgendamento.medicoLabel}</TextData>
                         <TextData>Demartologa, Esteticista</TextData>
                     </ViewData>
                     <ViewData fieldHeight={50}>
                         <TitleData>Local da consulta</TitleData>
-                        <TextData>{dados.loc}</TextData>
+                        <TextData>{dadosAgendamento.localizacao}</TextData>
                     </ViewData>
                     <ViewData fieldHeight={50}>
                         <TitleData>Tipo da consulta</TitleData>
-                        <TextData>{dados.type}</TextData>
+                        <TextData>{dadosAgendamento.prioridadeLabel}</TextData>
                     </ViewData>
-                    <Btn onPress={() => onPressHandle()}>
+                    <Btn onPress={() => onPressConfirm()}>
                         <ButtonTitle>CONFIRMAR</ButtonTitle>
                     </Btn>
 

@@ -30,6 +30,8 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
     const [numero, setNumero] = useState('')
     const [cidade, setCidade] = useState('')
     const [nome, setNome] = useState('')
+
+
     async function CapturarLocalizacao() {
         const { granted } = await requestForegroundPermissionsAsync()
 
@@ -59,7 +61,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
             })
 
         })
-    }, [1000])
+    }, [4000])
 
     useEffect(() => {
         RecarregarVizualizacaoMapa()
@@ -82,12 +84,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
     useEffect(() => {
         BuscarClinica();
     }, [route.params])
-
-    // useEffect(() => {
-    //     if (idClinica) {
-            
-    //     }
-    // }, [idClinica]);
 
     async function BuscarClinica() {
         try {

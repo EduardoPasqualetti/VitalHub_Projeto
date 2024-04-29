@@ -64,7 +64,7 @@ export const CameraPhoto = ({ navigation, route }) => {
     }, [])
     
     useEffect(() => {
-        if (route.params.isProfile) {
+        if (route.params) {
             GetLastPhoto()
         }
     })

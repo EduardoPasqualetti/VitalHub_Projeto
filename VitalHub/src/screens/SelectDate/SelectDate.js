@@ -18,15 +18,18 @@ export const SelectDate = ({ navigation, route }) => {
 
     const [showModalResume, setShowModalResume] = useState(false)
     const [showModalSchedule, setShowModalSchedule] = useState(false)
+    const [agendamento, setAgendamento] = useState()
 
-    const onPressHandle = () => {
+    function onPressCancel(){
         setShowModalSchedule(true)
         navigation.navigate("Main");
-        
       }
+
+
       useEffect(() => {
-        console.log(route.params);
-      })
+        setAgendamento(route.params.agendamento)
+      },[route])
+
 
     return (
 
@@ -54,7 +57,7 @@ export const SelectDate = ({ navigation, route }) => {
                 setShowModalResume={setShowModalResume}
                 dataConsulta={selectedDate}
                 horarioConsulta={selectedTime}
-                dados={route.params}
+                dadosAgendamento={agendamento}
                 
             />
 
@@ -64,7 +67,7 @@ export const SelectDate = ({ navigation, route }) => {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <LinkCancelMargin onPress={() => onPressHandle()}>Cancelar</LinkCancelMargin>
+            <LinkCancelMargin onPress={() => onPressCancel()}>Cancelar</LinkCancelMargin>
         </ContainerSelectDate>
     )
 }
