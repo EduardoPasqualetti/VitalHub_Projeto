@@ -6,6 +6,7 @@ import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
 import * as Notifications from "expo-notifications"
 import api from "../../service/Service"
+import { Alert } from "react-native"
 
 Notifications.requestPermissionsAsync()
 
@@ -21,28 +22,29 @@ Notifications.setNotificationHandler({
     })
 })
 
-
 export const ResetPwd = ({ navigation, route }) => {
-
     const [senha, setSenha] = useState('')
     const [confirmar, setConfirmar] = useState('')
 
     
     async function UpdatePassword() {
-        console.log(route)
         if (senha === confirmar) {
-            await api.post(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
-                {})
-                .then(() => {
-
-                    navigation.replace("Login");
-
-                }).catch(error => {
-                    console.log(error)
+            try {
+                await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
+                {
+                    senhaNova: senha
                 })
+                navigation.replace("Login");
+                handleCallNotifications()
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else {
+            Alert.alert('As senhas digitadas devem ser iguais')
         }
     }
-
+    
 
     const handleCallNotifications = async () => {
 
@@ -52,10 +54,6 @@ export const ResetPwd = ({ navigation, route }) => {
             alert("Voce nao permitiu as notificacoes estarem ativas")
             return
         }
-
-
-
-        // const token = await Notifications.getExpoPushTokenAsync()
 
         await Notifications.scheduleNotificationAsync({
             content: {
@@ -68,7 +66,6 @@ export const ResetPwd = ({ navigation, route }) => {
             }
         })
     }
-
 
     return (
         <Container>
@@ -86,7 +83,7 @@ export const ResetPwd = ({ navigation, route }) => {
 
             <Input
                 placeholder={"Nova senha"}
-                onChangeText={(txt) => setConfirmar(txt)}
+                onChangeText={(txt) => setSenha(txt)}
             />
             <Input
                 placeholder={"Confirmar nova senha"}

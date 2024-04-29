@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
 
             var conectionString = "";
 
-            var conteinerName = "blobvitalconteineredu";
+            var conteinerName = "";
 
             user.Foto = await AzureBlobStorageHelper.UploadImageBlobAsync(medicoModel.Arquivo!, conectionString, conteinerName);
 

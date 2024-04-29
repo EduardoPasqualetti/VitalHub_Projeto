@@ -23,10 +23,11 @@ import { Main } from './src/screens/Main/Main';
 import { InsertRecord } from './src/screens/InsertRecord/InsertRecord';
 import { Camera, CameraPhoto } from './src/components/Camera/Camera';
 
+import * as MediaLibrary from 'expo-media-library'
+import * as ImagePicker from 'expo-image-picker'
+
 
 export default function App() {
-  ''
-
   const [fontsLoaded, fontsError] = useFonts({
     MontserratAlternates_600SemiBold,
     MontserratAlternates_500Medium,
@@ -39,6 +40,12 @@ export default function App() {
 
   if (!fontsLoaded && !fontsError) {
     return null
+  }
+
+  async function RequestGaleria() {
+    await MediaLibrary.requestPermissionsAsync()
+
+    await ImagePicker.requestMediaLibraryPermissionsAsync()
   }
 
   return (

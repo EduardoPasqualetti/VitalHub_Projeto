@@ -1,4 +1,3 @@
-
 import { Container, ContentAccount } from "../../components/Container/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonGoogleTitle, ButtonTitle, ImgGoogle, TextAccount, TextFieldNull, Title } from "../../components/Title/Style"

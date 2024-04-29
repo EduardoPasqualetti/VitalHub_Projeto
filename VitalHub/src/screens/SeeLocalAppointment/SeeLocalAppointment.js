@@ -25,7 +25,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
         longitude: -46.5624046
     })
     const [clinica, setClinica] = useState('')
-    const [idClinica, setIdClinica] = useState('')
     const [logradouro, setLogradouro] = useState('')
     const [numero, setNumero] = useState('')
     const [cidade, setCidade] = useState('')
@@ -80,18 +79,12 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        setIdClinica(route.params.clinicaid)
+        BuscarClinica();
     }, [route.params])
-
-    useEffect(() => {
-        if (idClinica) {
-            BuscarClinica();
-        }
-    }, [idClinica]);
 
     async function BuscarClinica() {
         try {
-            const response = await api.get(`/Clinica/BuscarPorId?id=${idClinica}`)
+            const response = await api.get(`/Clinica/BuscarPorId/${route.params.clinicaId}`)
             setClinica(response.data)
             setFinalPosition({
                 latitude: response.data.endereco.longitude,
@@ -101,10 +94,10 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
             setNumero(response.data.endereco.numero.toString())
             setCidade(response.data.endereco.cidade)
             setNome(response.data.nomeFantasia)
+            console.log(clinica);
         } catch (error) {
-            console.log(error);
+            console.log(error + " EndPoint da BuscarClinica");
         }
-        console.log(clinica);
     }
 
 
@@ -187,7 +180,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                         fieldWidth={45}
                     />
                     <BoxInput
-                        textLabel={'Bairro'}
+                        textLabel={'Cidade'}
                         fieldValue={cidade}
                         fieldWidth={46}
                     />

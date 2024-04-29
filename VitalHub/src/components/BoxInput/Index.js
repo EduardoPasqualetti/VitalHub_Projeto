@@ -1,4 +1,3 @@
-
 import { FieldContent, InputLabel, InputText, InputTextModificate } from "./Style"
 
 
@@ -12,7 +11,8 @@ export const BoxInput = ({
     editable = false,
     multiline = false,
     marginBottom = 40,
-    insertRecord = false
+    insertRecord = false,
+    onChangeText = null
 }) => {
     return (
         <FieldContent fieldWidth={fieldWidth} marginBottom={marginBottom}>
@@ -22,12 +22,12 @@ export const BoxInput = ({
                 <>
                 <InputTextModificate 
                 placeholder={placeholder} value={fieldValue} editable={editable}
-                fieldHeight={fieldHeight} multiline={multiline}/>
+                fieldHeight={fieldHeight} multiline={multiline} onChangeText={onChangeText}/>
                 </>
             ) : (
                 <>
                 <InputText placeholder={placeholder} value={fieldValue} editable={editable}
-                fieldHeight={fieldHeight} multiline={multiline} />
+                fieldHeight={fieldHeight} multiline={multiline} onChangeText={onChangeText} />
                 </>
             )}
             

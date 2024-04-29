@@ -81,7 +81,16 @@ align-items: center;
 justify-content: center;
 `
 
-export const BtnReturnPhoto = styled(BtnReturn)`
-margin-top: 50px;
 
+
+export const ButtonCamera = styled.TouchableOpacity.attrs({
+    activeOpacity: 0.8
+})`
+padding: 12px;
+border-radius: 10px;
+background-color: #496bba;
+border: 1px solid #fbfbfb;
+top: 295px;
+right: 40px;
+position: absolute;
 `

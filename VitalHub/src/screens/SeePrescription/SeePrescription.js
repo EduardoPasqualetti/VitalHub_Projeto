@@ -6,55 +6,67 @@ import { BtnProfile, SubtitleRecord, TitleCancelPhoto, TitleProfile } from "../.
 import { BtnCancelPhoto, BtnInsertPhoto } from "../../components/Button/Button"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinkCancelMargin } from "../../components/Link/Style"
-import { Image } from "react-native"
 import { useEffect, useState } from "react"
 import { InputExame } from "../../components/Input/Style"
 
 export const SeePrescription = ({ navigation, route }) => {
     const { photoUri } = route.params || {};
-    const[isPhoto,setIsPhoto] = useState(true)
+    const [isPhoto, setIsPhoto] = useState(true)
     const [descricao, setDescricao] = useState('')
+    const [diagnostico, setDiagnostico] = useState('')
+    const [receita, setReceita] = useState('')
+    const [nome, setNome] = useState('')
+    const [crm, setCrm] = useState('')
+    const [especialidade, setEspecialidade] = useState('')
 
     function onPressPhoto() {
-        navigation.navigate("CameraPhoto");
+        navigation.navigate("CameraPhoto", {isProfile: false});
         setIsPhoto(true)
     }
 
     function onPressCancel() {
         setIsPhoto(false);
-        route.params = null
     }
+
     useEffect(() => {
-        console.log(route.params.descricao);
-    },[route.params])
+        if (route.params) {
+            setDescricao(route.params.descricao)
+            setDiagnostico(route.params.diagnostico)
+            setReceita(route.params.receita)
+            setNome(route.params.nome)
+            setCrm(route.params.crm)
+            setEspecialidade(route.params.especialidade)
+        }
+
+    }, [route.params])
 
     return (
         <ContainerScroll>
             <DoctorImage source={require("../../assets/doctor.png")} />
             <ContainerProfile>
 
-                <TitleProfile>Dr Claudio</TitleProfile>
+                <TitleProfile>{nome}</TitleProfile>
                 <ViewSuBTitlePrescription>
-                    <SubtitleRecord>Cliníco geral</SubtitleRecord>
-                    <SubtitleRecord>CRM-15286</SubtitleRecord>
+                    <SubtitleRecord>{especialidade}</SubtitleRecord>
+                    <SubtitleRecord>CRM-{crm}</SubtitleRecord>
                 </ViewSuBTitlePrescription>
 
                 <BoxInput
                     multiline={true}
                     textLabel={"Descrição da consulta"}
-                    placeholder={`O paciente possuí uma infecção no ouvido. Necessário repouse de 2 dias e acompanhamento médico constante`}
+                    fieldValue={descricao}
                     fieldHeight={150}
                 />
                 <BoxInput
                     multiline={true}
                     textLabel={"Diagnóstico do paciente"}
-                    placeholder={`Infecção no ouvido`}
+                    fieldValue={diagnostico}
                     fieldHeight={80}
                 />
                 <BoxInput
                     multiline={true}
                     textLabel={"Prescrição médica"}
-                    placeholder={`Medicamento: Advil Dosagem: 50 mg Frequência: 3 vezes ao dia Duração: 3 dias`}
+                    fieldValue={receita}
                     fieldHeight={150}
                 />
                 <InputExame>Exame medico</InputExame>
@@ -74,7 +86,7 @@ export const SeePrescription = ({ navigation, route }) => {
 
                 <ViewInsertPhoto>
 
-                    <BtnInsertPhoto onPress={() => {!photoUri ? onPressPhoto() : null}}>
+                    <BtnInsertPhoto onPress={() => { !photoUri ? onPressPhoto() : null }}>
                         <MaterialCommunityIcons name="camera-plus-outline" size={26} color="white" />
                         <BtnProfile>Enviar</BtnProfile>
                     </BtnInsertPhoto>
