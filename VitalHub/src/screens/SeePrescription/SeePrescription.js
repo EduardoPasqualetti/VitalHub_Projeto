@@ -12,9 +12,9 @@ import { InputExame } from "../../components/Input/Style"
 export const SeePrescription = ({ navigation, route }) => {
     const { photoUri } = route.params || {};
     const [isPhoto, setIsPhoto] = useState(true)
+    const [receita, setReceita] = useState('')
     const [descricao, setDescricao] = useState('')
     const [diagnostico, setDiagnostico] = useState('')
-    const [receita, setReceita] = useState('')
     const [nome, setNome] = useState('')
     const [crm, setCrm] = useState('')
     const [especialidade, setEspecialidade] = useState('')
@@ -36,6 +36,7 @@ export const SeePrescription = ({ navigation, route }) => {
             setNome(route.params.nome)
             setCrm(route.params.crm)
             setEspecialidade(route.params.especialidade)
+            console.log(route);
         }
 
     }, [route.params])

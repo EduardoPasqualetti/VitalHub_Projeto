@@ -47,7 +47,6 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
         .then( response => {
             setAppointments(response.data);
-            console.log(response.data);
         }).catch(error => {
             console.log(error);
         })   
@@ -136,7 +135,7 @@ export const Home = ({ navigation }) => {
                                             descricao: item.descricao,
                                             diagnostico: item.diagnostico,
                                             receita: item.receita.medicamento,
-                                            idReceita: item.receita.id,
+                                            receitaId: item.receita.id,
                                             dtNasc: item.paciente.dataNascimento,
                                             nome: item.paciente.idNavigation.nome,
                                             email: item.paciente.idNavigation.email,
@@ -194,9 +193,10 @@ export const Home = ({ navigation }) => {
                                                 nome: item.medicoClinica.medico.idNavigation.nome,
                                                 crm: item.medicoClinica.medico.crm,
                                                 especialidade: item.medicoClinica.medico.especialidade.especialidade1,
-                                                receita: item.receita.medicamento,
+                                                receita: item.receitaId,
                                                 consultaId: item.id
                                             })
+                                            
                                         }}
                                     />
                                 )

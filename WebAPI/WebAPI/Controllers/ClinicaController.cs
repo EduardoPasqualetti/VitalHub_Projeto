@@ -29,16 +29,17 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("BuscarPorId")]
+        [HttpGet("BuscarPorId/{id}")]
         public IActionResult GetById(Guid id)
         {
             try
             {
-                return Ok(clinicaRepository.BuscarPorId(id));
-
+                Clinica clinica = clinicaRepository.BuscarPorId(id);
+                return Ok(clinica);
             }
             catch (Exception ex)
             {
+
                 return BadRequest(ex.Message);
             }
         }
@@ -57,4 +58,5 @@ namespace WebAPI.Controllers
             }
         }
     }
-}
+
+}   

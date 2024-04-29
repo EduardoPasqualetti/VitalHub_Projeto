@@ -21,7 +21,6 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule , ...r
   async function onPressHandle() {
     await setShowModalSchedule(false)
     navigation.replace("SelectClinic");
-    
   }
 
   const[typeAppointment,setTypeAppointment] = useState(null)

@@ -8,7 +8,7 @@ namespace WebAPI.Utils.OCR
     {
         private readonly string _subscriptionKey = "";
 
-        private readonly string _endpoint = "";
+        private readonly string _endpoint = "https://cvvitalhubg15.cognitiveservices.azure.com/";
 
         public async Task<string> RecognizeTextAsync(Stream ImageStream)
         {
