@@ -25,7 +25,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
         longitude: -46.5624046
     })
     const [clinica, setClinica] = useState('')
-    const [idClinica, setIdClinica] = useState('')
     const [logradouro, setLogradouro] = useState('')
     const [numero, setNumero] = useState('')
     const [cidade, setCidade] = useState('')

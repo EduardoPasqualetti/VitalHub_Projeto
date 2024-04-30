@@ -8,14 +8,17 @@ import { LinkCancel } from "../Link/Style"
 
 export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...rest }) => {
 
-  const [loc, setLoc] = useState()
 
   const [agendamento, setAgendamento] = useState()
 
 
-  async function onPressHandle() {
-    await setShowModalSchedule(false)
+  async function onPressContinue() {
+    if (agendamento.prioridadeId != null && agendamento.localizacao != null) {
+      await setShowModalSchedule(false)
     navigation.replace("SelectClinic", {agendamento: agendamento});
+    }else{
+      alert("Informacoes necessarias")
+    }
   }
 
 
@@ -69,7 +72,7 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
 
 
           </TypeAppointment>
-          <Btn onPress={() => { onPressHandle() }}>
+          <Btn onPress={() => onPressContinue()}>
             <ButtonTitle >CONTINUAR</ButtonTitle>
           </Btn>
 

@@ -14,21 +14,14 @@ export const SelectDate = ({ navigation, route }) => {
     const [selectedDate, setSelectedDate] = useState();
     const [selectedTime, setSelectedTime] = useState();
 
-    const Horarios = ["10:30", "12:00", "12:30", "13:00", "17:15", "17:45", "19:00"]
-
     const [showModalResume, setShowModalResume] = useState(false)
     const [showModalSchedule, setShowModalSchedule] = useState(false)
-    const [agendamento, setAgendamento] = useState()
+
 
     function onPressCancel(){
         setShowModalSchedule(true)
         navigation.navigate("Main");
       }
-
-
-      useEffect(() => {
-        setAgendamento(route.params.agendamento)
-      },[route])
 
 
     return (
@@ -37,14 +30,13 @@ export const SelectDate = ({ navigation, route }) => {
             <Title>Selecionar Data</Title>
             <FullCalender
                 selectedDate={selectedDate}
-                handleSelectedDateFn={setSelectedDate}
+                setSelectedDate={setSelectedDate}
             />
             <LabelSchedule>Selecione um horário disponível</LabelSchedule>
 
             <InputSelect
                 textButton='Selecionar horário'
-                handleSelectedFn={setSelectedTime}
-                data={Horarios}
+                setSelectedTime={setSelectedTime}
             />
 
             <BtnFull onPress={() => { setShowModalResume(true) }} >
@@ -57,7 +49,7 @@ export const SelectDate = ({ navigation, route }) => {
                 setShowModalResume={setShowModalResume}
                 dataConsulta={selectedDate}
                 horarioConsulta={selectedTime}
-                dadosAgendamento={agendamento}
+                dadosAgendamento={route.params.agendamento}
                 
             />
 

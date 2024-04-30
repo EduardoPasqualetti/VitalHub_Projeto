@@ -11,9 +11,8 @@ export const ModalSeeDoctor = ({doctorInfo, navigation, visible, setShowModalSee
     const onPressHandle = () => {
         setShowModalSeeDoctor(false)
        
-        navigation.navigate("SeeLocalAppointment", {clinicaid : idClinica});
+        navigation.navigate("SeeLocalAppointment", {clinicaid : doctorInfo.clinica});
       }
-    const idClinica = doctorInfo ? doctorInfo.clinica : ''
     const name = doctorInfo ? doctorInfo.name : '';
     const crm = doctorInfo ? doctorInfo.crm : '';
     const especialidade = doctorInfo ? doctorInfo.especialidade : '';
@@ -22,7 +21,7 @@ export const ModalSeeDoctor = ({doctorInfo, navigation, visible, setShowModalSee
     <Modal {...rest} visible={visible} transparent={true} animationType="fade">
         <ViewModal>
             <ContentModal>
-                <ImageDoctor source={require("../../assets/doctor.png")}/>
+                <ImageDoctor source={doctorInfo ? { uri : doctorInfo.photo} : null}/>
                 <TitleProfile>{name}</TitleProfile>
 
                 <ViewDataDoctor>

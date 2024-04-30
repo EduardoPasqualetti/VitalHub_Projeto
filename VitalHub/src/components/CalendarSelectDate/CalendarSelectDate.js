@@ -23,7 +23,7 @@ LocaleConfig.locales['br'] = {
 };
 LocaleConfig.defaultLocale = 'br';
 
-export default function FullCalender({ selectedDate = '', handleSelectedDateFn = null }) {
+export default function FullCalender({ selectedDate = '', setSelectedDate = null }) {
     const currentDate = new Date().toUTCString();
 
     // Função para renderizar o cabeçalho do calendário com a fonte personalizada
@@ -53,7 +53,7 @@ export default function FullCalender({ selectedDate = '', handleSelectedDateFn =
                     if (state == 'disabled')
                         return;
                     ''
-                    handleSelectedDateFn(date.dateString)
+                    setSelectedDate(date.dateString)
 
                 }}>
                     

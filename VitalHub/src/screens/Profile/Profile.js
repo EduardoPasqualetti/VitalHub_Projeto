@@ -128,7 +128,6 @@ export const Profile = ({ navigation, route }) => {
 
     useEffect(() => {
         if (route.params && idUser != '') {
-            console.log("passou")
             AlterarFotoPerfil()
         }
 

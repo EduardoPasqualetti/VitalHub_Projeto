@@ -93,7 +93,7 @@ export const SeePrescription = ({ navigation, route }) => {
 
     return (
         <ContainerScroll>
-            <DoctorImage source={require("../../assets/doctor.png")} />
+            <DoctorImage source={route.params.photo ? {uri: route.params.photo} : null} />
             <ContainerProfile>
 
                 <TitleProfile>{nome}</TitleProfile>

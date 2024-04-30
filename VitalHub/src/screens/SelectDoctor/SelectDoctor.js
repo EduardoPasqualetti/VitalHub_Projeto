@@ -44,7 +44,8 @@ export const SelectDoctor = ({ navigation, route }) => {
                 (
                     <BtnSelect onPress={() => setSelectedDoctor({
                         medicoId: item.id,
-                        medicoLabel: item.idNavigation.nome
+                        medicoLabel: item.idNavigation.nome,
+                        especialidade: item.especialidade.especialidade1
                     })}>
                         <CardDoctor name={item.idNavigation.nome}
                             espec={item.especialidade.especialidade1}

@@ -23,12 +23,13 @@
         const email = patientInfo ? patientInfo.email : '';
         const idade = patientInfo ? calculateAge(patientInfo.dtNasc) : '';
         const idConsulta = patientInfo ? patientInfo.idConsulta : '';
+        const foto = patientInfo ? patientInfo.foto : ''
 
         return(
             <Modal {...rest} visible={visible} transparent={true} animationType="fade">
                 <ViewModal>
                     <ContentModal>
-                        <Image source={require('../../assets/nicole.png')}/>
+                        <Image source={patientInfo ? {uri : patientInfo.photo} : null}/>
 
                         <TitleProfile>{name}</TitleProfile>
 
