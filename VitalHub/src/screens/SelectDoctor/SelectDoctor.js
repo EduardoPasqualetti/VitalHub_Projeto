@@ -15,7 +15,6 @@ export const SelectDoctor = ({ navigation, route }) => {
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [showModalSchedule, setShowModalSchedule] = useState(false)
     const [doctorList, setDoctorList] = useState([])
-    const [medicoClinica, setMedicoClinica] = useState('E5890F4F-ED8F-48EE-B3C7-43C8B168512E')
 
 
     async function GetDoctors() {
@@ -25,9 +24,21 @@ export const SelectDoctor = ({ navigation, route }) => {
 
     }
 
-    const onPressCancel = () => {
+    function onPressCancel() {
         setShowModalSchedule(true)
         navigation.navigate("Main");
+    }
+
+    function onPressContinue() {
+        if (selectedDoctor == null) {
+            alert("Necessario selecionar um medico")
+        } else
+            navigation.replace("SelectDate", {
+                agendamento: {
+                    ...route.params.agendamento,
+                    ...selectedDoctor
+                }
+            })
     }
 
     useEffect(() => {
@@ -63,12 +74,7 @@ export const SelectDoctor = ({ navigation, route }) => {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <Btn onPress={() => navigation.replace("SelectDate", {
-                agendamento: {
-                    ...route.params.agendamento,
-                    ...selectedDoctor
-                }
-            })}>
+            <Btn onPress={() => onPressContinue()}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
             <Cancel onPress={() => onPressCancel()}>Cancelar</Cancel>

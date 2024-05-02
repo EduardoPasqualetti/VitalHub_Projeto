@@ -22,9 +22,21 @@ export const SelectClinic = ({ navigation, route }) => {
             .catch(error => console.log(error))
     }
 
-    const onPressCancel = () => {
+    function onPressCancel() {
         setShowModalSchedule(true)
         navigation.navigate("Main");
+    }
+
+    function onPressContinue() {
+        if (selectedClinic == null) {
+            alert("Necessario selecionar uma clinica")
+        } else
+            navigation.replace("SelectDoctor", {
+                agendamento: {
+                    ...route.params.agendamento,
+                    ...selectedClinic
+                }
+            })
     }
 
     useEffect(() => {
@@ -63,14 +75,7 @@ export const SelectClinic = ({ navigation, route }) => {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <Btn onPress={() => {
-                navigation.replace("SelectDoctor", {
-                    agendamento: {
-                        ...route.params.agendamento,
-                        ...selectedClinic
-                    }
-                })
-            }}>
+            <Btn onPress={() => onPressContinue()}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
             <Cancel onPress={() => onPressCancel()}>Cancelar</Cancel>

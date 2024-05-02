@@ -81,8 +81,11 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        BuscarClinica();
-    }, [route.params])
+        if (route.params) {
+            BuscarClinica();
+        }
+        B
+    }, [route])
 
     async function BuscarClinica() {
         try {

@@ -13,25 +13,22 @@ import asyncStorage from '@react-native-async-storage/async-storage'
 
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('gustavopasqualetti@gmail.com')
-    const [senha, setSenha] = useState('gustavo123')
+    const [email, setEmail] = useState('eduardopasqualetti9@gmail.com')
+    const [senha, setSenha] = useState('eduardo123')
     const [loading, setLoading] = useState(false)
     const [emailError, setEmailError] = useState(false);
     const [senhaError, setSenhaError] = useState(false);
 
-    // Funcao de login
     async function Login() {
 
         if (!email || !senha) {
-            setEmailError(!email) // true se email nulo
-            setSenhaError(!senha) // true se senha nulo
+            setEmailError(!email)
+            setSenhaError(!senha) 
             return
         }
 
-        // Definir que o estado do carregamento sera true e aparecera
         setLoading(true)
         try {
-            // Chamar a api de Login
             const response = await api.post('Login', {
                 email: email,
                 senha: senha
@@ -43,7 +40,7 @@ export const Login = ({ navigation }) => {
         } catch (error) {
             Alert.alert(`Email ou Senha invalido`)
         } finally {
-            // Ao encerrar a requisicao torna o estado do carregamento false
+
             setLoading(false)
             setEmailError(false)
             setSenhaError(false)

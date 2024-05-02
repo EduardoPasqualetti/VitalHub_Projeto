@@ -18,10 +18,17 @@ export const SelectDate = ({ navigation, route }) => {
     const [showModalSchedule, setShowModalSchedule] = useState(false)
 
 
-    function onPressCancel(){
+    function onPressCancel() {
         setShowModalSchedule(true)
         navigation.navigate("Main");
-      }
+    }
+
+    function onPressContinue() {
+        if (selectedDate == null || selectedTime == null) {
+            alert("Necessario selecionar dia e horario da consulta")
+        } else
+            setShowModalResume(true)
+    }
 
 
     return (
@@ -39,7 +46,7 @@ export const SelectDate = ({ navigation, route }) => {
                 setSelectedTime={setSelectedTime}
             />
 
-            <BtnFull onPress={() => { setShowModalResume(true) }} >
+            <BtnFull onPress={() => onPressContinue()} >
                 <ButtonTitle>CONFIRMAR</ButtonTitle>
             </BtnFull>
 
@@ -50,7 +57,7 @@ export const SelectDate = ({ navigation, route }) => {
                 dataConsulta={selectedDate}
                 horarioConsulta={selectedTime}
                 dadosAgendamento={route.params.agendamento}
-                
+
             />
 
             <ModalSchedule

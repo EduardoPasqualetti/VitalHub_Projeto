@@ -14,14 +14,9 @@ import api from "../../service/Service"
 export const SeePrescription = ({ navigation, route }) => {
     const { photoUri } = route.params || {};
     const [isPhoto, setIsPhoto] = useState(true)
-    const [descricao, setDescricao] = useState('')
-    const [diagnostico, setDiagnostico] = useState('')
-    const [receita, setReceita] = useState('')
-    const [consultaId, setConsultaId] = useState()
-    const [nome, setNome] = useState('')
-    const [crm, setCrm] = useState('')
-    const [especialidade, setEspecialidade] = useState('')
-    const [descricaoExame, setDescricaoExame] = useState('')
+
+    const [dadosConsulta, setDadosConsulta] = useState()
+    const [descricaoExame, setDescricaoExame] = useState()
 
     function onPressPhoto() {
         setIsPhoto(true)
@@ -38,8 +33,7 @@ export const SeePrescription = ({ navigation, route }) => {
 
     async function InserirExame() {
         const formData = new FormData();
-        console.log(consultaId);
-        formData.append("consultaId", consultaId)
+        formData.append("ConsultaId", dadosConsulta.consultaId)
         formData.append("Imagem", {
             uri: photoUri,
             name: `image.${photoUri.split('.').pop()}`,
@@ -52,28 +46,36 @@ export const SeePrescription = ({ navigation, route }) => {
             }
         }).then(response => {
             setDescricaoExame(descricaoExame + "/n" + response.data.descricao)
+            console.log('deu certo inserir exame');
+        }).catch((error) => {
+            console.log(error + 'erro inserir exame');
         })
     }
 
-    async function GetExame() {
+    async function GetExame(id) {
         try {
-            console.log('getexame');
-            const response = await api.get(`/Exame/BuscarPorIdConsulta?idConsulta=${consultaId}`)
-            setDescricaoExame(response.data[0].descricao)
+            const response = await api.get(`/Exame/BuscarPorIdConsulta?idConsulta=${id}`)
+            //setDescricaoExame(response.data[0].descricao)
+            const descricoes = response.data.map(item => item.descricao);
+            setDescricaoExame(descricoes.join("\n"));
         } catch (error) {
-            console.log(error);
+            console.log(error + "erro listar exame");
         }
     }
 
     useEffect(() => {
-        if (route.params) {
-            setDescricao(route.params.descricao)
-            setDiagnostico(route.params.diagnostico)
-            setReceita(route.params.receita)
-            setNome(route.params.nome)
-            setCrm(route.params.crm)
-            setEspecialidade(route.params.especialidade)
-            setConsultaId(route.params.consultaId)
+        if (route.params.home == true) {
+            setDadosConsulta({
+                nome: route.params.nome,
+                crm: route.params.crm,
+                descricao: route.params.descricao,
+                diagnostico: route.params.diagnostico,
+                receita: route.params.receita,
+                especialidade: route.params.especialidade,
+                foto: route.params.photo,
+                consulta: route.params.consultaId
+            })
+            GetExame(route.params.consultaId)
         }
 
     }, [route.params])
@@ -81,87 +83,91 @@ export const SeePrescription = ({ navigation, route }) => {
     useEffect(() => {
         if (photoUri) {
             InserirExame()
+            GetExame(dadosConsulta.consultaId)
         }
     }, [photoUri])
 
 
-    useEffect(() => {
-        if (consultaId) {
-            GetExame()
-        }
-    }, [consultaId])
-
     return (
-        <ContainerScroll>
-            <DoctorImage source={route.params.photo ? {uri: route.params.photo} : null} />
-            <ContainerProfile>
+        <>
+            {
+                dadosConsulta ? (
+                    <ContainerScroll>
+                        <DoctorImage source={{ uri: dadosConsulta.foto }} />
+                        <ContainerProfile>
+                            <TitleProfile>{dadosConsulta.nome}</TitleProfile>
+                            <ViewSuBTitlePrescription>
+                                <SubtitleRecord>{dadosConsulta.especialidade}</SubtitleRecord>
+                                <SubtitleRecord>CRM-{dadosConsulta.crm}</SubtitleRecord>
+                            </ViewSuBTitlePrescription>
 
-                <TitleProfile>{nome}</TitleProfile>
-                <ViewSuBTitlePrescription>
-                    <SubtitleRecord>{especialidade}</SubtitleRecord>
-                    <SubtitleRecord>CRM-{crm}</SubtitleRecord>
-                </ViewSuBTitlePrescription>
+                            <BoxInput
+                                multiline={true}
+                                textLabel={"Descrição da consulta"}
+                                fieldValue={dadosConsulta.descricao}
+                                fieldHeight={150}
+                            />
+                            <BoxInput
+                                multiline={true}
+                                textLabel={"Diagnóstico do paciente"}
+                                fieldValue={dadosConsulta.diagnostico}
+                                fieldHeight={80}
+                            />
+                            <BoxInput
+                                multiline={true}
+                                textLabel={"Prescrição médica"}
+                                fieldValue={dadosConsulta.receita}
+                                fieldHeight={150}
+                            />
 
-                <BoxInput
-                    multiline={true}
-                    textLabel={"Descrição da consulta"}
-                    fieldValue={descricao}
-                    fieldHeight={150}
-                />
-                <BoxInput
-                    multiline={true}
-                    textLabel={"Diagnóstico do paciente"}
-                    fieldValue={diagnostico}
-                    fieldHeight={80}
-                />
-                <BoxInput
-                    multiline={true}
-                    textLabel={"Prescrição médica"}
-                    fieldValue={receita}
-                    fieldHeight={150}
-                />
-                <InputExame>Exame medico</InputExame>
-                {
-                    photoUri && isPhoto ?
-                        <PhotoTaked
-                            source={{ uri: photoUri }}
-                            resizeMode="contain"
-                        /> :
-                        <BoxInput
-                            placeholder={`Nenhuma foto informada`}
-                            fieldHeight={150}
-                            marginBottom={0}
-                        />
-                }
-
-
-                <ViewInsertPhoto>
-
-                    <BtnInsertPhoto onPress={() => { !photoUri ? onPressPhoto() : null }}>
-                        <MaterialCommunityIcons name="camera-plus-outline" size={26} color="white" />
-                        <BtnProfile>Enviar</BtnProfile>
-                    </BtnInsertPhoto>
-                    <BtnCancelPhoto onPress={() => onPressCancel()}>
-                        <TitleCancelPhoto>Cancelar</TitleCancelPhoto>
-                    </BtnCancelPhoto>
-
-                </ViewInsertPhoto>
+                            <InputExame>Exame medico</InputExame>
+                            {
+                                photoUri && isPhoto ?
+                                    <PhotoTaked
+                                        source={{ uri: photoUri }}
+                                        resizeMode="contain"
+                                    /> :
+                                    <BoxInput
+                                        placeholder={`Nenhuma foto informada`}
+                                        fieldHeight={150}
+                                        marginBottom={0}
+                                    />
+                            }
 
 
+                            <ViewInsertPhoto>
 
-                <Line></Line>
+                                <BtnInsertPhoto onPress={() => { !photoUri ? onPressPhoto() : null }}>
+                                    <MaterialCommunityIcons name="camera-plus-outline" size={26} color="white" />
+                                    <BtnProfile>Enviar</BtnProfile>
+                                </BtnInsertPhoto>
+                                <BtnCancelPhoto onPress={() => onPressCancel()}>
+                                    <TitleCancelPhoto>Cancelar</TitleCancelPhoto>
+                                </BtnCancelPhoto>
 
-                <InputExame>Descricao do Exame:</InputExame>
-                <BoxInput
-                    placeholder={"Descricao do exame"}
-                    multiline={true}
-                    fieldHeight={120}
-                    fieldValue={descricaoExame}
-                />
+                            </ViewInsertPhoto>
 
-                <LinkCancelMargin onPress={() => { navigation.replace("Main") }}>Voltar</LinkCancelMargin>
 
-            </ContainerProfile>
-        </ContainerScroll>
+
+                            <Line></Line>
+
+                            <InputExame>Descricao do Exame:</InputExame>
+                            <BoxInput
+                                placeholder={"Descricao do exame"}
+                                multiline={true}
+                                fieldHeight={120}
+                                fieldValue={descricaoExame}
+                            />
+
+                            <LinkCancelMargin onPress={() => { navigation.replace("Main") }}>Voltar</LinkCancelMargin>
+
+                        </ContainerProfile>
+                    </ContainerScroll>
+                ) : (
+                    <>
+                    </>
+                )
+            }
+        </>
     )
 }

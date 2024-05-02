@@ -13,11 +13,14 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
 
 
   async function onPressContinue() {
-    if (agendamento.prioridadeId != null && agendamento.localizacao != null) {
-      await setShowModalSchedule(false)
-    navigation.replace("SelectClinic", {agendamento: agendamento});
-    }else{
+    if (agendamento == null ) {
       alert("Informacoes necessarias")
+
+    }else if(agendamento.localizacao == null || agendamento.prioridadeId == null){
+      alert("Informacoes necessarias")
+    } else {
+      await setShowModalSchedule(false)
+      navigation.replace("SelectClinic", { agendamento: agendamento });
     }
   }
 
@@ -42,21 +45,25 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
                 <BlueTitle>Rotina</BlueTitle>
               </SmallButton>
 
-              <SmallButton onPress={() => { setAgendamento({
-                ...agendamento,
-                
-                prioridadeId: 'C568D663-7FAD-4696-896F-D0890D7BD1DA',
-                prioridadeLabel: 'Exames'
-              })}} isSelected={agendamento ? agendamento.prioridadeLabel == "Exames" : false}>
+              <SmallButton onPress={() => {
+                setAgendamento({
+                  ...agendamento,
+
+                  prioridadeId: 'C568D663-7FAD-4696-896F-D0890D7BD1DA',
+                  prioridadeLabel: 'Exames'
+                })
+              }} isSelected={agendamento ? agendamento.prioridadeLabel == "Exames" : false}>
                 <BlueTitle>Exames</BlueTitle>
               </SmallButton>
-              
-              <SmallButton onPress={() => { setAgendamento({
-                ...agendamento, // Manter todas as informacoes presentes no state
-                
-                prioridadeId: '6F9EDEB1-2CC7-4681-BE83-A377C0F3C8DE',
-                prioridadeLabel: 'Urgencia'
-              }) }} isSelected={agendamento ? agendamento.prioridadeLabel == "Urgencia" : false}>
+
+              <SmallButton onPress={() => {
+                setAgendamento({
+                  ...agendamento, // Manter todas as informacoes presentes no state
+
+                  prioridadeId: '6F9EDEB1-2CC7-4681-BE83-A377C0F3C8DE',
+                  prioridadeLabel: 'Urgencia'
+                })
+              }} isSelected={agendamento ? agendamento.prioridadeLabel == "Urgencia" : false}>
                 <BlueTitle>Urgencia</BlueTitle>
               </SmallButton>
 
@@ -67,8 +74,8 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
             <InputAppointment placeholder={"Informe a localizacao"} value={agendamento ? agendamento.localizacao : null} onChangeText={(txt) => setAgendamento({
               ...agendamento,
 
-              localizacao : txt
-            })}/>
+              localizacao: txt
+            })} />
 
 
           </TypeAppointment>

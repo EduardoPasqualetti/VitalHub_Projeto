@@ -13,16 +13,18 @@ export const Card = ({
     name,
     typeAppointment,
     photo,
-    ageCrm
+    age,
+    crm,
+    doctor = false
 }) => {
 
     let prioridade
 
-if (typeAppointment === 0) {
-     prioridade = 'Rotina'
-} else if (typeAppointment === 1) {
-    prioridade = 'Exame'
-} else  prioridade = 'Urgencia'
+    if (typeAppointment === 0) {
+        prioridade = 'Rotina'
+    } else if (typeAppointment === 1) {
+        prioridade = 'Exame'
+    } else prioridade = 'Urgencia'
 
 
     return (
@@ -35,7 +37,13 @@ if (typeAppointment === 0) {
                 <DataProfile>
                     <ProfileName>{name}</ProfileName>
                     <ProfileData>
-                        <TextAge>{ageCrm}</TextAge>
+                        {
+                            doctor ? 
+                            <TextAge>CRM {crm}</TextAge> 
+                            : 
+                            <TextAge>{age}</TextAge>
+                        }
+                       
                         <ImagePoint source={require('../../assets/point.png')} />
                         <TextBold>{prioridade}</TextBold>
                     </ProfileData>

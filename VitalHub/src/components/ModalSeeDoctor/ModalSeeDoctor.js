@@ -6,36 +6,41 @@ import { ViewDataDoctor, ViewTitleRecord } from "../Container/Style"
 import { Btn, BtnModalSeeDoctor } from "../Button/Button"
 import { LinkCancelMargin } from "../Link/Style"
 
-export const ModalSeeDoctor = ({doctorInfo, navigation, visible, setShowModalSeeDoctor, ...rest }) => {
+export const ModalSeeDoctor = ({ doctorInfo, navigation, visible, setShowModalSeeDoctor, ...rest }) => {
 
-    const onPressHandle = () => {
+    function onPressHandle(){
         setShowModalSeeDoctor(false)
-       
-        navigation.navigate("SeeLocalAppointment", {clinicaid : doctorInfo.clinica});
-      }
-    const name = doctorInfo ? doctorInfo.name : '';
-    const crm = doctorInfo ? doctorInfo.crm : '';
-    const especialidade = doctorInfo ? doctorInfo.especialidade : '';
+
+        navigation.navigate("SeeLocalAppointment", { clinicaid: doctorInfo.clinica });
+    }
 
     return (
-    <Modal {...rest} visible={visible} transparent={true} animationType="fade">
-        <ViewModal>
-            <ContentModal>
-                <ImageDoctor source={doctorInfo ? { uri : doctorInfo.photo} : null}/>
-                <TitleProfile>{name}</TitleProfile>
+        <Modal {...rest} visible={visible} transparent={true} animationType="fade">
+            {
+                doctorInfo ? (
 
-                <ViewDataDoctor>
-                    <SubtitleRecord>{especialidade}</SubtitleRecord>
-                    <SubtitleRecord>CRM{crm}</SubtitleRecord>
-                </ViewDataDoctor>
+                    <ViewModal>
+                        <ContentModal>
+                            <ImageDoctor source={{ uri: doctorInfo.photo }} />
+                            <TitleProfile>{doctorInfo.name}</TitleProfile>
 
-                <BtnModalSeeDoctor onPress={() => {onPressHandle()}}>
-                    <ButtonTitle>VER LOCAL DA CONSULTA</ButtonTitle>
-                </BtnModalSeeDoctor>
+                            <ViewDataDoctor>
+                                <SubtitleRecord>{doctorInfo.especialidade}</SubtitleRecord>
+                                <SubtitleRecord>CRM{doctorInfo.crm}</SubtitleRecord>
+                            </ViewDataDoctor>
 
-                <LinkCancelMargin onPress={() => setShowModalSeeDoctor(false)}>Cancelar</LinkCancelMargin>
-            </ContentModal>
-        </ViewModal>
-    </Modal>
-)
+                            <BtnModalSeeDoctor onPress={() => { onPressHandle() }}>
+                                <ButtonTitle>VER LOCAL DA CONSULTA</ButtonTitle>
+                            </BtnModalSeeDoctor>
+
+                            <LinkCancelMargin onPress={() => setShowModalSeeDoctor(false)}>Cancelar</LinkCancelMargin>
+                        </ContentModal>
+                    </ViewModal>
+                ) : (
+                    <></>
+                )
+            }
+
+        </Modal>
+    )
 }

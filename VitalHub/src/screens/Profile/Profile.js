@@ -48,7 +48,7 @@ export const Profile = ({ navigation, route }) => {
 
         try {
             const response = await api.get(`/${url}/BuscarPorId?id=${token.jti}`);
-
+            
             setUserData(response.data)
             setFotoUsuario(response.data.idNavigation.foto)
             setCep(response.data.endereco.cep)
