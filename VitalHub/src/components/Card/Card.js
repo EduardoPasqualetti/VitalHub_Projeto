@@ -1,6 +1,7 @@
 import { Image, Text } from "react-native";
 import { ButtonCard, ButtonText, ClockCard, ContainerCard, ContentCard, DataProfile, ImagePoint, ProfileData, ProfileImage, ProfileName, TextAge, TextBold, ViewRow } from "./Style"
 import { AntDesign } from '@expo/vector-icons';
+import { useEffect } from "react";
 
 
 
@@ -22,6 +23,7 @@ if (typeAppointment === 0) {
 } else if (typeAppointment === 1) {
     prioridade = 'Exame'
 } else  prioridade = 'Urgencia'
+
 
     return (
         <ContainerCard>
@@ -68,4 +70,4 @@ if (typeAppointment === 0) {
 
         </ContainerCard>
     )
-}
+}   

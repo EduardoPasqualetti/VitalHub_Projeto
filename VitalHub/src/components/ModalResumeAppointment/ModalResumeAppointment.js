@@ -5,6 +5,9 @@ import { LinkCancelMargin } from "../Link/Style"
 import { Btn } from "../Button/Button"
 
 import * as Notifications from "expo-notifications"
+import { useEffect, useState } from "react"
+import api from "../../service/Service"
+import { UserDecodeToken } from "../../Utils/Auth/auth"
 
 Notifications.requestPermissionsAsync()
 
@@ -20,7 +23,8 @@ Notifications.setNotificationHandler({
     })
 })
 
-export const ModalResumeAppointment = ({ dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
+export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
+    const [idPaciente, setIdPaciente] = useState()
 
     const handleCallNotifications = async () => {
 
@@ -30,8 +34,6 @@ export const ModalResumeAppointment = ({ dataConsulta, horarioConsulta, navigati
             alert("Voce nao permitiu as notificacoes estarem ativas")
             return
         }
-
-
 
         // const token = await Notifications.getExpoPushTokenAsync()g
 
@@ -47,12 +49,38 @@ export const ModalResumeAppointment = ({ dataConsulta, horarioConsulta, navigati
         })
     }
 
+    async function profileLoad() {
+        const token = await UserDecodeToken();
 
-    async function onPressHandle() {
-        await setShowModalResume(false)
-        navigation.replace("Main")
-        handleCallNotifications()
+        setIdPaciente(token.jti)
+        console.log(token.jti);
     }
+
+    async function onPressConfirm() {
+        try {
+            const response = await api.post('/Consultas/Cadastrar', {
+                situacaoId: 'E4356B3C-3FA0-496B-85BD-4E8C493F2D2C',
+                pacienteId: idPaciente,
+                medicoClinicaId: dadosAgendamento.medicoId,
+                prioridadeId: dadosAgendamento.prioridadeId,
+                dataConsulta: `${dataConsulta}T${horarioConsulta}:00.000Z`
+
+            })
+            if (response) {
+                await setShowModalResume(false)
+                navigation.replace("Main")
+                handleCallNotifications()
+            }
+
+        } catch (error) {
+            console.log(error + 'erro cadastrar consulta');
+        }
+
+    }
+
+    useEffect(() => {
+        profileLoad()
+    }, [])
 
     return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade" animationsOutTiming={0}>
@@ -68,19 +96,19 @@ export const ModalResumeAppointment = ({ dataConsulta, horarioConsulta, navigati
                     </ViewData>
                     <ViewData fieldHeight={80}>
                         <TitleData>Médico(a) da consulta</TitleData>
-                        <TextData>Dra Alessandra</TextData>
-                        <TextData>Demartologa, Esteticista</TextData>
+                        <TextData>{dadosAgendamento.medicoLabel}</TextData>
+                        <TextData>{dadosAgendamento.especialidade}</TextData>
                     </ViewData>
                     <ViewData fieldHeight={50}>
                         <TitleData>Local da consulta</TitleData>
-                        <TextData>São Paulo, SP</TextData>
+                        <TextData>{dadosAgendamento.localizacao}</TextData>
                     </ViewData>
                     <ViewData fieldHeight={50}>
                         <TitleData>Tipo da consulta</TitleData>
-                        <TextData>Rotina</TextData>
+                        <TextData>{dadosAgendamento.prioridadeLabel}</TextData>
                     </ViewData>
-                    <Btn onPress={() => onPressHandle()}>
-                        <ButtonTitle>CONFIRMAR</ButtonTitle>
+                    <Btn >
+                        <ButtonTitle onPress={() => {onPressConfirm()}}>CONFIRMAR</ButtonTitle>
                     </Btn>
 
                     <LinkCancelMargin onPress={() => setShowModalResume(false)}>Cancelar</LinkCancelMargin>

@@ -1,4 +1,3 @@
-
 import { Container } from "../../components/Container/Style"
 import { BtnSelect, Cancel, Title } from "./Style"
 import { Btn } from "../../components/Button/Button"
@@ -9,29 +8,28 @@ import { useEffect, useState } from "react"
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
 import api from "../../service/Service"
 
-export const SelectClinic = ({ navigation }) => {
+export const SelectClinic = ({ navigation, route }) => {
 
     const [selectedClinic, setSelectedClinic] = useState(null);
     const [showModalSchedule, setShowModalSchedule] = useState(false)
-    const [clinicList,setClinicList] = useState([])
+    const [clinicList, setClinicList] = useState([])
 
 
-async function GetClinics() {
-    await api.get('/Clinica/ListarTodas')
-    .then(response => setClinicList(response.data))
-    .catch(error => console.log(error))
-    console.log(clinicList);
-}
+    async function GetClinics() {
+        await api.get('/Clinica/ListarTodas')
+            .then(response => setClinicList(response.data))
+            .catch(error => console.log(error))
+        console.log(clinicList);
+    }
 
     const onPressHandle = () => {
         setShowModalSchedule(true)
         navigation.navigate("Main");
-      }
+    }
 
-      useEffect(() => {
+    useEffect(() => {
         GetClinics()
-      },[])
-
+    }, [])
 
     return (
         <Container>
@@ -51,7 +49,7 @@ async function GetClinics() {
 
                         />
                     </BtnSelect>
-                    
+
                 )}
             />}
 
@@ -61,12 +59,19 @@ async function GetClinics() {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <Btn onPress={() => { navigation.replace("SelectDoctor") }}>
+            <Btn onPress={() => {
+                navigation.replace("SelectDoctor", {
+                    agendamento: {
+                        ...route.params.agendamento,
+                        ...selectedClinic
+                    }
+                })
+                console.log(route.params.agendamento)
+            }}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
             <Cancel onPress={() => onPressHandle()}>Cancelar</Cancel>
         </Container>
- 
 
     )
 }

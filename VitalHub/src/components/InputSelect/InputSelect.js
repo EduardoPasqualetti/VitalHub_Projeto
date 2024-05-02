@@ -1,22 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import { AntDesign } from '@expo/vector-icons';
+import moment from 'moment';
 
-export default function InputSelect({ textButton = '', handleSelectedFn = null, data}) {
+export default function InputSelect({ textButton = '', setSelectedTime = null}) {
+  const dataAtual = moment().format('YYYY-MM-DD');
+  const [arrayOptions, setArrayOptions] = useState(null)
+
+  function LoadOptions(){
+    // Conferir quantas horas faltam ate 00h
+    const horasRestantes = moment(dataAtual).add(24, 'hours').diff(moment(), 'hours')
+
+    // Criar um laco que rode a quantidade de horas que faltam
+    const options = Array.from({length : horasRestantes}, (_, index) => {
+      let valor = new Date().getHours() + (index + 1);
+
+      return `${valor}:00`
+    })
+    // Devolver para cada hora, uma nova opcao no select
+    setArrayOptions(options)
+  }
+
+  useEffect(() => {
+    LoadOptions();
+  }, [])
+
   return (
     <View>
-      
-      <SelectDropdown 
-          data={data}
+      {
+        arrayOptions != null ? (
+        <SelectDropdown 
+          data={arrayOptions}
           defaultButtonText={textButton}
           onSelect={( index) => {
-              handleSelectedFn(index);
+            setSelectedTime(index);
           }}  
           buttonStyle={styles.button}
           buttonTextStyle={styles.buttonText}
           renderDropdownIcon={() => <AntDesign name="caretdown" size={22} color="#34898F" />}
-      />
+      /> ) : (
+        <></>
+      )
+      }
+      
     </View>
   );
 }

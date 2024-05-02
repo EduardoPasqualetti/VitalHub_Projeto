@@ -10,19 +10,18 @@ import api from "../../service/Service"
 
 
 
-export const SelectDoctor = ({ navigation }) => {
+export const SelectDoctor = ({ navigation, route }) => {
 
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [showModalSchedule, setShowModalSchedule] = useState(false)
-    const [doctorList,setDoctorList] = useState([])
+    const [doctorList, setDoctorList] = useState([])
 
 
     async function GetDoctors() {
-        await api.get('/Medicos')
-        .then(response => {setDoctorList(response.data)})
-        .catch(error => {console.log(error)})
+        await api.get('/Medicos/ListaMedico')
+            .then(response => { setDoctorList(response.data) })
+            .catch(error => { console.log(error + ' GetDoctors') })
         console.log(doctorList);
-        
     }
 
     const onPressHandle = () => {
@@ -32,7 +31,7 @@ export const SelectDoctor = ({ navigation }) => {
 
     useEffect(() => {
         GetDoctors()
-    },[])
+    }, [])
 
     return (
         <Container>
@@ -49,7 +48,7 @@ export const SelectDoctor = ({ navigation }) => {
                             photo={require("../../assets/doctor.png")}
                         />
                     </BtnSelect>
-                    
+
                 )}
             />}
 
@@ -59,7 +58,12 @@ export const SelectDoctor = ({ navigation }) => {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <Btn onPress={() => navigation.replace("SelectDate")}>
+            <Btn onPress={() => navigation.replace("SelectDate", {
+                agendamento: {
+                    ...route.params.agendamento,
+                    ...selectedDoctor
+                }
+            })}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
             <Cancel onPress={() => onPressHandle()}>Cancelar</Cancel>

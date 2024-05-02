@@ -8,24 +8,60 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { useEffect, useState } from "react"
 import { InputExame } from "../../components/Input/Style"
+import api from "../../service/Service"
 
 export const SeePrescription = ({ navigation, route }) => {
     const { photoUri } = route.params || {};
     const [isPhoto, setIsPhoto] = useState(true)
-    const [receita, setReceita] = useState('')
     const [descricao, setDescricao] = useState('')
     const [diagnostico, setDiagnostico] = useState('')
+    const [receita, setReceita] = useState('')
+    const [consultaId, setConsultaId] = useState()
     const [nome, setNome] = useState('')
     const [crm, setCrm] = useState('')
     const [especialidade, setEspecialidade] = useState('')
+    const [descricaoExame, setDescricaoExame] = useState('')
 
     function onPressPhoto() {
-        navigation.navigate("CameraPhoto", {isProfile: false});
         setIsPhoto(true)
+        navigation.navigate("CameraPhoto", { isProfile: false });
+
     }
 
     function onPressCancel() {
         setIsPhoto(false);
+        if (photoUri != '') {
+            route.params.photoUri = '';
+        }
+    }
+
+    async function InserirExame() {
+        const formData = new FormData();
+        console.log(consultaId);
+        formData.append("consultaId", consultaId)
+        formData.append("Imagem", {
+            uri: photoUri,
+            name: `image.${photoUri.split('.').pop()}`,
+            type: `image/${photoUri.split('.').pop()}`
+        });
+
+        await api.post(`/Exame/Cadastrar`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        }).then(response => {
+            setDescricaoExame(descricaoExame + "/n" + response.data.descricao)
+        })
+    }
+
+    async function GetExame() {
+        try {
+            console.log('getexame');
+            const response = await api.get(`/Exame/BuscarPorIdConsulta?idConsulta=${consultaId}`)
+            setDescricaoExame(response.data[0].descricao)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
@@ -36,14 +72,27 @@ export const SeePrescription = ({ navigation, route }) => {
             setNome(route.params.nome)
             setCrm(route.params.crm)
             setEspecialidade(route.params.especialidade)
-            console.log(route);
+            setConsultaId(route.params.consultaId)
         }
 
     }, [route.params])
 
+    useEffect(() => {
+        if (photoUri) {
+            InserirExame()
+        }
+    }, [photoUri])
+
+
+    useEffect(() => {
+        if (consultaId) {
+            GetExame()
+        }
+    }, [consultaId])
+
     return (
         <ContainerScroll>
-            <DoctorImage source={require("../../assets/doctor.png")} />
+            <DoctorImage source={route.params.photo ? {uri: route.params.photo} : null} />
             <ContainerProfile>
 
                 <TitleProfile>{nome}</TitleProfile>
@@ -101,11 +150,12 @@ export const SeePrescription = ({ navigation, route }) => {
 
                 <Line></Line>
 
+                <InputExame>Descricao do Exame:</InputExame>
                 <BoxInput
-                    placeholder={"Resultado do exame de sangue : tudo normal"}
+                    placeholder={"Descricao do exame"}
                     multiline={true}
                     fieldHeight={120}
-                    marginBottom={0}
+                    fieldValue={descricaoExame}
                 />
 
                 <LinkCancelMargin onPress={() => { navigation.replace("Main") }}>Voltar</LinkCancelMargin>

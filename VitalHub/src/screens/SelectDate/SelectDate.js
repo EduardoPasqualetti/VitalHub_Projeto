@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FullCalender from "../../components/CalendarSelectDate/CalendarSelectDate";
 import { ContainerSelectDate } from "../../components/Container/Style"
 import { Title } from "../SelectClinic/Style"
@@ -10,19 +10,17 @@ import InputSelect from "../../components/InputSelect/InputSelect";
 import { ModalResumeAppointment } from "../../components/ModalResumeAppointment/ModalResumeAppointment";
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule";
 
-export const SelectDate = ({ navigation }) => {
+export const SelectDate = ({ navigation, route }) => {
     const [selectedDate, setSelectedDate] = useState();
     const [selectedTime, setSelectedTime] = useState();
-
-    const Horarios = ["10:30", "12:00", "12:30", "13:00", "17:15", "17:45", "19:00"]
 
     const [showModalResume, setShowModalResume] = useState(false)
     const [showModalSchedule, setShowModalSchedule] = useState(false)
 
-    const onPressHandle = () => {
+
+    function onPressCancel(){
         setShowModalSchedule(true)
         navigation.navigate("Main");
-        
       }
 
     return (
@@ -31,14 +29,13 @@ export const SelectDate = ({ navigation }) => {
             <Title>Selecionar Data</Title>
             <FullCalender
                 selectedDate={selectedDate}
-                handleSelectedDateFn={setSelectedDate}
+                setSelectedDate={setSelectedDate}
             />
             <LabelSchedule>Selecione um horário disponível</LabelSchedule>
 
             <InputSelect
                 textButton='Selecionar horário'
-                handleSelectedFn={setSelectedTime}
-                data={Horarios}
+                setSelectedTime={setSelectedTime}
             />
 
             <BtnFull onPress={() => { setShowModalResume(true) }} >
@@ -51,6 +48,7 @@ export const SelectDate = ({ navigation }) => {
                 setShowModalResume={setShowModalResume}
                 dataConsulta={selectedDate}
                 horarioConsulta={selectedTime}
+                dadosAgendamento={route.params.agendamento}
             />
 
             <ModalSchedule
@@ -59,7 +57,7 @@ export const SelectDate = ({ navigation }) => {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <LinkCancelMargin onPress={() => onPressHandle()}>Cancelar</LinkCancelMargin>
+            <LinkCancelMargin onPress={() => onPressCancel()}>Cancelar</LinkCancelMargin>
         </ContainerSelectDate>
     )
 }

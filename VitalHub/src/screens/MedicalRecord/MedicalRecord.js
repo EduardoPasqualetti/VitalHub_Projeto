@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { ContainerProfile, ContainerScroll, ViewTitleRecord } from "../../components/Container/Style"
+import { ContainerProfile, ContainerScroll, ViewFormat, ViewTitleRecord } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
-import { ButtonTitle, SubtitleRecord, TitleProfile } from "../../components/Title/Style"
+import { ButtonTitle, EmailProfile, SubtitleRecord, TextRecord, TitleProfile } from "../../components/Title/Style"
+import { Text } from "react-native"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn } from "../../components/Button/Button"
 import { LinkCancelMargin } from "../../components/Link/Style"
@@ -21,7 +22,7 @@ export const MedicalRecord = ({navigation, route}) => {
 
 
     useEffect(() => {
-        console.log(route.params);
+        console.log(route.params.receita);
         setDescricao(route.params.descricao)
         setDiagnostico(route.params.diagnostico)
         setReceita(route.params.receita)

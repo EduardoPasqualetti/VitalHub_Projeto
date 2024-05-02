@@ -35,24 +35,6 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule , ...r
 
           <TypeAppointment>
 
-            {/* SELECIONAR O TIPO DE CONSULTA */}
-            {/* <LabelSchedule>Informe o tipo de consulta</LabelSchedule>
- 
-            <TypeButton onPress={() => setShowOptions(true)}>
-              <BlueTitle>{selectedOption || 'Tipo de consulta'}</BlueTitle>
-            </TypeButton> 
-
-            {showOptions && (
-              <OptionsContainer >
-                {opcoes.map((option, index) => (
-                  <Option key={index} onPress={() => onPressOption(option)} >
-                    <TextOption> {index + 1}- {option}</TextOption>
-                  </Option>
-                ))}
-              </OptionsContainer>
-            )}*/}
-
-
             {/* SELECIONAR QUAL O NIVEL DA CONSULTA */}
             <LabelSchedule>Qual o nível da consulta</LabelSchedule>
             <RowContainerButton>

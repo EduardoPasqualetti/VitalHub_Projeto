@@ -10,7 +10,7 @@ import { ModalAppointment } from "../../components/ModalAppointment/ModalAppoint
 import { BtnCard, BtnSchedule } from "../../components/Button/Button"
 import { FontAwesome } from '@expo/vector-icons';
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
-import { Text, TouchableOpacity } from "react-native"
+import { TouchableOpacity } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
@@ -37,7 +37,7 @@ export const Home = ({ navigation }) => {
     async function profileLoad() {
         const token = await UserDecodeToken();
 
-         setUserLogin(token)
+        setUserLogin(token)
         setDataConsulta( moment().format('YYYY-MM-DD'))
     }
 
@@ -49,7 +49,8 @@ export const Home = ({ navigation }) => {
             setAppointments(response.data);
         }).catch(error => {
             console.log(error);
-        })   
+        })
+        
     }
 
     useEffect(() => {
@@ -73,7 +74,7 @@ export const Home = ({ navigation }) => {
     return (
 
         <Container>
-            <Header ProfileImage={userLogin.role === "Medico" ? require('../../assets/doctor.png') : require('../../assets/nicole.png')} onPress={() => navigation.replace("Profile")} />
+            <Header onPress={() => navigation.replace("Profile")} />
 
             <CalendarHome setDataConsulta={setDataConsulta}/>
 
@@ -113,13 +114,14 @@ export const Home = ({ navigation }) => {
                                     email: item.paciente.idNavigation.email,
                                     idConsulta: item.id,
                                     dtNasc: item.paciente.dataNascimento,
+                                    photo: item.paciente.idNavigation.foto
                                 }); setShowModalAppointment(true) }}>
                                     <Card name={item.paciente.idNavigation.nome}
                                         status={item.situacao.situacao}
                                         ageCrm={calculateAge(item.paciente.dataNascimento)}
                                         typeAppointment={item.prioridade.prioridade}
                                         onPressCancel={() => {setIdConsulta(item.id); setShowModalCancel(true)}}
-                                        photo={require('../../assets/nicole.png')}
+                                        photo={{uri: item.paciente.idNavigation.foto}}
                                     />
                                 </TouchableOpacity>
                             )
@@ -135,7 +137,7 @@ export const Home = ({ navigation }) => {
                                             descricao: item.descricao,
                                             diagnostico: item.diagnostico,
                                             receita: item.receita.medicamento,
-                                            receitaId: item.receita.id,
+                                            idReceita: item.receita.id,
                                             dtNasc: item.paciente.dataNascimento,
                                             nome: item.paciente.idNavigation.nome,
                                             email: item.paciente.idNavigation.email,
@@ -150,13 +152,13 @@ export const Home = ({ navigation }) => {
                                     status={item.situacao.situacao}
                                     ageCrm={calculateAge(item.paciente.dataNascimento)}
                                     typeAppointment={item.prioridade.prioridade}
-                                    photo={require('../../assets/nicole.png')}
+                                    photo={{uri: item.paciente.idNavigation.foto}}
                                 />
                             )
                         }
                     }}
                 />
-                :   
+                :
                 <>
                     <ListComponent
                         data={appointments}
@@ -168,14 +170,15 @@ export const Home = ({ navigation }) => {
                                         name: item.medicoClinica.medico.idNavigation.nome,
                                         crm: item.medicoClinica.medico.crm,
                                         especialidade: item.medicoClinica.medico.especialidade.especialidade1,
-                                        clinica: item.medicoClinica.clinicaId
+                                        clinica: item.medicoClinica.clinicaId,
+                                        photo: item.medicoClinica.medico.idNavigation.foto
                                     }); setShowModalSeeDoctor(true) }}>
                                         <Card name={item.medicoClinica.medico.idNavigation.nome}
                                             status={item.situacao.situacao}
                                             ageCrm={item.medicoClinica.medico.crm}
                                             typeAppointment={item.prioridade.prioridade}
-                                            photo={require('../../assets/doctor.png')}
-                                            onPressCancel={() => setShowModalCancel(true)}
+                                            photo={{uri: item.medicoClinica.medico.idNavigation.foto}}
+                                            onPressCancel={() => {setIdConsulta(item.id),setShowModalCancel(true)}}
                                         />
                                     </TouchableOpacity>
                                 )
@@ -185,7 +188,7 @@ export const Home = ({ navigation }) => {
                                         status={item.situacao.situacao}
                                         ageCrm={item.medicoClinica.medico.crm}
                                         typeAppointment={item.prioridade.prioridade}
-                                        photo={require('../../assets/doctor.png')}
+                                        photo={{uri: item.medicoClinica.medico.idNavigation.foto}}
                                         onPressAppointment={() => {
                                             navigation.replace('SeePrescription', {
                                                 descricao: item.descricao,
@@ -193,10 +196,10 @@ export const Home = ({ navigation }) => {
                                                 nome: item.medicoClinica.medico.idNavigation.nome,
                                                 crm: item.medicoClinica.medico.crm,
                                                 especialidade: item.medicoClinica.medico.especialidade.especialidade1,
-                                                receita: item.receitaId,
-                                                consultaId: item.id
+                                                receita: item.receita,
+                                                consultaId: item.id,
+                                                photo: item.medicoClinica.medico.idNavigation.foto
                                             })
-                                            
                                         }}
                                     />
                                 )
@@ -206,7 +209,7 @@ export const Home = ({ navigation }) => {
                                         status={item.situacao.situacao}
                                         ageCrm={item.medicoClinica.medico.crm}
                                         typeAppointment={item.prioridade.prioridade}
-                                        photo={require('../../assets/doctor.png')}
+                                        photo={{uri: item.medicoClinica.medico.idNavigation.foto}}
                                     />
                                 )
                             }
@@ -245,6 +248,9 @@ export const Home = ({ navigation }) => {
                 patientInfo={patientInfo}
             />
 
+
         </Container>
+
+
     )
 }

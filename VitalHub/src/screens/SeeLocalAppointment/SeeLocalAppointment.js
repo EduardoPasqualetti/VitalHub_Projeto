@@ -9,8 +9,8 @@ import {
     requestForegroundPermissionsAsync, // solicita o acesso a localizacao
     getCurrentPositionAsync,  //recebe a localizacao atual
 
-    watchPositionAsync, // acompanha a posição do usuário
-    LocationAccuracy, 
+    watchPositionAsync,
+    LocationAccuracy,
 
 } from 'expo-location'
 import { useEffect, useRef, useState } from "react"
@@ -29,6 +29,8 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
     const [numero, setNumero] = useState('')
     const [cidade, setCidade] = useState('')
     const [nome, setNome] = useState('')
+
+
     async function CapturarLocalizacao() {
         const { granted } = await requestForegroundPermissionsAsync()
 
@@ -58,7 +60,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
             })
 
         })
-    }, [1000])
+    }, [4000])
 
     useEffect(() => {
         RecarregarVizualizacaoMapa()
@@ -85,7 +87,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
     async function BuscarClinica() {
         try {
             const response = await api.get(`/Clinica/BuscarPorId/${route.params.clinicaid}`)
-            console.log(route.params);
             setClinica(response.data)
             setFinalPosition({
                 latitude: response.data.endereco.longitude,
@@ -95,9 +96,9 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
             setNumero(response.data.endereco.numero.toString())
             setCidade(response.data.endereco.cidade)
             setNome(response.data.nomeFantasia)
-
+            console.log(clinica);
         } catch (error) {
-            console.log(error + " em BuscarClinica()");
+            console.log(error);
         }
         
     }

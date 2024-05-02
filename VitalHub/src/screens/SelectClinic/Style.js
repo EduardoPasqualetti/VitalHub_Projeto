@@ -16,6 +16,6 @@ margin-bottom: 60px;
 
 export const BtnSelect = styled.TouchableOpacity`
 align-self: center;
-height: 120px;
+height: 130px;
 margin-top: 10px;
 `
