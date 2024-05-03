@@ -53,27 +53,28 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
         const token = await UserDecodeToken();
 
         setIdPaciente(token.jti)
-        console.log(token.jti);
+        // console.log(token.jti);
     }
-
+    
     async function onPressConfirm() {
         try {
-            const response = await api.post('/Consultas/Cadastrar', {
-                situacaoId: 'E4356B3C-3FA0-496B-85BD-4E8C493F2D2C',
+            const response = await api.post('/Consultas/Cadastrar', {  // Cadastrar
+                situacaoId: 'C1D85201-F0E6-4302-8FF3-F8F36F9FFAC3',    
                 pacienteId: idPaciente,
-                medicoClinicaId: dadosAgendamento.medicoId,
+                medicoClinicaId: dadosAgendamento.medicoClinicaId,
                 prioridadeId: dadosAgendamento.prioridadeId,
                 dataConsulta: `${dataConsulta}T${horarioConsulta}:00.000Z`
 
-            })
+            }) 
             if (response) {
-                await setShowModalResume(false)
+                await setShowModalResume(true)
                 navigation.replace("Main")
                 handleCallNotifications()
             }
 
         } catch (error) {
-            console.log(error + 'erro cadastrar consulta');
+            console.log(error + ' erro ao cadastrar consulta');
+            // console.log(situacaoId);
         }
 
     }

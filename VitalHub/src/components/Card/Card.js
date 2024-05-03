@@ -1,10 +1,5 @@
-import { Image, Text } from "react-native";
 import { ButtonCard, ButtonText, ClockCard, ContainerCard, ContentCard, DataProfile, ImagePoint, ProfileData, ProfileImage, ProfileName, TextAge, TextBold, ViewRow } from "./Style"
 import { AntDesign } from '@expo/vector-icons';
-import { useEffect } from "react";
-
-
-
 
 export const Card = ({
     status = "Pendentes",
@@ -13,16 +8,18 @@ export const Card = ({
     name,
     typeAppointment,
     photo,
-    ageCrm
+    age,
+    crm,
+    doctor = false
 }) => {
 
     let prioridade
 
-if (typeAppointment === 0) {
-     prioridade = 'Rotina'
-} else if (typeAppointment === 1) {
-    prioridade = 'Exame'
-} else  prioridade = 'Urgencia'
+    if (typeAppointment === 0) {
+        prioridade = 'Rotina'
+    } else if (typeAppointment === 1) {
+        prioridade = 'Exame'
+    } else prioridade = 'Urgencia'
 
 
     return (
@@ -35,7 +32,13 @@ if (typeAppointment === 0) {
                 <DataProfile>
                     <ProfileName>{name}</ProfileName>
                     <ProfileData>
-                        <TextAge>{ageCrm}</TextAge>
+                        {
+                            doctor ? 
+                            <TextAge>CRM {crm}</TextAge> 
+                            : 
+                            <TextAge>{age}</TextAge>
+                        }
+                       
                         <ImagePoint source={require('../../assets/point.png')} />
                         <TextBold>{prioridade}</TextBold>
                     </ProfileData>
@@ -70,4 +73,4 @@ if (typeAppointment === 0) {
 
         </ContainerCard>
     )
-}   
+}

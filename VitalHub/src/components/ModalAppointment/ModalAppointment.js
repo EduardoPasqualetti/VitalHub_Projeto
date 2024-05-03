@@ -16,7 +16,7 @@ export const ModalAppointment = ({patientInfo,appointmentData, navigation, visib
         const years = today.diff(birthDate, 'years');
         return years;
     };
-
+    
     const name = patientInfo ? patientInfo.name : '';
     const email = patientInfo ? patientInfo.email : '';
     const idade = patientInfo ? calculateAge(patientInfo.dtNasc) : '';

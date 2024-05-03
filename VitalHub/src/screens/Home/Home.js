@@ -108,23 +108,27 @@ export const Home = ({ navigation }) => {
 
                     renderItem={({ item }) => {
                         if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
-                            return (
-                                <TouchableOpacity onPress={() => { setPatientInfo({
-                                    name: item.paciente.idNavigation.nome,
-                                    email: item.paciente.idNavigation.email,
-                                    idConsulta: item.id,
-                                    dtNasc: item.paciente.dataNascimento,
-                                    photo: item.paciente.idNavigation.foto
-                                }); setShowModalAppointment(true) }}>
-                                    <Card name={item.paciente.idNavigation.nome}
-                                        status={item.situacao.situacao}
-                                        ageCrm={calculateAge(item.paciente.dataNascimento)}
-                                        typeAppointment={item.prioridade.prioridade}
-                                        onPressCancel={() => {setIdConsulta(item.id); setShowModalCancel(true)}}
-                                        photo={{uri: item.paciente.idNavigation.foto}}
-                                    />
-                                </TouchableOpacity>
-                            )
+                            try {
+                                return (
+                                    <TouchableOpacity onPress={() => { setPatientInfo({
+                                        name: item.paciente.idNavigation.nome,
+                                        email: item.paciente.idNavigation.email,
+                                        idConsulta: item.id,
+                                        dtNasc: item.paciente.dataNascimento,
+                                        photo: item.paciente.idNavigation.foto
+                                    }); setShowModalAppointment(true) }}>
+                                        <Card name={item.paciente.idNavigation.nome}
+                                            status={item.situacao.situacao}
+                                            ageCrm={calculateAge(item.paciente.dataNascimento)}
+                                            typeAppointment={item.prioridade.prioridade}
+                                            onPressCancel={() => {setIdConsulta(item.id); setShowModalCancel(true)}}
+                                            photo={{uri: item.paciente.idNavigation.foto}}
+                                        />
+                                    </TouchableOpacity>
+                                )
+                            } catch (error) {
+                                console.log(error + " ListComponent de Medico em Pendentes");
+                            }
                         } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
                             return (
                                 <Card name={item.paciente.idNavigation.nome}
@@ -165,23 +169,29 @@ export const Home = ({ navigation }) => {
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => {
                             if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
-                                return (
-                                    <TouchableOpacity onPress={() => {setDoctorInfo({
-                                        name: item.medicoClinica.medico.idNavigation.nome,
-                                        crm: item.medicoClinica.medico.crm,
-                                        especialidade: item.medicoClinica.medico.especialidade.especialidade1,
-                                        clinica: item.medicoClinica.clinicaId,
-                                        photo: item.medicoClinica.medico.idNavigation.foto
-                                    }); setShowModalSeeDoctor(true) }}>
-                                        <Card name={item.medicoClinica.medico.idNavigation.nome}
-                                            status={item.situacao.situacao}
-                                            ageCrm={item.medicoClinica.medico.crm}
-                                            typeAppointment={item.prioridade.prioridade}
-                                            photo={{uri: item.medicoClinica.medico.idNavigation.foto}}
-                                            onPressCancel={() => {setIdConsulta(item.id),setShowModalCancel(true)}}
-                                        />
-                                    </TouchableOpacity>
-                                )
+                                try {
+                                    return (
+                                        <TouchableOpacity onPress={() => {setDoctorInfo({
+                                            name: item.medicoClinica.medico.idNavigation.nome,
+                                            crm: item.medicoClinica.medico.crm,
+                                            especialidade: item.medicoClinica.medico.especialidade.especialidade1,
+                                            clinica: item.medicoClinica.clinicaId,
+                                            photo: item.medicoClinica.medico.idNavigation.foto
+                                        }); setShowModalSeeDoctor(true) }}>
+                                            <Card name={item.medicoClinica.medico.idNavigation.nome}
+                                                status={item.situacao.situacao}
+                                                ageCrm={item.medicoClinica.medico.crm}
+                                                typeAppointment={item.prioridade.prioridade}
+                                                photo={{uri: item.medicoClinica.medico.idNavigation.foto}}
+                                                onPressCancel={() => {setIdConsulta(item.id),setShowModalCancel(true)}}
+                                            />
+                                        </TouchableOpacity>
+                                    )
+                                } catch (error) {
+                                    // console.log(error + " ListComponent de Paciente em Pendentes");
+                                    console.log(item.medicoClinica);
+                                }
+                                
                             } else if (statusList === 'realizada' && item.situacao.situacao === "Realizados") {
                                 return (
                                     <Card name={item.medicoClinica.medico.idNavigation.nome}
@@ -200,6 +210,7 @@ export const Home = ({ navigation }) => {
                                                 consultaId: item.id,
                                                 photo: item.medicoClinica.medico.idNavigation.foto
                                             })
+                                            console.log(item.medicoClinica)
                                         }}
                                     />
                                 )

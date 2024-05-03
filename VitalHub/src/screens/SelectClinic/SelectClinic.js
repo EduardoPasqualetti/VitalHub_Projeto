@@ -19,13 +19,28 @@ export const SelectClinic = ({ navigation, route }) => {
         await api.get('/Clinica/ListarTodas')
             .then(response => setClinicList(response.data))
             .catch(error => console.log(error))
-        console.log(clinicList);
+        // console.log(clinicList);
     }
 
     const onPressHandle = () => {
         setShowModalSchedule(true)
         navigation.navigate("Main");
     }
+    
+
+    function onPressContinue () {
+        if ( selectedClinic == null ) {
+            alert("Por favor, Selecione uma clínica!")
+        } else {
+            navigation.replace("SelectDoctor", {
+                agendamento: {
+                    ...route.params.agendamento,
+                    ...selectedClinic
+                }
+            })
+        }
+    }
+
 
     useEffect(() => {
         GetClinics()
@@ -59,15 +74,7 @@ export const SelectClinic = ({ navigation, route }) => {
                 setShowModalSchedule={setShowModalSchedule}
             />
 
-            <Btn onPress={() => {
-                navigation.replace("SelectDoctor", {
-                    agendamento: {
-                        ...route.params.agendamento,
-                        ...selectedClinic
-                    }
-                })
-                console.log(route.params.agendamento)
-            }}>
+            <Btn onPress={() => onPressContinue()}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
             </Btn>
             <Cancel onPress={() => onPressHandle()}>Cancelar</Cancel>
