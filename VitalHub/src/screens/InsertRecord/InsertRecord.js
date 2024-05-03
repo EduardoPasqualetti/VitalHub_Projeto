@@ -7,11 +7,7 @@ import { LinkCancelMargin } from "../../components/Link/Style"
 import { ButtonTitle, SubtitleRecord, TitleProfile } from "../../components/Title/Style"
 import api from "../../service/Service"
 
-export const InsertRecord = ({navigation, route}) => {
-    const [name, setName] = useState();
-    const [email, setEmail] = useState();
-    const [idade, setIdade] = useState();
-    const [idConsulta, setIdConsulta] = useState()
+export const InsertRecord = ({ navigation, route }) => {
     const [descricao, setDescricao] = useState()
     const [diagnostico, setDiagnostico] = useState()
     const [receita, setReceita] = useState()
@@ -19,19 +15,18 @@ export const InsertRecord = ({navigation, route}) => {
 
     useEffect(() => {
         console.log(route.params);
-        setName(route.params.name)
-        setEmail(route.params.email)
-        setIdade(route.params.idade)
-        setIdConsulta(route.params.idConsulta)
-    },[route.params])
+    }, [route.params])
 
 
     async function InsertRecord() {
+        console.log(route.params.idConsulta);
         try {
-            await api.put('/Consultas/Prontuario',{
-                consultaId: idConsulta,
+            await api.put('/Consultas/Prontuario', {
+                consultaId: route.params.idConsulta,
+                medicamento: receita,
                 descricao: descricao,
                 diagnostico: diagnostico
+                
             })
             console.log("Prontuario Inserido com sucesso");
             navigation.replace("Main")
@@ -42,49 +37,59 @@ export const InsertRecord = ({navigation, route}) => {
 
     return (
         <ContainerScroll>
-            <ProfileImage source={require("../../assets/photo.png")} />
 
-            <ContainerProfile>
-                <TitleProfile>{name}</TitleProfile>
-                <ViewTitleRecord>
-                    <SubtitleRecord>{idade}</SubtitleRecord>
-                    <SubtitleRecord>{email}</SubtitleRecord>
-                </ViewTitleRecord>
+            {route.params ? (
+                <>
 
-                <BoxInput
-                 textLabel={'Descrição da consulta'}
-                 placeholder={'Descricao'}
-                 fieldHeight={150}
-                 insertRecord={true}
-                 multiline={true}
-                 editable={true}
-                 onChangeText={setDescricao}
-                />
-                <BoxInput
-                 textLabel={'Diagnóstico do paciente'}
-                 placeholder={'Diagnóstico'}
-                 fieldHeight={80}
-                 insertRecord={true}
-                 multiline={true}
-                 editable={true}
-                 onChangeText={setDiagnostico}
-                />
-                <BoxInput
-                 textLabel={'Prescrição médica'}
-                 placeholder={'Prescrição medica'}
-                 fieldHeight={150}
-                 insertRecord={true}
-                 multiline={true}
-                 editable={true}
-                 onChangeText={setReceita}
-                />
+                    <ProfileImage source={{ uri: route.params.data.photo }} />
+                    <ContainerProfile>
+                        <TitleProfile>{route.params.data.name}</TitleProfile>
+                        <ViewTitleRecord>
+                            <SubtitleRecord>{route.params.idade} anos</SubtitleRecord>
+                            <SubtitleRecord>{route.params.data.email}</SubtitleRecord>
+                        </ViewTitleRecord>
+                        <BoxInput
+                            textLabel={'Descrição da consulta'}
+                            placeholder={'Descricao'}
+                            fieldHeight={150}
+                            insertRecord={true}
+                            multiline={true}
+                            editable={true}
+                            onChangeText={setDescricao}
+                        />
+                        <BoxInput
+                            textLabel={'Diagnóstico do paciente'}
+                            placeholder={'Diagnóstico'}
+                            fieldHeight={80}
+                            insertRecord={true}
+                            multiline={true}
+                            editable={true}
+                            onChangeText={setDiagnostico}
+                        />
+                        <BoxInput
+                            textLabel={'Prescrição médica'}
+                            placeholder={'Prescrição medica'}
+                            fieldHeight={150}
+                            insertRecord={true}
+                            multiline={true}
+                            editable={true}
+                            onChangeText={setReceita}
+                        />
 
-                <Btn onPress={() => InsertRecord()}>
-                    <ButtonTitle>SALVAR</ButtonTitle>
-                </Btn>
+                        <Btn onPress={() => InsertRecord()}>
+                            <ButtonTitle>SALVAR</ButtonTitle>
+                        </Btn>
 
-                <LinkCancelMargin onPress={() => navigation.replace("Main")}>Cancelar</LinkCancelMargin>
-            </ContainerProfile>
+                        <LinkCancelMargin onPress={() => navigation.replace("Main")}>Cancelar</LinkCancelMargin>
+                    </ContainerProfile>
+                </>
+            ) : (
+                <></>
+            )}
+
+
+
+
         </ContainerScroll>
     )
 }

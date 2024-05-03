@@ -45,12 +45,12 @@ export const Home = ({ navigation }) => {
         const url = (userLogin.role === 'Medico' ? 'Medicos' : 'Pacientes')
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
+        
             .then(response => {
                 setAppointments(response.data);
             }).catch(error => {
                 console.log(error);
             })
-
     }
 
     useEffect(() => {
@@ -116,7 +116,7 @@ export const Home = ({ navigation }) => {
                                         email: item.paciente.idNavigation.email,
                                         idConsulta: item.id,
                                         dtNasc: item.paciente.dataNascimento,
-                                        photo: `{uri : ${item.paciente.idNavigation.foto}}`
+                                        photo: item.paciente.idNavigation.foto
                                     }); setShowModalAppointment(true)
                                 }}>
                                     <Card name={item.paciente.idNavigation.nome}
@@ -125,6 +125,7 @@ export const Home = ({ navigation }) => {
                                         typeAppointment={item.prioridade.prioridade}
                                         onPressCancel={() => { setIdConsulta(item.id); setShowModalCancel(true) }}
                                         photo={{ uri: item.paciente.idNavigation.foto }}
+                                        timeConsulta={item.dataConsulta}
                                     />
                                 </TouchableOpacity>
                             )
@@ -135,6 +136,7 @@ export const Home = ({ navigation }) => {
                                     age={calculateAge(item.paciente.dataNascimento)}
                                     typeAppointment={item.prioridade.prioridade}
                                     photo={{ uri: item.paciente.idNavigation.foto }}
+                                    timeConsulta={item.dataConsulta}
                                     onPressAppointment={() => {
                                         navigation.replace('MedicalRecord', {
                                             descricao: item.descricao,
@@ -144,7 +146,8 @@ export const Home = ({ navigation }) => {
                                             dtNasc: item.paciente.dataNascimento,
                                             nome: item.paciente.idNavigation.nome,
                                             email: item.paciente.idNavigation.email,
-                                            idConsulta: item.id
+                                            idConsulta: item.id,
+                                            photo: item.paciente.idNavigation.foto,
                                         })
                                     }}
                                 />
@@ -156,6 +159,7 @@ export const Home = ({ navigation }) => {
                                     age={calculateAge(item.paciente.dataNascimento)}
                                     typeAppointment={item.prioridade.prioridade}
                                     photo={{ uri: item.paciente.idNavigation.foto }}
+                                    timeConsulta={item.dataConsulta}
                                 />
                             )
                         }
@@ -186,6 +190,7 @@ export const Home = ({ navigation }) => {
                                             typeAppointment={item.prioridade.prioridade}
                                             photo={{ uri: item.medicoClinica.medico.idNavigation.foto }}
                                             onPressCancel={() => { setIdConsulta(item.id), setShowModalCancel(true) }}
+                                            timeConsulta={item.dataConsulta}
                                         />
                                     </TouchableOpacity>
                                 )
@@ -198,6 +203,7 @@ export const Home = ({ navigation }) => {
                                         crm={item.medicoClinica.medico.crm}
                                         typeAppointment={item.prioridade.prioridade}
                                         photo={{ uri: item.medicoClinica.medico.idNavigation.foto }}
+                                        timeConsulta={item.dataConsulta}
                                         onPressAppointment={() => {
                                             navigation.replace('SeePrescription', {
                                                 home: true,
@@ -222,6 +228,7 @@ export const Home = ({ navigation }) => {
                                         crm={item.medicoClinica.medico.crm}
                                         typeAppointment={item.prioridade.prioridade}
                                         photo={{ uri: item.medicoClinica.medico.idNavigation.foto }}
+                                        timeConsulta={item.dataConsulta}
                                     />
                                 )
                             }

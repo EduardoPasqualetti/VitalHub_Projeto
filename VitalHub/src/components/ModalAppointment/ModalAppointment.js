@@ -9,7 +9,7 @@ import { useEffect } from "react"
 export const ModalAppointment = ({ patientInfo, appointmentData, navigation, visible, setShowModalAppointment, ...rest }) => {
 
     const onPressHandler = () => {
-        navigation.navigate("InsertRecord", { name: name, email: email, idade: idade, idConsulta: idConsulta });
+        navigation.navigate("InsertRecord", { data: patientInfo, idade: idade, });
         setShowModalAppointment(false)
     };
 
@@ -20,41 +20,41 @@ export const ModalAppointment = ({ patientInfo, appointmentData, navigation, vis
         return years;
     };
 
-    const name = patientInfo ? patientInfo.name : '';
-    const email = patientInfo ? patientInfo.email : '';
+
     const idade = patientInfo ? calculateAge(patientInfo.dtNasc) : '';
     const idConsulta = patientInfo ? patientInfo.idConsulta : '';
     const foto = patientInfo ? patientInfo.photo : ''
 
 
-    useEffect(() => {``
-        patientInfo ?
-       patientInfo.photo : null
-    }, [])
+    useEffect(() => {
+        console.log(patientInfo);
+    }, [patientInfo])
 
     return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade">
             <ViewModal>
-                <ContentModal>
-                    {
-                        patientInfo ?
-                            <Image source={foto} />
-                            : null
-                    }
-                    <TitleProfile>{name}</TitleProfile>
+                {
+                    patientInfo ? (
+                        <ContentModal>
+                            <Image source={{uri: patientInfo.photo}}/>
+                            <TitleProfile>{patientInfo.name}</TitleProfile>
 
-                    <ViewData>
-                        <TextAge>{idade}</TextAge>
-                        <TextEmail>{email}</TextEmail>
-                    </ViewData>
+                            <ViewData>
+                                <TextAge>{idade}</TextAge>
+                                <TextEmail>{patientInfo.email}</TextEmail>
+                            </ViewData>
 
-                    <ButtonModal onPress={() => { onPressHandler() }} >
-                        <ButtonTitle>INSERIR PRONTUARIO</ButtonTitle>
-                    </ButtonModal>
+                            <ButtonModal onPress={() => { onPressHandler() }} >
+                                <ButtonTitle>INSERIR PRONTUARIO</ButtonTitle>
+                            </ButtonModal>
 
-                    <Cancel onPress={() => setShowModalAppointment(false)}>Cancelar</Cancel>
+                            <Cancel onPress={() => setShowModalAppointment(false)}>Cancelar</Cancel>
 
-                </ContentModal>
+                        </ContentModal>
+                    ) : (
+                        <></>
+                    )
+                }
             </ViewModal>
         </Modal>
     )

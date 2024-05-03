@@ -15,6 +15,7 @@ export const Card = ({
     photo,
     age,
     crm,
+    timeConsulta,
     doctor = false
 }) => {
 
@@ -25,6 +26,7 @@ export const Card = ({
     } else if (typeAppointment === 1) {
         prioridade = 'Exame'
     } else prioridade = 'Urgencia'
+
 
 
     return (
@@ -41,7 +43,7 @@ export const Card = ({
                             doctor ? 
                             <TextAge>CRM {crm}</TextAge> 
                             : 
-                            <TextAge>{age}</TextAge>
+                            <TextAge>{age} anos</TextAge>
                         }
                        
                         <ImagePoint source={require('../../assets/point.png')} />
@@ -51,7 +53,7 @@ export const Card = ({
                 <ViewRow>
                     <ClockCard status={status}>
                         <AntDesign name="clockcircle" size={18} color={status == "Pendentes" ? '#49B3BA' : '#4E4B59'} />
-                        <TextBold status={status}>14:00</TextBold>
+                        <TextBold status={status}>{timeConsulta.split('T')[1].split(':')[0]}:{timeConsulta.split('T')[1].split(':')[1]}</TextBold>
                     </ClockCard>
 
 

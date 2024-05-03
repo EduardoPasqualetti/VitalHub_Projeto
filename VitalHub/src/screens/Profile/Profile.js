@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
 import moment from 'moment'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TextInputMask } from 'react-native-masked-text';
 
 export const Profile = ({ navigation, route }) => {
     const [profileEdit, setProfileEdit] = useState(false)
@@ -48,13 +49,13 @@ export const Profile = ({ navigation, route }) => {
 
         try {
             const response = await api.get(`/${url}/BuscarPorId?id=${token.jti}`);
-            
+
             setUserData(response.data)
             setFotoUsuario(response.data.idNavigation.foto)
             setCep(response.data.endereco.cep)
             setCidade(response.data.endereco.cidade)
             setLogradouro(response.data.endereco.logradouro)
-            setNumero(response.data.endereco.numero.toString())
+            setNumero(response.data.endereco.numero)
             setDtNasc(response.data.dataNascimento)
             token.role === 'Medico' ?
                 setEspecialidade(response.data.especialidade.especialidade1)
@@ -134,6 +135,10 @@ export const Profile = ({ navigation, route }) => {
     }, [route.params, idUser])
 
 
+    useEffect(() => {
+        console.log(dtNasc);
+    },[])
+
     async function closeApp() {
         await AsyncStorage.removeItem('token')
         navigation.replace("Login")
@@ -192,7 +197,7 @@ export const Profile = ({ navigation, route }) => {
                             />
                             <BoxInput
                                 textLabel={'Numero'}
-                                fieldValue={numero}
+                                fieldValue={numero.toString()}
                                 fieldWidth={'30'}
                             />
                         </ViewFormat>
@@ -239,9 +244,19 @@ export const Profile = ({ navigation, route }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        placeholder={dtNasc ? formatarData(dtNasc) : null}
+                                        placeholder={'DD-MM-YYYY'}
                                         editable={true}
-                                        onChangeText={setDtNasc}
+                                        render={(props) => (
+                                            <TextInputMask
+                                                {...props}
+                                                type={'datetime'}
+                                                options={{
+                                                    format: 'DD-MM-YYYY'
+                                                }}
+                                                value={dtNasc}
+                                                onChangeText={txt => setDtNasc(txt)}
+                                            />
+                                        )}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
@@ -282,10 +297,10 @@ export const Profile = ({ navigation, route }) => {
                             />
                             <BoxInput
                                 textLabel={'Numero'}
-                                placeholder={numero}
+                                placeholder={numero.toString()}
                                 fieldWidth={'30'}
                                 editable={true}
-                                onChangeText={setNumero}
+                                onChangeText={txt => setNumero(parseInt(txt))}
                             />
                         </ViewFormat>
                         <ViewFormat>

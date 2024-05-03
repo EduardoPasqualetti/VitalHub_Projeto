@@ -19,9 +19,8 @@ export const SelectDoctor = ({ navigation, route }) => {
 
     async function GetDoctors() {
         await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
-            .then(response => { setDoctorList(response.data) })
+            .then(response => { setDoctorList(response.data) } )
             .catch(error => { console.log(error) })
-
     }
 
     function onPressCancel() {
@@ -61,7 +60,7 @@ export const SelectDoctor = ({ navigation, route }) => {
                         <CardDoctor name={item.idNavigation.nome}
                             espec={item.especialidade.especialidade1}
                             isSelected={selectedDoctor ? item.id == selectedDoctor.medicoId : false}
-                            photo={require("../../assets/doctor.png")}
+                            photo={item.idNavigation.foto}
                         />
                     </BtnSelect>
 

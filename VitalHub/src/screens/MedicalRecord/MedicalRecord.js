@@ -9,7 +9,7 @@ import { LinkCancelMargin } from "../../components/Link/Style"
 import moment from 'moment'
 import api from "../../service/Service"
 
-export const MedicalRecord = ({navigation, route}) => {
+export const MedicalRecord = ({ navigation, route }) => {
 
     const [recordEdit, setRecordEdit] = useState(true)
     const [descricao, setDescricao] = useState('')
@@ -18,19 +18,16 @@ export const MedicalRecord = ({navigation, route}) => {
     const [email, setEmail] = useState('')
     const [nome, setNome] = useState('')
     const [dtNasc, setDtNasc] = useState('')
-    const [idConsulta, setIdConsulta] = useState('')
 
 
     useEffect(() => {
-        console.log(route.params);
-        setDescricao(route.params.descricao)
-        setDiagnostico(route.params.diagnostico)
-        setReceita(route.params.receita)
         setDtNasc(route.params.dtNasc)
         setNome(route.params.nome)
         setEmail(route.params.email)
-        setIdConsulta(route.params.idConsulta)
-    },[route.params])
+
+
+        GetRecord(route.params.idConsulta)
+    }, [route.params, recordEdit])
 
 
     const calculateAge = (dateOfBirth) => {
@@ -42,15 +39,26 @@ export const MedicalRecord = ({navigation, route}) => {
 
     const idade = calculateAge(dtNasc)
 
+    async function GetRecord(id) {
+        try {
+            const response = await api.get(`/Consultas/BuscarPorId?id=${id}`)
+            console.log(response.data);
+            setDescricao(response.data.descricao)
+            setDiagnostico(response.data.diagnostico)
+            setReceita(response.data.receita.medicamento)
+        } catch (error) {
+            
+        }
+    }
+
     async function UpdateRecord() {
         try {
-            await api.put('/Consultas/Prontuario',{
-                consultaId: idConsulta,
+            await api.put('/Consultas/Prontuario', {
+                consultaId: route.params.idConsulta,
                 descricao: descricao,
                 diagnostico: diagnostico
             })
             console.log("Prontuario atualizado com sucesso");
-            navigation.replace("Main")
         } catch (error) {
             console.log(error);
         }
@@ -65,13 +73,13 @@ export const MedicalRecord = ({navigation, route}) => {
         <ContainerScroll>
             {recordEdit ? (
                 <>
-                    <ProfileImage source={require("../../assets/photo.png")} />
+                    <ProfileImage source={{ uri: route.params.photo }} />
 
                     <ContainerProfile>
 
                         <TitleProfile>{nome}</TitleProfile>
                         <ViewTitleRecord>
-                            <SubtitleRecord>{idade}</SubtitleRecord>
+                            <SubtitleRecord>{idade} anos</SubtitleRecord>
                             <SubtitleRecord>{email}</SubtitleRecord>
                         </ViewTitleRecord>
 
@@ -80,7 +88,7 @@ export const MedicalRecord = ({navigation, route}) => {
                             fieldValue={descricao}
                             fieldHeight={150}
                             multiline={true}
-                            
+
                         />
                         <BoxInput
                             textLabel={'Diagnóstico do paciente'}
@@ -89,22 +97,22 @@ export const MedicalRecord = ({navigation, route}) => {
                             multiline={true}
                         />
                         <BoxInput
-                            textLabel={'Prescrição médica'} 
+                            textLabel={'Prescrição médica'}
                             fieldValue={receita}
                             fieldHeight={150}
                             multiline={true}
-                        /> 
-                        <Btn onPress={() => setRecordEdit(false)}> 
+                        />
+                        <Btn onPress={() => setRecordEdit(false)}>
                             <ButtonTitle>EDITAR</ButtonTitle>
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => {navigation.replace("Main")}}>Cancelar</LinkCancelMargin>
+                        <LinkCancelMargin onPress={() => { navigation.replace("Main") }}>Cancelar</LinkCancelMargin>
                     </ContainerProfile>
 
                 </>
             ) : (
                 <>
-                    <ProfileImage source={require("../../assets/photo.png")} />
+                    <ProfileImage source={{ uri: route.params.photo }} />
 
                     <ContainerProfile>
 
@@ -126,7 +134,7 @@ export const MedicalRecord = ({navigation, route}) => {
                             textLabel={'Diagnóstico do paciente'}
                             placeholder={diagnostico}
                             onChangeText={setDiagnostico}
-                            fieldHeight={80}                  
+                            fieldHeight={80}
                             editable={true}
                             multiline={true}
                         />
