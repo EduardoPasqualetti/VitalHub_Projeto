@@ -6,25 +6,28 @@ import { Btn, BtnReturn, IconReturn } from "../../components/Button/Button"
 import { useState } from "react"
 import api from "../../service/Service"
 
-export const Recover = ({navigation}) => {
+export const Recover = ({ navigation }) => {
     const [email, setEmail] = useState('')
 
-    async function SendEmail(){
-        console.log()
-     await api.post(`/RecuperarSenha?email=${email}`)
-     .then( () =>  {
-         navigation.replace("VerifyEmail", { emailRecuperacao : email })
-     }).catch( error => {
-         console.log(error)
-     } )
- }
+    async function SendEmail() {
+        if (email != '' && email.length > 10 && email.includes('@')) {
+            await api.post(`/RecuperarSenha?email=${email}`)
+                .then(() => {
+                    navigation.replace("VerifyEmail", { emailRecuperacao: email })
+                }).catch(error => {
+                    console.log(error)
+                })
+        }
+        else 
+            alert("Email invalido, informe-o corretamente")
+    }
     return (
         <Container>
-            
+
             <BtnReturn onPress={() => navigation.navigate("Login")}>
-                 <IconReturn source={require("../../assets/return.png")}/>
+                <IconReturn source={require("../../assets/return.png")} />
             </BtnReturn>
-           
+
             <Logo source={require('../../assets/logo.png')}></Logo>
 
             <Title>Recuperar Senha</Title>
@@ -35,7 +38,7 @@ export const Recover = ({navigation}) => {
 
             <Btn onPress={() => SendEmail()}>
                 <ButtonTitle>CONTINUAR</ButtonTitle>
-            </Btn>  
+            </Btn>
 
         </Container>
     )

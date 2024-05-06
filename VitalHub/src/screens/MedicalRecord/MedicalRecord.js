@@ -15,19 +15,18 @@ export const MedicalRecord = ({ navigation, route }) => {
     const [descricao, setDescricao] = useState('')
     const [diagnostico, setDiagnostico] = useState('')
     const [receita, setReceita] = useState('')
-    const [email, setEmail] = useState('')
-    const [nome, setNome] = useState('')
-    const [dtNasc, setDtNasc] = useState('')
+    const [idConsulta, setIdConsulta] = useState()
 
 
     useEffect(() => {
-        setDtNasc(route.params.dtNasc)
-        setNome(route.params.nome)
-        setEmail(route.params.email)
-
-
+        setIdConsulta(route.params.idConsulta)
+        console.log(route.params);
         GetRecord(route.params.idConsulta)
-    }, [route.params, recordEdit])
+    }, [route.params])
+
+    useEffect(() => {
+        GetRecord()
+    },[])
 
 
     const calculateAge = (dateOfBirth) => {
@@ -37,30 +36,36 @@ export const MedicalRecord = ({ navigation, route }) => {
         return years;
     };
 
-    const idade = calculateAge(dtNasc)
+    const idade = calculateAge(route.params.dtNasc)
 
     async function GetRecord(id) {
         try {
             const response = await api.get(`/Consultas/BuscarPorId?id=${id}`)
+            console.log('buscar');
             console.log(response.data);
             setDescricao(response.data.descricao)
             setDiagnostico(response.data.diagnostico)
             setReceita(response.data.receita.medicamento)
+
         } catch (error) {
-            
+
         }
     }
 
     async function UpdateRecord() {
-        try {
-            await api.put('/Consultas/Prontuario', {
-                consultaId: route.params.idConsulta,
-                descricao: descricao,
-                diagnostico: diagnostico
-            })
-            console.log("Prontuario atualizado com sucesso");
-        } catch (error) {
-            console.log(error);
+        if (descricao != '' && diagnostico != '' && receita != '') {
+            try {
+                await api.put('/Consultas/Prontuario', {
+                    consultaId: idConsulta,
+                    medicamento: receita,
+                    descricao: descricao,
+                    diagnostico: diagnostico
+                })
+                console.log("Prontuario atualizado com sucesso");
+                GetRecord(idConsulta)
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
@@ -77,10 +82,10 @@ export const MedicalRecord = ({ navigation, route }) => {
 
                     <ContainerProfile>
 
-                        <TitleProfile>{nome}</TitleProfile>
+                        <TitleProfile>{route.params.nome}</TitleProfile>
                         <ViewTitleRecord>
                             <SubtitleRecord>{idade} anos</SubtitleRecord>
-                            <SubtitleRecord>{email}</SubtitleRecord>
+                            <SubtitleRecord>{route.params.email}</SubtitleRecord>
                         </ViewTitleRecord>
 
                         <BoxInput
@@ -116,10 +121,10 @@ export const MedicalRecord = ({ navigation, route }) => {
 
                     <ContainerProfile>
 
-                        <TitleProfile>{nome}</TitleProfile>
+                        <TitleProfile>{route.params.nome}</TitleProfile>
                         <ViewTitleRecord>
                             <SubtitleRecord>{idade}</SubtitleRecord>
-                            <SubtitleRecord>{email}</SubtitleRecord>
+                            <SubtitleRecord>{route.params.email}</SubtitleRecord>
                         </ViewTitleRecord>
 
                         <BoxInput

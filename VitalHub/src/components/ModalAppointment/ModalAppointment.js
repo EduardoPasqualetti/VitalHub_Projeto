@@ -22,8 +22,6 @@ export const ModalAppointment = ({ patientInfo, appointmentData, navigation, vis
 
 
     const idade = patientInfo ? calculateAge(patientInfo.dtNasc) : '';
-    const idConsulta = patientInfo ? patientInfo.idConsulta : '';
-    const foto = patientInfo ? patientInfo.photo : ''
 
 
     useEffect(() => {

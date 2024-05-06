@@ -14,7 +14,7 @@ export const InsertRecord = ({ navigation, route }) => {
 
 
     useEffect(() => {
-        console.log(route.params);
+        console.log(route.params.data.idConsulta);
     }, [route.params])
 
 
@@ -22,7 +22,7 @@ export const InsertRecord = ({ navigation, route }) => {
         console.log(route.params.idConsulta);
         try {
             await api.put('/Consultas/Prontuario', {
-                consultaId: route.params.idConsulta,
+                consultaId: route.params.data.idConsulta,
                 medicamento: receita,
                 descricao: descricao,
                 diagnostico: diagnostico

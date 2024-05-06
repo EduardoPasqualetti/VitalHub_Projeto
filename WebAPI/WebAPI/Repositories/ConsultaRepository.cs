@@ -14,7 +14,7 @@ namespace WebAPI.Repositories
 
         public Consulta BuscarPorId(Guid id)
         {
-            Consulta consulta = ctx.Consultas.Include(x => x.Receita!.Consulta).FirstOrDefault(x => x.Id == id)!;
+            Consulta consulta = ctx.Consultas.Include(x => x.Receita).FirstOrDefault(x => x.Id == id)!;
             return consulta;
         }
 
@@ -35,7 +35,7 @@ namespace WebAPI.Repositories
 
                 if (buscada.ReceitaId != null)
                 {
-                    buscada.Receita = consulta.Receita;
+                    buscada.Receita!.Medicamento = consulta.Receita!.Medicamento;
 
                 }
                 else

@@ -135,10 +135,6 @@ export const Profile = ({ navigation, route }) => {
     }, [route.params, idUser])
 
 
-    useEffect(() => {
-        console.log(dtNasc);
-    },[])
-
     async function closeApp() {
         await AsyncStorage.removeItem('token')
         navigation.replace("Login")
@@ -245,30 +241,15 @@ export const Profile = ({ navigation, route }) => {
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
                                         placeholder={'DD-MM-YYYY'}
-                                        editable={true}
-                                        render={(props) => (
-                                            <TextInputMask
-                                                {...props}
-                                                type={'datetime'}
-                                                options={{
-                                                    format: 'DD-MM-YYYY'
-                                                }}
-                                                value={dtNasc}
-                                                onChangeText={txt => setDtNasc(txt)}
-                                            />
-                                        )}
+                                        
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
                                         placeholder={cpf}
-                                        editable={true}
-                                        onChangeText={setCpf}
                                     />
                                     <BoxInput
                                         textLabel={'RG'}
                                         placeholder={rg}
-                                        editable={true}
-                                        onChangeText={setRg}
                                     />
                                 </>
                                 :
@@ -282,8 +263,6 @@ export const Profile = ({ navigation, route }) => {
                                     <BoxInput
                                         textLabel={'CRM'}
                                         placeholder={crm}
-                                        editable={true}
-                                        onChangeText={setCrm}
                                     />
                                 </>
                         }

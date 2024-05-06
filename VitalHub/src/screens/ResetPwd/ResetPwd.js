@@ -28,7 +28,7 @@ export const ResetPwd = ({ navigation, route }) => {
 
     
     async function UpdatePassword() {
-        if (senha === confirmar) {
+        if (senha === confirmar && senha.length >= 5) {
             try {
                 await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
                 {

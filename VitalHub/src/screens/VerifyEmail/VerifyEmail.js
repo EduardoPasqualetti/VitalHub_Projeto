@@ -29,13 +29,18 @@ export const VerifyEmail = ({ navigation, route }) => {
     }
 
     async function ValidateCode() {
-        try {
+        if (codigo != '' && codigo.length === 4) {
+             try {
             await api.post(`/RecuperarSenha/ValidarCodigoRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&code=${codigo}`)
             
             navigation.replace("ResetPwd", {emailRecuperacao : route.params.emailRecuperacao})
         } catch (error) {
             console.log(error);
         }
+        } else {
+            alert("Informe o codigo corretamente")
+        }
+       
     }
 
     useEffect(() => {
