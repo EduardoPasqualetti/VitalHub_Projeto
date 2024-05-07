@@ -1,4 +1,4 @@
-import { Alert, ScrollView, Text } from "react-native"
+import { ActivityIndicator, Alert, ScrollView, Text } from "react-native"
 import { Container, ContainerScroll } from "../../components/Container/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
@@ -31,44 +31,24 @@ export const Register = ({ navigation }) => {
     const [dtNasc, setDtNasc] = useState()
     const [cpf, setCpf] = useState()
     const [rg, setRG] = useState()
+    const [spinner, setSpinner] = useState(false);
 
     function validarCPF(cpf) {
-        cpf = cpf.replace(/[^\d]/g, ''); 
-    
-        if (cpf.length !== 11) {
-            return false;
-        }
-    
-
-        if (/^(\d)\1{10}$/.test(cpf)) {
-            return false;
-        }
-    
-        let sum = 0;
-        for (let i = 0; i < 9; i++) {
-            sum += parseInt(cpf.charAt(i)) * (10 - i);
-        }
-        let remainder = 11 - (sum % 11);
-        let digit = (remainder === 10 || remainder === 11) ? 0 : remainder;
-    
-        if (digit != parseInt(cpf.charAt(9))) {
-            return false;
-        }
-    
-        sum = 0;
-        for (let i = 0; i < 10; i++) {
-            sum += parseInt(cpf.charAt(i)) * (11 - i);
-        }
-        remainder = 11 - (sum % 11);
-        digit = (remainder === 10 || remainder === 11) ? 0 : remainder;
-    
-        if (digit != parseInt(cpf.charAt(10))) {
-            return false;
-        }
-    
-        return true;
+        cpf = cpf.replace(/\D/g, '');
+        if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+        var result = true;
+        [9, 10].forEach(function (j) {
+            var soma = 0, r;
+            cpf.split(/(?=)/).splice(0, j).forEach(function (e, i) {
+                soma += parseInt(e) * ((j + 2) - (i + 1));
+            });
+            r = soma % 11;
+            r = (r < 2) ? 0 : 11 - r;
+            if (r != cpf.substring(j, j + 1)) result = false;
+        });
+        return result;
     }
-    
+
 
     const handleCallNotifications = async () => {
 
@@ -96,6 +76,7 @@ export const Register = ({ navigation }) => {
     }
 
     async function HandleRegister() {
+        console.log("entra no metodo cadastrar");
         if (
             senha === confirmarSenha &&
             senha !== '' &&
@@ -107,12 +88,7 @@ export const Register = ({ navigation }) => {
             dtNasc &&
             validarCPF(cpf)
         ) {
-            const cpfJaCadastrado = await verificarCPFCadastrado(cpf);
-            if (cpfJaCadastrado) {
-                Alert.alert("CPF já cadastrado");
-                return;
-            }
-
+            setSpinner(true)
             const formData = new FormData();
             formData.append('Nome', nome);
             formData.append('Email', email);
@@ -127,12 +103,14 @@ export const Register = ({ navigation }) => {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
+                console.log("feito a requisicao");
                 console.log(response);
                 navigation.replace("Login");
                 handleCallNotifications();
             } catch (error) {
-                console.log(error);
+                console.log(error + 'erro no metodo');
             }
+            setSpinner(false)
         } else if (senha.length < 5) {
             Alert.alert("Senha muito pequena!")
         } else if (senha !== confirmarSenha) {
@@ -144,16 +122,6 @@ export const Register = ({ navigation }) => {
         }
     }
 
-    async function verificarCPFCadastrado(cpf) {
-        try {
-            const response = await api.get(`/verificarCpfCadastrado?cpf=${cpf}`);
-            return response.data.cadastrado;
-        } catch (error) {
-            console.error("Erro ao verificar CPF cadastrado:", error);
-            return false;
-        }
-    }
-
     return (
         <Container>
             <Logo source={require('../../assets/logo.png')}></Logo>
@@ -161,17 +129,25 @@ export const Register = ({ navigation }) => {
             <Title>Criar conta</Title>
 
             <TextRec>Insira seu endereço de e-mail, senha e dados pessoais para realizar seu cadastro.</TextRec>
-            <ScrollView style={{width:'100%', alignSelf:'center', left:18}}>
+            <ScrollView style={{ width: '100%', alignSelf: 'center', left: 18 }}>
                 <Input placeholder={"Nome"} value={nome} onChangeText={setNome} />
                 <Input placeholder={"Email"} value={email} onChangeText={setEmail} />
                 <Input placeholder={"Senha"} value={senha} onChangeText={setSenha} secureTextEntry={true} />
-                <Input placeholder={"Confirmar senha"} value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry={true}/>
-                <Input placeholder={"RG"} value={rg} onChangeText={setRG} keyboardType="numeric"/>
-                <Input placeholder={"CPF"} value={cpf} onChangeText={setCpf} keyboardType="numeric"/>
+                <Input placeholder={"Confirmar senha"} value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry={true} />
+                <Input placeholder={"RG"} value={rg} onChangeText={setRG} keyboardType="numeric" />
+                <Input placeholder={"CPF"} value={cpf} onChangeText={setCpf} keyboardType="numeric" />
                 <Input placeholder={"Data de nascimento"} value={dtNasc} onChangeText={setDtNasc} />
             </ScrollView>
+
             <Btn onPress={() => HandleRegister()}>
-                <ButtonTitle>CADASTRAR</ButtonTitle>
+                {
+                    spinner ? (
+
+                        <ActivityIndicator size="small" color="#ffffff" />
+
+                    ) : <ButtonTitle>CADASTRAR</ButtonTitle>
+                }
+
             </Btn>
 
             <LinkCancel onPress={() => navigation.replace("Login")}>Cancelar</LinkCancel>

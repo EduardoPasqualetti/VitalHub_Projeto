@@ -23,28 +23,31 @@ Notifications.setNotificationHandler({
 })
 
 export const ResetPwd = ({ navigation, route }) => {
+    const [spinner, setSpinner] = useState(false)
     const [senha, setSenha] = useState('')
     const [confirmar, setConfirmar] = useState('')
 
-    
+
     async function UpdatePassword() {
         if (senha === confirmar && senha.length >= 5) {
+            setSpinner(true)
             try {
                 await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
-                {
-                    senhaNova: senha
-                })
+                    {
+                        senhaNova: senha
+                    })
                 navigation.replace("Login");
                 handleCallNotifications()
             } catch (error) {
                 console.log(error);
             }
+            setSpinner(false)
         }
         else {
             Alert.alert('Senha de confirmação nao coincide com a senha')
         }
     }
-    
+
 
     const handleCallNotifications = async () => {
 
@@ -95,8 +98,11 @@ export const ResetPwd = ({ navigation, route }) => {
 
             />
 
-            <Btn onPress={() => UpdatePassword()}>
-                <ButtonTitle>Confirmar nova senha</ButtonTitle>
+            <Btn disabled={spinner} onPress={() => UpdatePassword()}>
+                {
+                    spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>Confirmar nova senha</ButtonTitle>
+                }
+
             </Btn>
 
         </Container>

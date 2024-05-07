@@ -16,6 +16,7 @@ export const MedicalRecord = ({ navigation, route }) => {
     const [diagnostico, setDiagnostico] = useState('')
     const [receita, setReceita] = useState('')
     const [idConsulta, setIdConsulta] = useState()
+    const [spinner, setSpinner] = useState(false)
 
 
     useEffect(() => {
@@ -25,8 +26,12 @@ export const MedicalRecord = ({ navigation, route }) => {
     }, [route.params])
 
     useEffect(() => {
-        GetRecord()
-    },[])
+        if (recordEdit === false) {
+            console.log('effect dois');
+            GetRecord(idConsulta)
+        }
+
+    }, [recordEdit])
 
 
     const calculateAge = (dateOfBirth) => {
@@ -42,7 +47,6 @@ export const MedicalRecord = ({ navigation, route }) => {
         try {
             const response = await api.get(`/Consultas/BuscarPorId?id=${id}`)
             console.log('buscar');
-            console.log(response.data);
             setDescricao(response.data.descricao)
             setDiagnostico(response.data.diagnostico)
             setReceita(response.data.receita.medicamento)
@@ -54,6 +58,7 @@ export const MedicalRecord = ({ navigation, route }) => {
 
     async function UpdateRecord() {
         if (descricao != '' && diagnostico != '' && receita != '') {
+            setSpinner(true)
             try {
                 await api.put('/Consultas/Prontuario', {
                     consultaId: idConsulta,
@@ -66,6 +71,7 @@ export const MedicalRecord = ({ navigation, route }) => {
             } catch (error) {
                 console.log(error);
             }
+            setSpinner(false)
         }
     }
 
@@ -129,7 +135,7 @@ export const MedicalRecord = ({ navigation, route }) => {
 
                         <BoxInput
                             textLabel={'Descrição da consulta'}
-                            placeholder={descricao}
+                            fieldValue={descricao}
                             onChangeText={setDescricao}
                             fieldHeight={150}
                             editable={true}
@@ -137,7 +143,7 @@ export const MedicalRecord = ({ navigation, route }) => {
                         />
                         <BoxInput
                             textLabel={'Diagnóstico do paciente'}
-                            placeholder={diagnostico}
+                            fieldValue={diagnostico}
                             onChangeText={setDiagnostico}
                             fieldHeight={80}
                             editable={true}
@@ -145,14 +151,16 @@ export const MedicalRecord = ({ navigation, route }) => {
                         />
                         <BoxInput
                             textLabel={'Prescrição médica'}
-                            placeholder={receita}
+                            fieldValue={receita}
                             onChangeText={setReceita}
                             fieldHeight={150}
                             editable={true}
                             multiline={true}
                         />
-                        <Btn onPress={() => OnPressHandle()}>
-                            <ButtonTitle>SALVAR</ButtonTitle>
+                        <Btn disabled={spinner} onPress={() => OnPressHandle()}>
+                            {
+                                spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>SALVAR</ButtonTitle>
+                            }
                         </Btn>
 
                         <LinkCancelMargin onPress={() => setRecordEdit(true)}>Cancelar Edição</LinkCancelMargin>

@@ -11,6 +11,7 @@ export const InsertRecord = ({ navigation, route }) => {
     const [descricao, setDescricao] = useState()
     const [diagnostico, setDiagnostico] = useState()
     const [receita, setReceita] = useState()
+    const [spinner, setSpinner] = useState()
 
 
     useEffect(() => {
@@ -19,7 +20,7 @@ export const InsertRecord = ({ navigation, route }) => {
 
 
     async function InsertRecord() {
-        console.log(route.params.idConsulta);
+        setSpinner(true)
         try {
             await api.put('/Consultas/Prontuario', {
                 consultaId: route.params.data.idConsulta,
@@ -33,6 +34,7 @@ export const InsertRecord = ({ navigation, route }) => {
         } catch (error) {
             console.log(error);
         }
+        setSpinner(false)
     }
 
     return (
@@ -76,8 +78,11 @@ export const InsertRecord = ({ navigation, route }) => {
                             onChangeText={setReceita}
                         />
 
-                        <Btn onPress={() => InsertRecord()}>
-                            <ButtonTitle>SALVAR</ButtonTitle>
+                        <Btn disabled={spinner} onPress={() => InsertRecord()}>
+                            {
+                                spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>SALVAR</ButtonTitle>
+                            }
+
                         </Btn>
 
                         <LinkCancelMargin onPress={() => navigation.replace("Main")}>Cancelar</LinkCancelMargin>

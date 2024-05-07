@@ -84,7 +84,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
         if (route.params) {
             BuscarClinica();
         }
-        B
     }, [route])
 
     async function BuscarClinica() {
@@ -166,7 +165,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                         <>
                             <Text>Localizacao nao Encontrada</Text>
 
-                            <ActivityIndicator />
+                            <ActivityIndicator size="small" color="#ffffff" />
                         </>
                 }
             </ContainerMap>

@@ -19,14 +19,7 @@ export const ModalAppointment = ({ patientInfo, appointmentData, navigation, vis
         const years = today.diff(birthDate, 'years');
         return years;
     };
-
-
     const idade = patientInfo ? calculateAge(patientInfo.dtNasc) : '';
-
-
-    useEffect(() => {
-        console.log(patientInfo);
-    }, [patientInfo])
 
     return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade">

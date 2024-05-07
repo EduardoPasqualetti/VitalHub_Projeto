@@ -25,6 +25,7 @@ Notifications.setNotificationHandler({
 
 export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
     const [idPaciente, setIdPaciente] = useState()
+    const [spinner, setSpinner] = useState(false);
 
     const handleCallNotifications = async () => {
 
@@ -59,6 +60,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
     }
 
     async function onPressConfirm() {
+        setSpinner(true)
         try {
             const response = await api.post('/Consultas/Cadastrar', {
                 situacaoId: 'E4356B3C-3FA0-496B-85BD-4E8C493F2D2C',
@@ -77,7 +79,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
         } catch (error) {
             console.log(error + 'erro cadastrar consulta');
         }
-
+        setSpinner(false)
     }
 
     useEffect(() => {
@@ -109,8 +111,11 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
                         <TitleData>Tipo da consulta</TitleData>
                         <TextData>{dadosAgendamento.prioridadeLabel}</TextData>
                     </ViewData>
-                    <Btn >
-                        <ButtonTitle onPress={() => {onPressConfirm()}}>CONFIRMAR</ButtonTitle>
+                    <Btn disabled={spinner} onPress={() => { onPressConfirm() }}>
+                        {
+                            spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONFIRMAR</ButtonTitle>
+                        }
+
                     </Btn>
 
                     <LinkCancelMargin onPress={() => setShowModalResume(false)}>Cancelar</LinkCancelMargin>

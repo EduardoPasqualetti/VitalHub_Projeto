@@ -7,6 +7,7 @@ import { ContentModal, ViewModal } from "./Style"
 // Importar a biblioteca
 import * as Notifications from "expo-notifications"
 import api from "../../service/Service"
+import { useState } from "react"
 
 // Solicitar as permissoes de notificacao ao iniciar o app
 Notifications.requestPermissionsAsync()
@@ -18,14 +19,15 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     // Reproduz ou nao o som ao receber a notificacao
     shouldPlaySound: true,
-    
+
 
     // Configura o numero de notificacoes no icone do app
     shouldSetBadge: false
   })
 })
 
-export const ModalCancel = ({idConsulta, visible, setShowModalCancel, ...rest }) => {
+export const ModalCancel = ({ idConsulta, visible, setShowModalCancel, ...rest }) => {
+  const [spinner, setSpinner] = useState(false);
 
   const handleCallNotifications = async () => {
 
@@ -51,7 +53,7 @@ export const ModalCancel = ({idConsulta, visible, setShowModalCancel, ...rest })
 
   async function onPressHandle() {
     handleCallNotifications(),
-    setShowModalCancel(false)
+      setShowModalCancel(false)
     UpdateStatus()
   }
 
@@ -59,29 +61,34 @@ export const ModalCancel = ({idConsulta, visible, setShowModalCancel, ...rest })
 
 
   async function UpdateStatus() {
+    setSpinner(true)
     try {
       await api.put(`/Consultas/Status?idConsulta=${consulta}&status=Cancelados`)
     } catch (error) {
       console.log(error + 'erro ao atualizar status');
     }
+    setSpinner(false)
   }
 
 
-    return (
-        <Modal {...rest} visible={visible} transparent={true} animationType="fade">
-            <ViewModal>
-                <ContentModal>
-                    <Title>Cancelar consulta</Title>
-                    <TextRec>Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?</TextRec>
+  return (
+    <Modal {...rest} visible={visible} transparent={true} animationType="fade">
+      <ViewModal>
+        <ContentModal>
+          <Title>Cancelar consulta</Title>
+          <TextRec>Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?</TextRec>
 
-                    <Btn onPress={() => onPressHandle()}>
-                        <ButtonTitle>CONFIRMAR</ButtonTitle>
-                    </Btn>
+          <Btn disabled={spinner} onPress={() => onPressHandle()}>
+            {
+              spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONFIRMAR</ButtonTitle>
+            }
 
-                    <LinkCancel onPress={() => setShowModalCancel(false)}>Cancelar</LinkCancel>
-                </ContentModal>
-            </ViewModal>
-        </Modal>
-    )
+          </Btn>
+
+          <LinkCancel onPress={() => setShowModalCancel(false)}>Cancelar</LinkCancel>
+        </ContentModal>
+      </ViewModal>
+    </Modal>
+  )
 }
 
