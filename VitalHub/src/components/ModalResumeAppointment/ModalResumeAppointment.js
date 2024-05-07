@@ -57,22 +57,14 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
     }
     
     async function onPressConfirm() {
-        console.log({  // Cadastrar
-            situacaoId: 'C1D85201-F0E6-4302-8FF3-F8F36F9FFAC3',    
-            pacienteId: idPaciente,
-            medicoClinicaId: dadosAgendamento.medicoClinicaId,
-            prioridadeId: dadosAgendamento.prioridadeId,
-            dataConsulta: `${dataConsulta}T${horarioConsulta}:00.000Z`
-
-        })
         try {
-            const response = await api.post('/Consultas/Cadastrar', {  // Cadastrar
+            console.log("rodou");
+            const response = await api.post('/Consultas/Cadastrar', { 
                 situacaoId: 'C1D85201-F0E6-4302-8FF3-F8F36F9FFAC3',    
                 pacienteId: idPaciente,
                 medicoClinicaId: dadosAgendamento.medicoClinicaId,
                 prioridadeId: dadosAgendamento.prioridadeId,
                 dataConsulta: `${dataConsulta}T${horarioConsulta}:00.000Z`
-
             }) 
             if (response) {
                 await setShowModalResume(true)
@@ -81,10 +73,8 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
             }
 
         } catch (error) {
-            console.log(error + ' erro ao cadastrar consulta');
-            // console.log(situacaoId);
+            console.log(error + ' erro na função onPressConfirm()');
         }
-
     }
 
     useEffect(() => {
@@ -101,7 +91,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
 
                     <ViewData fieldHeight={50}>
                         <TitleData>Data da consulta</TitleData>
-                        <TextData>{dataConsulta} {horarioConsulta}</TextData>
+                        <TextData>{dataConsulta} - {horarioConsulta}</TextData>
                     </ViewData>
                     <ViewData fieldHeight={80}>
                         <TitleData>Médico(a) da consulta</TitleData>
@@ -117,7 +107,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
                         <TextData>{dadosAgendamento.prioridadeLabel}</TextData>
                     </ViewData>
                     <Btn >
-                        <ButtonTitle onPress={() => {onPressConfirm()}}>CONFIRMAR</ButtonTitle>
+                        <ButtonTitle onPress={() => onPressConfirm()}>CONFIRMAR</ButtonTitle>
                     </Btn>
 
                     <LinkCancelMargin onPress={() => setShowModalResume(false)}>Cancelar</LinkCancelMargin>

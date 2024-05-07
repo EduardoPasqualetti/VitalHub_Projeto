@@ -28,7 +28,7 @@ export const Header = ({onPress}) => {
       const response =  await api.get(`/Usuario/BuscarPorId?id=${id}`)
       setPhoto(response.data.foto)
     } catch (error) {
-      console.log(error + 'erro buscar usuario');
+      console.log(error + 'erro na função GetUser');
     }
   }
   

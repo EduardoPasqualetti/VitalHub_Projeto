@@ -30,34 +30,45 @@ export const Profile = ({ navigation, route }) => {
     const [logradouro, setLogradouro] = useState('')
     const [cidade, setCidade] = useState("")
     const [numero, setNumero] = useState('')
+    const [photo, setPhoto] = useState()
 
     const { photoUri } = route.params || {};
     const [uriCameraCapture, setCameraCapture] = useState(null)
 
-    async function getUser(token) {
-        const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes');
 
+    // async function getUser(token) {
+    //     const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes');
+
+    //     try {
+    //         const response = await api.get(`/${url}/BuscarPorId?id=${token.jti}`);
+
+    //         setUserData(response.data)
+    //         setFotoUsuario(response.data.idNavigation.foto)
+    //         setCep(response.data.endereco.cep)
+    //         setCidade(response.data.endereco.cidade)
+    //         setLogradouro(response.data.endereco.logradouro)
+    //         setNumero(response.data.endereco.numero.toString())
+    //         setDtNasc(response.data.dataNascimento)
+    //         token.role === 'Medico' ?
+    //             setEspecialidade(response.data.especialidade.especialidade1)
+    //             :
+    //             null
+    //         setCrm(response.data.crm)
+    //         setCpf(response.data.cpf)
+    //         setRg(response.data.rg)
+    //     } catch (error) {
+    //         console.log(error + "Função getUser");
+    //     }
+
+    // }
+
+    async function GetUserPhoto(id) {
         try {
-            const response = await api.get(`/${url}/BuscarPorId?id=${token.jti}`);
-
-            setUserData(response.data)
-            setFotoUsuario(response.data.idNavigation.foto)
-            setCep(response.data.endereco.cep)
-            setCidade(response.data.endereco.cidade)
-            setLogradouro(response.data.endereco.logradouro)
-            setNumero(response.data.endereco.numero.toString())
-            setDtNasc(response.data.dataNascimento)
-            token.role === 'Paciente' ?
-                setCpf(response.data.cpf)
-                :
-                setEspecialidade(response.data.especialidade.especialidade1)
-            setCrm(response.data.crm)
-            setRg(response.data.rg)
+            const response = await api.get(`/Usuario/BuscarPorId?id=${id}`)
+            setPhoto(response.data.foto)
         } catch (error) {
-            console.log('user')
-            console.log(error);
+            console.log(error + 'erro buscar usuario');
         }
-
     }
 
 
@@ -65,7 +76,7 @@ export const Profile = ({ navigation, route }) => {
         const token = JSON.parse(await AsyncStorage.getItem('token')).token;
 
         try {
-            console.log(token);
+            // console.log(token);
             if (role === 'Medico') {
                 await api.put('/Medicos/AtualizarPerfilMedico', {
                     crm: crm,
@@ -76,21 +87,21 @@ export const Profile = ({ navigation, route }) => {
                     especialidade: especialidade
                 }, { headers: { Authorization: `Bearer ${token}` } });
             } else {
+                console.log(photo);
                 await api.put('/Pacientes/PutUpdateProfile', {
                     cpf: cpf,
                     dataNascimento: dtNasc,
                     logradouro: logradouro,
                     numero: numero,
                     cep: cep,
-                    cidade: cidade
+                    cidade: cidade,
+                    photo: photo
                 }, { headers: { Authorization: `Bearer ${token}` } });
             }
-            console.log('Perfil atualizado');
-
 
             setProfileEdit(false);
         } catch (error) {
-            console.log(error + " erro para atualizar usuario");
+            console.log(error + " erro para atualizar perfil usuario");
         }
     }
 
@@ -114,9 +125,9 @@ export const Profile = ({ navigation, route }) => {
                 "Content-Type": "multipart/form-data"
             }
         }).then(response => {
-            console.log(response)
+            // console.log(response)
         }).catch(error => {
-            console.log(error + ' no AlterarFotoPerfil ')
+            console.log(error + ' na função AlterarFotoPerfil ')
         })
     }
 
@@ -127,6 +138,9 @@ export const Profile = ({ navigation, route }) => {
         setEmail(token.email)
         setRole(token.role)
         setIdUser(token.jti)
+
+        GetUserPhoto(token.jti)
+
 
         await getUser(token)
     }
@@ -146,7 +160,7 @@ export const Profile = ({ navigation, route }) => {
                 setEspecialidade(response.data.especialidade.especialidade1)
             setCrm(response.data.crm)
         } catch (error) {
-            console.log(error);
+            console.log(error + "na função getUser de médico");
         }
 
         console.log(userData);
@@ -177,7 +191,7 @@ export const Profile = ({ navigation, route }) => {
             {!profileEdit ? (
                 <>
                     <ContainerImage>
-                        <ProfileImage source={require("../../assets/photo.png")} />
+                        <ProfileImage source={{ uri: photo }} />
                     </ContainerImage>
 
                     <ConteinerTitle>
@@ -245,7 +259,7 @@ export const Profile = ({ navigation, route }) => {
             ) : (
                 <>
                     <ContainerImage>
-                        <ProfileImage source={require("../../assets/photo.png")} />
+                        <ProfileImage source={{ uri: photo }} />
                         <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", { isProfile: true })}>
                             <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
                         </ButtonCamera>
@@ -262,16 +276,16 @@ export const Profile = ({ navigation, route }) => {
                             role == 'Paciente' ?
                                 <>
                                     <BoxInput
-                                        textLabel={'Data de nascimento:'}
-                                        placeholder={formatarData(dtNasc)}
                                         editable={true}
+                                        textLabel={'Data de nascimento:'}
                                         onChangeText={(txt) => setDtNasc(txt)}
+                                    // placeholder={formatarData(dtNasc)}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
-                                        placeholder={cpf}
                                         editable={true}
                                         onChangeText={setCpf}
+                                    // placeholder={cpf}
                                     />
                                 </>
                                 :
@@ -299,6 +313,15 @@ export const Profile = ({ navigation, route }) => {
                                 textLabel={'Logradouro'}
                                 fieldValue={logradouro}
                                 fieldWidth={'60'}
+                                editable={true}
+
+                                // textLabel,
+                                // placeholder,
+                                // fieldValue,
+                                // editable
+                                // multiline
+                                // insertRecord
+                                // onChangeText
                             />
                         </ViewFormatLog>
                         <ViewFormat>
