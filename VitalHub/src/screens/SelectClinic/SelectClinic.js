@@ -54,13 +54,16 @@ export const SelectClinic = ({ navigation, route }) => {
                 data={clinicList}
                 renderItem={({ item }) =>
                 (
-                    <BtnSelect onPress={() => setSelectedClinic(item.id)}>
+                    <BtnSelect onPress={() => setSelectedClinic({
+                        clinicaId : item.id,
+                        clinicaLabel : item.nomeFantasia
+                    })}>
                         <CardClinic name={item.nomeFantasia}
                             logradouro={item.endereco.logradouro}
                             numero={item.endereco.numero}
                             aval={item.Avaliacao}
                             date={item.Abertura}
-                            isSelected={item.id == selectedClinic}
+                            isSelected={selectedClinic && item.id == selectedClinic.clinicaId}
 
                         />
                     </BtnSelect>

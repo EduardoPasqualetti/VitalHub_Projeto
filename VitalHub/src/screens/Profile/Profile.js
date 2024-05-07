@@ -116,7 +116,7 @@ export const Profile = ({ navigation, route }) => {
         }).then(response => {
             console.log(response)
         }).catch(error => {
-            console.log(error)
+            console.log(error + ' no AlterarFotoPerfil ')
         })
     }
 

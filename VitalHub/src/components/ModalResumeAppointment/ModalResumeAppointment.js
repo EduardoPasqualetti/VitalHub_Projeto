@@ -57,6 +57,14 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
     }
     
     async function onPressConfirm() {
+        console.log({  // Cadastrar
+            situacaoId: 'C1D85201-F0E6-4302-8FF3-F8F36F9FFAC3',    
+            pacienteId: idPaciente,
+            medicoClinicaId: dadosAgendamento.medicoClinicaId,
+            prioridadeId: dadosAgendamento.prioridadeId,
+            dataConsulta: `${dataConsulta}T${horarioConsulta}:00.000Z`
+
+        })
         try {
             const response = await api.post('/Consultas/Cadastrar', {  // Cadastrar
                 situacaoId: 'C1D85201-F0E6-4302-8FF3-F8F36F9FFAC3',    
