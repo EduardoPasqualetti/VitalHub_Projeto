@@ -11,7 +11,6 @@ import api from "../../service/Service"
 import moment from 'moment'
 
 import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from 'expo-media-library'
 
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
@@ -35,32 +34,6 @@ export const Profile = ({ navigation, route }) => {
     const { photoUri } = route.params || {};
     const [uriCameraCapture, setCameraCapture] = useState(null)
 
-
-    // async function getUser(token) {
-    //     const url = (token.role === 'Medico' ? 'Medicos' : 'Pacientes');
-
-    //     try {
-    //         const response = await api.get(`/${url}/BuscarPorId?id=${token.jti}`);
-
-    //         setUserData(response.data)
-    //         setFotoUsuario(response.data.idNavigation.foto)
-    //         setCep(response.data.endereco.cep)
-    //         setCidade(response.data.endereco.cidade)
-    //         setLogradouro(response.data.endereco.logradouro)
-    //         setNumero(response.data.endereco.numero.toString())
-    //         setDtNasc(response.data.dataNascimento)
-    //         token.role === 'Medico' ?
-    //             setEspecialidade(response.data.especialidade.especialidade1)
-    //             :
-    //             null
-    //         setCrm(response.data.crm)
-    //         setCpf(response.data.cpf)
-    //         setRg(response.data.rg)
-    //     } catch (error) {
-    //         console.log(error + "Função getUser");
-    //     }
-
-    // }
 
     async function GetUserPhoto(id) {
         try {
@@ -101,7 +74,7 @@ export const Profile = ({ navigation, route }) => {
 
             setProfileEdit(false);
         } catch (error) {
-            console.log(error + " erro para atualizar perfil usuario");
+            console.log(error + " erro updateUser()");
         }
     }
 
@@ -182,7 +155,7 @@ export const Profile = ({ navigation, route }) => {
     }
 
     function formatarData(data) {
-        return moment(data).format('YYYY/MM/DD');
+        return moment(data).format('DD/MM/YYYY');
     }
 
 
@@ -205,8 +178,8 @@ export const Profile = ({ navigation, route }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        fieldValue={dtNasc ? formatarData(dtNasc) : null}
-
+                                        // fieldValue={dtNasc ? formatarData(dtNasc) : null}
+                                        placeholder={formatarData(dtNasc)}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
@@ -240,8 +213,11 @@ export const Profile = ({ navigation, route }) => {
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
+                                placeholder={cidade}
                                 fieldValue={cidade}
-                                fieldWidth={'45'}
+                                multiline={true}
+                                onChangeText={(txt) => setCidade(txt)}
+                                fieldWidth={'48'}
                             />
 
                         </ViewFormat>
@@ -276,16 +252,24 @@ export const Profile = ({ navigation, route }) => {
                             role == 'Paciente' ?
                                 <>
                                     <BoxInput
-                                        editable={true}
+                                        // textLabel={'Data de nascimento:'}
+                                        // fieldValue={dtNasc}
+                                        // editable={true}
+                                        // multiline={true}
+                                        // onChangeText={(txt) => setDtNasc(txt)}
+
                                         textLabel={'Data de nascimento:'}
+                                        fieldValue={dtNasc}
+                                        editable={true}
                                         onChangeText={(txt) => setDtNasc(txt)}
-                                    // placeholder={formatarData(dtNasc)}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
+                                        placeholder={cpf}
+                                        fieldValue={cpf}
                                         editable={true}
-                                        onChangeText={setCpf}
-                                    // placeholder={cpf}
+                                        multiline={true}
+                                        onChangeText={(txt) => setCpf(txt)}
                                     />
                                 </>
                                 :
@@ -311,9 +295,12 @@ export const Profile = ({ navigation, route }) => {
                         <ViewFormatLog>
                             <BoxInput
                                 textLabel={'Logradouro'}
+                                placeholder={logradouro}
                                 fieldValue={logradouro}
-                                fieldWidth={'60'}
                                 editable={true}
+                                multiline={true}
+                                onChangeText={(txt) => setLogradouro(txt)}
+                                fieldWidth={'60'}
 
                                 // textLabel,
                                 // placeholder,
@@ -328,16 +315,20 @@ export const Profile = ({ navigation, route }) => {
                             <BoxInput
                                 textLabel={'Cep'}
                                 placeholder={cep}
-                                fieldWidth={'45'}
+                                fieldValue={cep}
                                 editable={true}
+                                multiline={true}
                                 onChangeText={(txt) => setCep(txt)}
+                                fieldWidth={'45'}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
                                 placeholder={cidade}
-                                fieldWidth={'45'}
+                                fieldValue={cidade}
                                 editable={true}
+                                multiline={true}
                                 onChangeText={(txt) => setCidade(txt)}
+                                fieldWidth={'48'}
                             />
 
                         </ViewFormat>
