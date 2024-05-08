@@ -6,35 +6,44 @@ import { ProfileImage } from "../../components/Images/Style"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { ButtonTitle, SubtitleRecord, TitleProfile } from "../../components/Title/Style"
 import api from "../../service/Service"
+import { ActivityIndicator, Alert } from "react-native"
 
 export const InsertRecord = ({ navigation, route }) => {
     const [descricao, setDescricao] = useState()
     const [diagnostico, setDiagnostico] = useState()
     const [receita, setReceita] = useState()
     const [spinner, setSpinner] = useState()
+    const [idConsulta, setIdConsulta] = useState()
 
 
     useEffect(() => {
-        console.log(route.params.data.idConsulta);
+        setIdConsulta(route.params.data.idConsulta);
     }, [route.params])
 
 
     async function InsertRecord() {
         setSpinner(true)
         try {
-            await api.put('/Consultas/Prontuario', {
+            response = await api.put('/Consultas/Prontuario', {
                 consultaId: route.params.data.idConsulta,
                 medicamento: receita,
                 descricao: descricao,
                 diagnostico: diagnostico
-                
+
             })
-            console.log("Prontuario Inserido com sucesso");
+            if (response) {
+                try {
+                    await api.put(`/Consultas/Status?idConsulta=${route.params.data.idConsulta}&status=Realizados`)
+                } catch (error) {
+                    Alert.alert("erro ao marcar como realizada")
+                }
+            }
             navigation.replace("Main")
         } catch (error) {
-            console.log(error);
+            Alert.alert('erro ao inserir prontuario')
         }
-        setSpinner(false)
+
+
     }
 
     return (

@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, ScrollView, Text } from "react-native"
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text } from "react-native"
 import { Container, ContainerScroll } from "../../components/Container/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
@@ -8,6 +8,7 @@ import { LinkCancel } from "../../components/Link/Style"
 import * as Notifications from "expo-notifications"
 import { useState } from "react"
 import api from "../../service/Service"
+import { Masks, useMaskedInputProps } from 'react-native-mask-input';
 
 Notifications.requestPermissionsAsync()
 
@@ -49,6 +50,11 @@ export const Register = ({ navigation }) => {
         return result;
     }
 
+    function formatarData(data) {
+        const [dia, mes, ano] = data.split('/')
+
+        return `${dia}-${mes}-${ano}`
+    }
 
     const handleCallNotifications = async () => {
 
@@ -96,7 +102,7 @@ export const Register = ({ navigation }) => {
             formData.append('IdTipoUsuario', idTipoUsuario);
             formData.append('Rg', rg);
             formData.append('Cpf', cpf);
-            formData.append('DataNascimento', dtNasc);
+            formData.append('DataNascimento', formatarData(dtNasc));
             try {
                 const response = await api.post("Pacientes", formData, {
                     headers: {
@@ -122,36 +128,51 @@ export const Register = ({ navigation }) => {
         }
     }
 
+    const dataMasked = useMaskedInputProps({
+        value: dtNasc,
+        onChangeText: setDtNasc,
+        mask: Masks.DATE_DDMMYYYY
+    });
+
+    const cpfMasked = useMaskedInputProps({
+        value: cpf,
+        onChangeText: setCpf,
+        mask: Masks.BRL_CPF
+    })
+
     return (
-        <Container>
-            <Logo source={require('../../assets/logo.png')}></Logo>
+        <KeyboardAvoidingView style={{ width: '100%', alignSelf: 'center' }} behavior={Platform.OS == 'ios' ? "padding" : "height"}
+            keyboardVerticalOffset={80}>
+            <ScrollView >
+                <Logo source={require('../../assets/logo.png')}></Logo>
 
-            <Title>Criar conta</Title>
+                <Title style={{alignSelf: 'center'}}>Criar conta</Title>
 
-            <TextRec>Insira seu endereço de e-mail, senha e dados pessoais para realizar seu cadastro.</TextRec>
-            <ScrollView style={{ width: '100%', alignSelf: 'center', left: 18 }}>
-                <Input placeholder={"Nome"} value={nome} onChangeText={setNome} />
-                <Input placeholder={"Email"} value={email} onChangeText={setEmail} />
-                <Input placeholder={"Senha"} value={senha} onChangeText={setSenha} secureTextEntry={true} />
-                <Input placeholder={"Confirmar senha"} value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry={true} />
-                <Input placeholder={"RG"} value={rg} onChangeText={setRG} keyboardType="numeric" />
-                <Input placeholder={"CPF"} value={cpf} onChangeText={setCpf} keyboardType="numeric" />
-                <Input placeholder={"Data de nascimento"} value={dtNasc} onChangeText={setDtNasc} />
+                <TextRec>Insira seu endereço de e-mail, senha e dados pessoais para realizar seu cadastro.</TextRec>
+
+                <Input style={{alignSelf: 'center'}} placeholder={"Nome"} value={nome} onChangeText={setNome} />
+                <Input style={{alignSelf: 'center'}} placeholder={"Email"} value={email} onChangeText={setEmail} />
+                <Input style={{alignSelf: 'center'}} placeholder={"Senha"} value={senha} onChangeText={setSenha} secureTextEntry={true} />
+                <Input style={{alignSelf: 'center'}} placeholder={"Confirmar senha"} value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry={true} />
+                <Input style={{alignSelf: 'center'}} placeholder={"RG"} value={rg} onChangeText={setRG} keyboardType="numeric" />
+                <Input style={{alignSelf: 'center'}} {...cpfMasked} keyboardType="numeric" placeholder={"CPF"}/>
+                <Input style={{alignSelf: 'center'}} {...dataMasked} placeholder={"Data de nascimento"}/>
+
+
+                <Btn onPress={() => HandleRegister()}>
+                    {
+                        spinner ? (
+
+                            <ActivityIndicator size="small" color="#ffffff" />
+
+                        ) : <ButtonTitle>CADASTRAR</ButtonTitle>
+                    }
+
+                </Btn>
+
+                <LinkCancel onPress={() => navigation.replace("Login")}>Cancelar</LinkCancel>
+
             </ScrollView>
-
-            <Btn onPress={() => HandleRegister()}>
-                {
-                    spinner ? (
-
-                        <ActivityIndicator size="small" color="#ffffff" />
-
-                    ) : <ButtonTitle>CADASTRAR</ButtonTitle>
-                }
-
-            </Btn>
-
-            <LinkCancel onPress={() => navigation.replace("Login")}>Cancelar</LinkCancel>
-
-        </Container>
+        </KeyboardAvoidingView>
     )
 }

@@ -6,7 +6,7 @@ import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
 import * as Notifications from "expo-notifications"
 import api from "../../service/Service"
-import { Alert } from "react-native"
+import { ActivityIndicator, Alert } from "react-native"
 
 Notifications.requestPermissionsAsync()
 
@@ -36,7 +36,7 @@ export const ResetPwd = ({ navigation, route }) => {
                     {
                         senhaNova: senha
                     })
-                navigation.replace("Login");
+                Alert.alert('Erro ao alterar senha')
                 handleCallNotifications()
             } catch (error) {
                 console.log(error);

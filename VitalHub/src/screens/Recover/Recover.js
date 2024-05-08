@@ -18,12 +18,12 @@ export const Recover = ({ navigation }) => {
                 await api.post(`/RecuperarSenha?email=${email}`)
                 navigation.replace("VerifyEmail", { emailRecuperacao: email })
             } catch (error) {
-                Alert("Erro ao tentar recuperar senha")
+                Alert.alert("Erro ao tentar recuperar senha")
             }
             setSpinner(false)
         }
         else
-            alert("Email invalido, informe-o corretamente")
+            Alert.alert("Email invalido, informe-o corretamente")
     }
     return (
         <Container>
@@ -42,7 +42,7 @@ export const Recover = ({ navigation }) => {
 
             <Btn disabled={spinner} onPress={() => SendEmail()}>
                 {
-                    spinner ? ( <ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONTINUAR</ButtonTitle>
+                    spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONTINUAR</ButtonTitle>
                 }
 
             </Btn>

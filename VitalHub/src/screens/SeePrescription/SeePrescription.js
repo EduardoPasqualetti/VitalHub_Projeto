@@ -33,7 +33,7 @@ export const SeePrescription = ({ navigation, route }) => {
 
     async function InserirExame() {
         const formData = new FormData();
-        formData.append("ConsultaId", dadosConsulta.consultaId)
+        formData.append("ConsultaId", dadosConsulta.consulta)
         formData.append("Imagem", {
             uri: photoUri,
             name: `image.${photoUri.split('.').pop()}`,

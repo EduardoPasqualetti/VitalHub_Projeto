@@ -6,6 +6,7 @@ import { LinkResend } from "../../components/Link/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, TextUser, Title } from "../../components/Title/Style"
 import api from "../../service/Service"
+import { ActivityIndicator, Alert } from "react-native"
 
 export const VerifyEmail = ({ navigation, route }) => {
     const [spinner, setSpinner] = useState(false)
@@ -37,11 +38,11 @@ export const VerifyEmail = ({ navigation, route }) => {
 
                 navigation.replace("ResetPwd", { emailRecuperacao: route.params.emailRecuperacao })
             } catch (error) {
-                console.log(error);
+                Alert.alert("Codigo de validacao invalido!")
             }
             setSpinner(false)
         } else {
-            alert("Informe o codigo corretamente")
+            Alert.alert("Informe o codigo corretamente")
         }
 
     }

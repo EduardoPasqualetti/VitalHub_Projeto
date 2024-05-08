@@ -43,23 +43,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
 
     useEffect(() => {
         CapturarLocalizacao()
-        
-
-        // monitora em tempo real
-        watchPositionAsync({
-            accuracy: LocationAccuracy.Highest,
-            timeInterval: 1000,
-            distanceInterval: 1,
-        }, async (response) => {
-            // recebe e guarda a nova localizacao
-            await setInitialPosition(response)
-
-            mapReference.current?.animateCamera({
-                pitch: 60,
-                center: response.coords
-            })
-
-        })
     }, [4000])
 
     useEffect(() => {

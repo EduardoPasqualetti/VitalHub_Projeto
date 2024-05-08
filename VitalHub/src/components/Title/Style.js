@@ -5,7 +5,6 @@ font-size: 25px;
 color: #33303e;
 font-family: "MontserratAlternates_600SemiBold";
 margin-bottom: 10px;
-
 `   
 
 export const ButtonTitle = styled(Title)`

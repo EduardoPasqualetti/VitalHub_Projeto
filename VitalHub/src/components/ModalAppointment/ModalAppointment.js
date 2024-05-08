@@ -5,6 +5,7 @@ import { LinkCancel } from "../Link/Style"
 import { ButtonModal, Cancel, ContentModal, TextAge, TextEmail, ViewData, ViewModal } from "./Style"
 import moment from 'moment'
 import { useEffect } from "react"
+import { ImageModal } from "../Images/Style"
 
 export const ModalAppointment = ({ patientInfo, appointmentData, navigation, visible, setShowModalAppointment, ...rest }) => {
 
@@ -27,7 +28,7 @@ export const ModalAppointment = ({ patientInfo, appointmentData, navigation, vis
                 {
                     patientInfo ? (
                         <ContentModal>
-                            <Image source={{uri: patientInfo.photo}}/>
+                            <ImageModal resizeMode='cover' source={{uri: patientInfo.photo}}/>
                             <TitleProfile>{patientInfo.name}</TitleProfile>
 
                             <ViewData>

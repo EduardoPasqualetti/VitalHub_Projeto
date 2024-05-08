@@ -1,4 +1,4 @@
-import { Modal } from "react-native"
+import { ActivityIndicator, Modal } from "react-native"
 import { ContentModal, TextData, TitleData, ViewData, ViewModal } from "./Style"
 import { ButtonTitle, SubTitleModalResume, TitleProfile } from "../Title/Style"
 import { LinkCancelMargin } from "../Link/Style"

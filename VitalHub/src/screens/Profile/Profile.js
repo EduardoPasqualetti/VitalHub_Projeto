@@ -1,9 +1,9 @@
-import { Button, Text } from "react-native"
+
 import { ContainerImage, ContainerProfile, ContainerSafeEdit, ContainerScroll, ViewFormat, ViewTitle } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
-import { Btn, ButtonCamera, ButtonGoOut } from "../../components/Button/Button"
+import { Btn, ButtonCamera } from "../../components/Button/Button"
 import { useEffect, useState } from "react"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
 import moment from 'moment'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { TextInputMask } from 'react-native-masked-text';
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native"
 
 export const Profile = ({ navigation, route }) => {
     const [profileEdit, setProfileEdit] = useState(false)
@@ -145,10 +145,11 @@ export const Profile = ({ navigation, route }) => {
     }
 
     return (
-        <ContainerScroll>
+        <KeyboardAvoidingView style={{ width: '100%', alignSelf: 'center' }} behavior={Platform.OS == 'ios' ? "padding" : "height"}
+            keyboardVerticalOffset={80}>
             {!profileEdit ? (
-                <>
 
+                <ScrollView>
                     <ProfileImage source={{ uri: fotoUsuario }} />
 
                     <ContainerProfile>
@@ -193,7 +194,7 @@ export const Profile = ({ navigation, route }) => {
                             />
                             <BoxInput
                                 textLabel={'Numero'}
-                                fieldValue={numero.toString()}
+                                fieldValue={numero ? numero.toString() : null}
                                 fieldWidth={'30'}
                             />
                         </ViewFormat>
@@ -220,9 +221,9 @@ export const Profile = ({ navigation, route }) => {
 
                         <LinkCancelMargin onPress={() => navigation.replace("Main")}>Voltar</LinkCancelMargin>
                     </ContainerProfile>
-                </>
+                </ScrollView>
             ) : (
-                <>
+                <ScrollView>
                     <ProfileImage source={{ uri: fotoUsuario }} />
 
 
@@ -240,8 +241,8 @@ export const Profile = ({ navigation, route }) => {
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        placeholder={'DD-MM-YYYY'}
-                                        
+                                        placeholder={dtNasc ? formatarData(dtNasc) : null}
+
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
@@ -276,7 +277,7 @@ export const Profile = ({ navigation, route }) => {
                             />
                             <BoxInput
                                 textLabel={'Numero'}
-                                placeholder={numero.toString()}
+                                placeholder={numero ? numero.toString() : null}
                                 fieldWidth={'30'}
                                 editable={true}
                                 onChangeText={txt => setNumero(parseInt(txt))}
@@ -307,8 +308,8 @@ export const Profile = ({ navigation, route }) => {
                         <LinkCancelMargin onPress={() => { setProfileEdit(false) }}>Cancelar Edição</LinkCancelMargin>
 
                     </ContainerSafeEdit>
-                </>
+                </ScrollView>
             )}
-        </ContainerScroll>
+        </KeyboardAvoidingView>
     )
 }
