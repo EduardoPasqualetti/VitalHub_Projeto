@@ -2,7 +2,6 @@ import { Image, Modal, StyleSheet, TouchableOpacity, View } from "react-native"
 import { Container } from "../Container/Style"
 import { useEffect, useRef, useState } from "react"
 import { BoxCamera, BoxTop, BtnCapture, BtnFlash, BtnFlip, BtnReturnPhoto, ConfigBtnCapture, LastPhoto } from "./Style"
-import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { FontAwesome6 } from '@expo/vector-icons';
 import * as MediaLibrary from 'expo-media-library'
 import * as ImagePicker from 'expo-image-picker'
@@ -12,13 +11,16 @@ import { ButtonTitle } from "../Title/Style";
 import { LinkCancel } from "../Link/Style";
 import { EvilIcons } from '@expo/vector-icons';
 
+import { Camera, CameraView, CameraViewRef, useCameraPermissions } from "expo-camera";
+import { CameraType } from "expo-camera/build/legacy/Camera.types";
+
 
 export const CameraPhoto = ({ navigation, route }) => {
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
     const [openModal, setOpenModal] = useState(false)
-    const [tipoCamera, setTipoCamera] = useState(Camera.Constants.Type.front)
-    const [flashOn, setFlashOn] = useState(Camera.Constants.FlashMode.off)
+    const [tipoCamera, setTipoCamera] = useState(CameraType.Constants.Type.front)
+    const [flashOn, setFlashOn] = useState(CameraType.Constants.FlashMode.off)
     const [latestPhoto, setLatestPhoto] = useState(null)
 
     
@@ -57,7 +59,7 @@ export const CameraPhoto = ({ navigation, route }) => {
     
     useEffect(() => {
         (async () => {
-            const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
+            const { status: cameraStatus } = await CameraView.requestCameraPermissionsAsync()
             
             const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         })();
@@ -71,10 +73,10 @@ export const CameraPhoto = ({ navigation, route }) => {
     
     return (
         <Container>
-            <Camera
+            <CameraView
                 ref={cameraRef}
                 type={tipoCamera}
-                style={styles.camera}
+                style={styles.CameraView}
                 flashMode={flashOn}
                 >
                 <BoxTop>
@@ -100,12 +102,12 @@ export const CameraPhoto = ({ navigation, route }) => {
                         <ConfigBtnCapture></ConfigBtnCapture>
                     </BtnCapture>
 
-                    <BtnFlip onPress={() => setTipoCamera(tipoCamera == CameraType.front ? CameraType.back : CameraType.front)}>
+                    <BtnFlip onPress={() => setTipoCamera(tipoCamera == 'front' ? 'back' : 'front')}>
                         <FontAwesome6 name="camera-rotate" size={45} color="white" />
                     </BtnFlip>
 
                 </BoxCamera>
-            </Camera>
+            </CameraView>
 
 
             <Modal
@@ -132,7 +134,7 @@ export const CameraPhoto = ({ navigation, route }) => {
 
 
 const styles = StyleSheet.create({
-    camera: {
+    CameraView: {
         flex: 1,
         height: '80%',
         width: '100%',

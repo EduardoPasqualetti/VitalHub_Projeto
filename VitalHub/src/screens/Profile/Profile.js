@@ -10,7 +10,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
 import moment from 'moment'
 
-import { Camera, CameraType } from "expo-camera";
+// import { Camera, CameraType } from "expo-camera/legacy";
+import { CameraView, useCameraPermissions } from "expo-camera"
 
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
@@ -343,7 +344,7 @@ export const Profile = ({ navigation, route }) => {
                 </>
             )}
 
-            <Camera
+            <CameraView
                 getMediaLibrary={true}
                 visible={true}
             />
