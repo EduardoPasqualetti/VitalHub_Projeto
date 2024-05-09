@@ -24,7 +24,6 @@ export const SelectDate = ({ navigation, route }) => {
     }
 
     function onPressContinue() {
-        console.log(route)
         if (selectedDate == null || selectedTime == null) {
             alert("Necessario selecionar dia e horario da consulta")
         } else
@@ -58,6 +57,7 @@ export const SelectDate = ({ navigation, route }) => {
                 dataConsulta={selectedDate}
                 horarioConsulta={selectedTime}
                 dadosAgendamento={route.params.agendamento}
+
             />
 
             <ModalSchedule

@@ -7,9 +7,9 @@ namespace WebAPI.ViewModels
     {
         public Guid? ConsultaId { get; set; }
 
-        [NotMapped]
         [JsonIgnore]
-        public IFormFile? Imagem { get; set; }
+        [NotMapped]
+        public IFormFile Imagem { get; set; }
 
         public string? Descricao { get; set; }
     }

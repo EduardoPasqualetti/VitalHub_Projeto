@@ -25,7 +25,6 @@ namespace WebAPI.Controllers
         }
 
         // Método de ação do controlador que lida com solicitações POST na rota "Cadastrar"
-        // RequestSizeLimit serve para aumentarr o processamento da API, para receber arquivos maiores, com melhor qualidade e posicionamnto
         [RequestSizeLimit(100_000_000)]
         [HttpPost("Cadastrar")]
         public async Task<IActionResult> Post([FromForm] ExameViewModel exameViewModel)
@@ -87,6 +86,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+
         }
     }
 }

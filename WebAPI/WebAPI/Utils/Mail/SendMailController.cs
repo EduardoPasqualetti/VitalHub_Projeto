@@ -28,7 +28,7 @@ namespace WebAPI.Utils.Mail
 
 
                 //chamar o metodo para envio do email
-                await emailService.sendEmailAsync(mailRequest);
+                await emailService.SendEmailAsync(mailRequest);
 
                 return Ok("Email enviado com sucesso");
             }
@@ -36,7 +36,7 @@ namespace WebAPI.Utils.Mail
             {
                 return BadRequest("Falha ao enviar o email");
             }
-
+            
         }
 
         private string GetHtmlContent(string userName)

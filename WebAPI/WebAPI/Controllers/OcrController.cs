@@ -15,31 +15,32 @@ namespace WebAPI.Controllers
             _ocrService = ocrService;
         }
 
-        [HttpPost("PostOCR")]
-        //FromForm quer dizer que vem de um formulário
-        public async Task<IActionResult> RecognizeText([FromForm] FileUploadModel fileUploadForm )
+
+        [HttpPost]
+        public async Task<IActionResult> RecognizeText([FromForm] FIleUploadModel fileUploadModel)
         {
             try
             {
-                //Verifica se a imagem foi recebida 
-                if ( fileUploadForm == null || fileUploadForm.Image == null) 
+                //verifica se a imagem foi recebida
+                if (fileUploadModel == null || fileUploadModel.Image == null)
                 {
-                    return BadRequest("Nenhuma imagem foi fornecida");
+                    return BadRequest("Nenhum imagem foi fornecida");
                 }
-               
-                //abre a conexão com o recurso
-                using (var stream = fileUploadForm.Image.OpenReadStream())
+
+                //abre a conexao com o recurso
+                using (var stream = fileUploadModel.Image.OpenReadStream())
                 {
-                    //chama o método para reconhcer a imagem
+                    //chama o metodo para reconhecer a imagem
                     var result = await _ocrService.RecognizeTextAsync(stream);
 
-                    //retorna o resultado
+                    //retorna a o resultado
                     return Ok(result);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return BadRequest("Erro ao processar a imagem" + e.Message);
+
+                return BadRequest("Erro ao processar a imagem" + ex.Message);
             }
         }
     }

@@ -1,82 +1,87 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebAPI.Contexts;
-using WebAPI.Utils.Mail;
+﻿using Microsoft.AspNetCore.Http; // Importa o namespace necessário para lidar com solicitações HTTP
+using Microsoft.AspNetCore.Mvc; // Importa o namespace necessário para trabalhar com o padrão MVC
+using Microsoft.EntityFrameworkCore; // Importa o namespace necessário para acessar o Entity Framework Core
+using WebAPI.Contexts; // Importa o namespace que contém o contexto do Entity Framework
+using WebAPI.Utils.Mail; // Importa o namespace que contém o serviço de envio de e-mails
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RecuperarSenhaController : ControllerBase
+    [Route("api/[controller]")] // Define o padrão de rota para o controller (api/[nome do controller])
+    [ApiController] // Indica que o controller é um controlador de API
+    public class RecuperarSenhaController : ControllerBase // Define o controller como um ControllerBase
     {
-        private readonly VitalContext _context;
+        private readonly VitalContext _context; // Contexto do banco de dados
+        private readonly EmailSendingService _emailSendingService; // Serviço de envio de e-mails
 
-        private readonly EmailSendingService _emailSendingService;
-
+        // Construtor do controller
         public RecuperarSenhaController(VitalContext context, EmailSendingService emailSendingService)
         {
-            _context = context;
-            _emailSendingService = emailSendingService;
+            _context = context; // Inicializa o contexto do banco de dados
+            _emailSendingService = emailSendingService; // Inicializa o serviço de envio de e-mails
         }
 
-        [HttpPost("PostRecupSenha")]
-        public async Task <IActionResult> SendRecoveryCodePassword(string email)
+        // Método para enviar o código de recuperação de senha por e-mail
+        [HttpPost]
+        public async Task<IActionResult> SendRecoveryCodePassword(string email)
         {
             try
             {
-                //Busca o usuário pelo email
+                // Busca o usuário pelo e-mail no banco de dados
                 var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
-                if (User == null)
+
+                if (user == null)
                 {
-                    return NotFound("Usuário não encontrado");
+                    return NotFound("Usuario Nao Encontrado "); // Retorna um erro 404 se o usuário não for encontrado
                 }
 
-                //Geramos um código aleatório de 4 dígitos
+                // Gera um código de recuperação de senha aleatório
                 Random random = new Random();
-                int recoveryCode = random.Next(1000, 9999);
+                int RecoveryCode = random.Next(1000, 9999);
 
-                user.CodRecupSenha = recoveryCode;
+                // Armazena o código de recuperação de senha no usuário
+                user.CodRecupSenha = RecoveryCode;
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // Salva as alterações no banco de dados
 
-                //Envia código de confirmação por e-mail
-                await _emailSendingService.SendRecoveryPassword(user.Email, recoveryCode);
+                // Envia o código de recuperação de senha por e-mail
+                await _emailSendingService.SendRecoveryPassword(user.Email!, RecoveryCode);
 
-                return Ok("Código de confirmação enviado com sucesso");
-
+                return Ok("Codigo Enviado Com Sucesso "); // Retorna uma resposta de sucesso
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return BadRequest("Erro Ao enviar o Codigo "); // Retorna um erro 400 em caso de falha
             }
         }
 
-        [HttpPost("ValidarCodigoRecuperacaoSenha")]
-        public async Task<IActionResult> ValidatePasswordRecoveryCode(string email, int codigo)
+        // Método para validar o código de recuperação de senha
+        [HttpPost("ValidarCodigoRecuperacaoDeSenha")]
+        public async Task<IActionResult> ValidatePasswordRecoveryCode(string email, int code)
         {
             try
             {
+                // Busca o usuário pelo e-mail no banco de dados
                 var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
 
-                if(user == null)
+                if (user == null)
                 {
-                    return NotFound("Usuário não encontrado!");
+                    return NotFound("Usuario Nao Encontrado "); // Retorna um erro 404 se o usuário não for encontrado
                 }
 
-                if (user.CodRecupSenha != codigo)
+                if (user.CodRecupSenha != code)
                 {
-                    return BadRequest("Código de recuperação de senha é inválido");
+                    return BadRequest("Codigo Invalido"); // Retorna um erro 400 se o código for inválido
                 }
 
-                user.CodRecupSenha = null;
+                user.CodRecupSenha = null; // Limpa o código de recuperação de senha do usuário
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // Salva as alterações no banco de dados
 
-                return Ok("´Código de recuperação está completo");
+                return Ok("Codigo de Recuperacao Valido"); // Retorna uma resposta de sucesso
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(e.Message); // Retorna um erro 400 em caso de falha
             }
         }
     }

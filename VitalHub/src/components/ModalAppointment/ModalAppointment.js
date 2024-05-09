@@ -1,12 +1,16 @@
-import { Image, Modal } from "react-native"
+import { Image, Modal, Text } from "react-native"
 import { ButtonTitle, TitleProfile } from "../Title/Style"
+import { Btn } from "../Button/Button"
+import { LinkCancel } from "../Link/Style"
 import { ButtonModal, Cancel, ContentModal, TextAge, TextEmail, ViewData, ViewModal } from "./Style"
 import moment from 'moment'
+import { useEffect } from "react"
+import { ImageModal } from "../Images/Style"
 
-export const ModalAppointment = ({patientInfo,appointmentData, navigation, visible, setShowModalAppointment, ...rest}) => {
+export const ModalAppointment = ({ patientInfo, appointmentData, navigation, visible, setShowModalAppointment, ...rest }) => {
 
     const onPressHandler = () => {
-        navigation.navigate("InsertRecord",{name: name, email: email, idade: idade, idConsulta: idConsulta});
+        navigation.navigate("InsertRecord", { data: patientInfo, idade: idade, });
         setShowModalAppointment(false)
     };
 
@@ -16,34 +20,35 @@ export const ModalAppointment = ({patientInfo,appointmentData, navigation, visib
         const years = today.diff(birthDate, 'years');
         return years;
     };
-    
-    const name = patientInfo ? patientInfo.name : '';
-    const email = patientInfo ? patientInfo.email : '';
     const idade = patientInfo ? calculateAge(patientInfo.dtNasc) : '';
-    const idConsulta = patientInfo ? patientInfo.idConsulta : '';
-    const foto = patientInfo ? patientInfo.foto : ''
 
-    return(
+    return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade">
             <ViewModal>
-                <ContentModal>
-                    <Image source={patientInfo ? {uri : patientInfo.photo} : null}/>
+                {
+                    patientInfo ? (
+                        <ContentModal>
+                            <ImageModal resizeMode='cover' source={{uri: patientInfo.photo}}/>
+                            <TitleProfile>{patientInfo.name}</TitleProfile>
 
-                    <TitleProfile>{name}</TitleProfile>
+                            <ViewData>
+                                <TextAge>{idade}</TextAge>
+                                <TextEmail>{patientInfo.email}</TextEmail>
+                            </ViewData>
 
-                    <ViewData>
-                        <TextAge>{idade}</TextAge>
-                        <TextEmail>{email}</TextEmail>
-                    </ViewData>
+                            <ButtonModal onPress={() => { onPressHandler() }} >
+                                <ButtonTitle>INSERIR PRONTUARIO</ButtonTitle>
+                            </ButtonModal>
 
-                    <ButtonModal onPress={() => {onPressHandler()}} >
-                        <ButtonTitle>INSERIR PRONTUARIO</ButtonTitle>
-                    </ButtonModal>
+                            <Cancel onPress={() => setShowModalAppointment(false)}>Cancelar</Cancel>
 
-                    <Cancel onPress={() => setShowModalAppointment(false)}>Cancelar</Cancel>
-
-                </ContentModal>
+                        </ContentModal>
+                    ) : (
+                        <></>
+                    )
+                }
             </ViewModal>
         </Modal>
     )
 }
+

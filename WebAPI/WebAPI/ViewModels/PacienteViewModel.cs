@@ -28,12 +28,11 @@ namespace WebAPI.ViewModels
 
         public Guid IdTipoUsuario { get; set; }
 
-
-
-        [NotMapped]
-        [JsonIgnore]
-        public IFormFile? Arquivo { get; set; }
-
         public string? Foto { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public IFormFile? File { get; set; }
+
     }
 }

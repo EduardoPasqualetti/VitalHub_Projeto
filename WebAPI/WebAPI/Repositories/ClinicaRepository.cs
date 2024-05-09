@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Contexts;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
@@ -8,16 +9,14 @@ namespace WebAPI.Repositories
     public class ClinicaRepository : IClinicaRepository
     {
         public VitalContext ctx = new VitalContext();
+
         public Clinica BuscarPorId(Guid id)
         {
-            return ctx.Clinicas
-                .Select(c => new Clinica
-                {
-                    Id = id,
-                    NomeFantasia = c.NomeFantasia,
-                    Endereco = c.Endereco
-                })
-                .FirstOrDefault(c => c.Id == id)!;
+
+            Clinica clinica = ctx.Clinicas.Include(x => x.Endereco).FirstOrDefault(x => x.Id == id)!;
+
+            return clinica;
+            
         }
 
         public void Cadastrar(Clinica clinica)
@@ -51,5 +50,6 @@ namespace WebAPI.Repositories
                .Where(c => c.Endereco!.Cidade == cidade)
                 .ToList();
         }
+
     }
 }

@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
 using WebAPI.Repositories;
-using WebAPI.Utils.BlobStorage;
+using WebAPI.Utils.Blob;
 using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
@@ -36,6 +36,19 @@ namespace WebAPI.Controllers
             }
         }
 
+        [HttpGet("BuscarPorId")]
+        public IActionResult GetById(Guid id)
+        {
+            try
+            {
+                return Ok(usuarioRepository.BuscarPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPut("AlterarFotoPerfil")]
         public async Task<IActionResult> UpdateProfileImage(Guid id, [FromForm] UsuarioViewModel form)
         {
@@ -51,13 +64,13 @@ namespace WebAPI.Controllers
                 }
 
 
-                var conectionString = "";
+                var connectionString = "";
 
 
                 var containerName = "blobvitalconteineredu";
 
 
-                string fotoUrl = await AzureBlobStorageHelper.UploadImageBlobAsync(form.Arquivo!, conectionString!, containerName!);
+                string fotoUrl = await AzureBlobStorageHelper.UploadImage(form.Arquivo!, connectionString!, containerName!);
 
 
                 usuarioBuscado.Foto = fotoUrl;
@@ -71,19 +84,6 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-        [HttpGet("BuscarPorId")]
-        public IActionResult GetById(Guid id)
-        {
-            try
-            {
-                return Ok(usuarioRepository.BuscarPorId(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
     }
+
 }

@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
 using WebAPI.Repositories;
-using WebAPI.Utils.BlobStorage;
+using WebAPI.Utils.Blob;
 using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
@@ -14,14 +14,13 @@ namespace WebAPI.Controllers
     [ApiController]
     public class MedicosController : ControllerBase
     {
-
         private IMedicoRepository _medicoRepository;
         public MedicosController()
         {
             _medicoRepository = new MedicoRepository();
         }
 
-        [HttpGet("ListaMedico")]
+        [HttpGet]
         public IActionResult Get()
         {
             try
@@ -47,17 +46,8 @@ namespace WebAPI.Controllers
             }
         }
 
-        //[Authorize]
-        [HttpPut("AtualizarPerfilMedico")]
-        public IActionResult AtualizarPerfil(MedicoViewModel medico)
-        {
-            Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
-
-            return Ok(_medicoRepository.AtualizarPerfil(idUsuario, medico));
-        }
-
         [HttpPost]
-        public async Task <IActionResult> Post([FromForm] MedicoViewModel medicoModel)
+        public async Task<IActionResult> Post([FromForm] MedicoViewModel medicoModel)
         {
             Usuario user = new Usuario();
             user.Nome = medicoModel.Nome;
@@ -65,13 +55,12 @@ namespace WebAPI.Controllers
             user.TipoUsuarioId = medicoModel.IdTipoUsuario;
 
 
-            var conectionString = "";
+            var connectionString = "";
 
-            var conteinerName = "blobvitalconteineredu";
-
-            user.Foto = await AzureBlobStorageHelper.UploadImageBlobAsync(medicoModel.Arquivo!, conectionString, conteinerName);
+            var containerName = "blobvitalconteineredu";
 
 
+            user.Foto = await AzureBlobStorageHelper.UploadImage(medicoModel.File!, connectionString, containerName);
 
             user.Senha = medicoModel.Senha;
 
@@ -117,8 +106,8 @@ namespace WebAPI.Controllers
             }
         }
 
-        //[Authorize]
-        [HttpPut("AtualizarPerfil")]
+        [Authorize]
+        [HttpPut]
         public IActionResult UpdateProfile(MedicoViewModel medico)
         {
             try
@@ -133,5 +122,6 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+ 
     }
 }

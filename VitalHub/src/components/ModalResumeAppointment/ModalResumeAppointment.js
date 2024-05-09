@@ -1,4 +1,4 @@
-import { Modal } from "react-native"
+import { ActivityIndicator, Modal } from "react-native"
 import { ContentModal, TextData, TitleData, ViewData, ViewModal } from "./Style"
 import { ButtonTitle, SubTitleModalResume, TitleProfile } from "../Title/Style"
 import { LinkCancelMargin } from "../Link/Style"
@@ -25,6 +25,7 @@ Notifications.setNotificationHandler({
 
 export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horarioConsulta, navigation, visible, setShowModalResume, ...rest }) => {
     const [idPaciente, setIdPaciente] = useState()
+    const [spinner, setSpinner] = useState(false);
 
     const handleCallNotifications = async () => {
 
@@ -34,6 +35,8 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
             alert("Voce nao permitiu as notificacoes estarem ativas")
             return
         }
+
+
 
         // const token = await Notifications.getExpoPushTokenAsync()g
 
@@ -53,28 +56,30 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
         const token = await UserDecodeToken();
 
         setIdPaciente(token.jti)
-        // console.log(token.jti);
+        console.log(token.jti);
     }
-    
+
     async function onPressConfirm() {
+        setSpinner(true)
         try {
-            console.log("rodou");
-            const response = await api.post('/Consultas/Cadastrar', { 
-                situacaoId: 'C1D85201-F0E6-4302-8FF3-F8F36F9FFAC3',    
+            const response = await api.post('/Consultas/Cadastrar', {
+                situacaoId: 'C1D85201-F0E6-4302-8FF3-F8F36F9FFAC3',
                 pacienteId: idPaciente,
-                medicoClinicaId: dadosAgendamento.medicoClinicaId,
+                medicoClinicaId: dadosAgendamento.medicoId,
                 prioridadeId: dadosAgendamento.prioridadeId,
                 dataConsulta: `${dataConsulta}T${horarioConsulta}:00.000Z`
-            }) 
+
+            })
             if (response) {
-                await setShowModalResume(true)
+                await setShowModalResume(false)
                 navigation.replace("Main")
                 handleCallNotifications()
             }
 
         } catch (error) {
-            console.log(error + ' erro na função onPressConfirm()');
+            console.log(error + ' erro cadastrar consulta');
         }
+        setSpinner(false)
     }
 
     useEffect(() => {
@@ -91,7 +96,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
 
                     <ViewData fieldHeight={50}>
                         <TitleData>Data da consulta</TitleData>
-                        <TextData>{dataConsulta} - {horarioConsulta}</TextData>
+                        <TextData>{dataConsulta} {horarioConsulta}</TextData>
                     </ViewData>
                     <ViewData fieldHeight={80}>
                         <TitleData>Médico(a) da consulta</TitleData>
@@ -106,8 +111,11 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
                         <TitleData>Tipo da consulta</TitleData>
                         <TextData>{dadosAgendamento.prioridadeLabel}</TextData>
                     </ViewData>
-                    <Btn >
-                        <ButtonTitle onPress={() => onPressConfirm()}>CONFIRMAR</ButtonTitle>
+                    <Btn disabled={spinner} onPress={() => { onPressConfirm() }}>
+                        {
+                            spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONFIRMAR</ButtonTitle>
+                        }
+
                     </Btn>
 
                     <LinkCancelMargin onPress={() => setShowModalResume(false)}>Cancelar</LinkCancelMargin>

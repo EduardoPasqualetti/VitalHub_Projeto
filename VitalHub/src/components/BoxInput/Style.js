@@ -30,6 +30,8 @@ color: #4E4B59;
 font-family: 'MontserratAlternates_500Medium';
 font-size: 16px;
 padding-left: 20px;
+padding-top: 5px;
+padding-right: 10px
 `
 
 export const InputTextModificate = styled.TextInput.attrs(props => ({

@@ -11,10 +11,6 @@ namespace WebAPI.ViewModels
 
         public string? Senha { get; set; }
 
-        [NotMapped]
-        [JsonIgnore]
-        public IFormFile? Arquivo { get; set; }
-
         public string? Foto { get; set; }
 
         public string? Cep { get; set; }
@@ -27,8 +23,14 @@ namespace WebAPI.ViewModels
 
         public Guid? EspecialidadeId { get; set; }
 
+        public string? Especialidade { get; set; }
+
         public string? Crm { get; set; }
 
         public Guid? IdTipoUsuario { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public IFormFile? File { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { Modal } from "react-native"
+import { ActivityIndicator, Modal } from "react-native"
 import { ButtonTitle, TextRec, Title } from "../Title/Style"
 import { Btn } from "../Button/Button"
 import { LinkCancel } from "../Link/Style"
@@ -6,6 +6,8 @@ import { ContentModal, ViewModal } from "./Style"
 
 // Importar a biblioteca
 import * as Notifications from "expo-notifications"
+import api from "../../service/Service"
+import { useState } from "react"
 
 // Solicitar as permissoes de notificacao ao iniciar o app
 Notifications.requestPermissionsAsync()
@@ -17,34 +19,26 @@ Notifications.setNotificationHandler({
     shouldShowAlert: true,
     // Reproduz ou nao o som ao receber a notificacao
     shouldPlaySound: true,
-    
+
 
     // Configura o numero de notificacoes no icone do app
     shouldSetBadge: false
   })
 })
 
-export const ModalCancel = ({ visible, setShowModalCancel, ...rest }) => {
+export const ModalCancel = ({ idConsulta, visible, setShowModalCancel, ...rest }) => {
+  const [spinner, setSpinner] = useState(false);
 
-    // Funcao para lidar com a chamada da notificacao
   const handleCallNotifications = async () => {
 
-    // Pega o status da permissao
     const { status } = await Notifications.getPermissionsAsync()
 
-    // Verifica se o usuario concedeu a permissao para o uso de notificacoes
     if (status !== "granted") {
       alert("Voce nao permitiu as notificacoes estarem ativas")
       return
     }
 
-    
-    
 
-    // obter o token de envio de notificacao
-    // const token = await Notifications.getExpoPushTokenAsync()
-
-    // Agendar uma notificacao para ser exibida apos 5 segundos
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Consulta Cancelada",
@@ -59,25 +53,42 @@ export const ModalCancel = ({ visible, setShowModalCancel, ...rest }) => {
 
   async function onPressHandle() {
     handleCallNotifications(),
-    setShowModalCancel(false)
+      setShowModalCancel(false)
+    UpdateStatus()
+  }
+
+  const consulta = idConsulta;
+
+
+  async function UpdateStatus() {
+    setSpinner(true)
+    try {
+      await api.put(`/Consultas/Status?idConsulta=${consulta}&status=Cancelados`)
+    } catch (error) {
+      console.log(error + 'erro ao atualizar status');
+    }
+    setSpinner(false)
   }
 
 
-    return (
-        <Modal {...rest} visible={visible} transparent={true} animationType="fade">
-            <ViewModal>
-                <ContentModal>
-                    <Title>Cancelar consulta</Title>
-                    <TextRec>Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?</TextRec>
+  return (
+    <Modal {...rest} visible={visible} transparent={true} animationType="fade">
+      <ViewModal>
+        <ContentModal>
+          <Title>Cancelar consulta</Title>
+          <TextRec>Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?</TextRec>
 
-                    <Btn onPress={() => onPressHandle()}>
-                        <ButtonTitle>CONFIRMAR</ButtonTitle>
-                    </Btn>
+          <Btn disabled={spinner} onPress={() => onPressHandle()}>
+            {
+              spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONFIRMAR</ButtonTitle>
+            }
 
-                    <LinkCancel onPress={() => setShowModalCancel(false)}>Cancelar</LinkCancel>
-                </ContentModal>
-            </ViewModal>
-        </Modal>
-    )
+          </Btn>
+
+          <LinkCancel onPress={() => setShowModalCancel(false)}>Cancelar</LinkCancel>
+        </ContentModal>
+      </ViewModal>
+    </Modal>
+  )
 }
 

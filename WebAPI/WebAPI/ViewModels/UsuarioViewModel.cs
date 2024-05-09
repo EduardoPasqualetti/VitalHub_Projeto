@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace WebAPI.ViewModels
 {
-    public interface UsuarioViewModel
+    public class UsuarioViewModel
     {
         [NotMapped]
         [JsonIgnore]

@@ -6,7 +6,7 @@ import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
 import * as Notifications from "expo-notifications"
 import api from "../../service/Service"
-import { Alert } from "react-native"
+import { ActivityIndicator, Alert } from "react-native"
 
 Notifications.requestPermissionsAsync()
 
@@ -23,28 +23,31 @@ Notifications.setNotificationHandler({
 })
 
 export const ResetPwd = ({ navigation, route }) => {
+    const [spinner, setSpinner] = useState(false)
     const [senha, setSenha] = useState('')
     const [confirmar, setConfirmar] = useState('')
 
-    
+
     async function UpdatePassword() {
-        if (senha === confirmar) {
+        if (senha === confirmar && senha.length >= 5) {
+            setSpinner(true)
             try {
                 await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`,
-                {
-                    senhaNova: senha
-                })
-                navigation.replace("Login");
+                    {
+                        senhaNova: senha
+                    })
+                Alert.alert('Erro ao alterar senha')
                 handleCallNotifications()
             } catch (error) {
                 console.log(error);
             }
+            setSpinner(false)
         }
         else {
-            Alert.alert('As senhas digitadas devem ser iguais')
+            Alert.alert('Senha de confirmação nao coincide com a senha')
         }
     }
-    
+
 
     const handleCallNotifications = async () => {
 
@@ -54,6 +57,10 @@ export const ResetPwd = ({ navigation, route }) => {
             alert("Voce nao permitiu as notificacoes estarem ativas")
             return
         }
+
+
+
+        // const token = await Notifications.getExpoPushTokenAsync()
 
         await Notifications.scheduleNotificationAsync({
             content: {
@@ -91,8 +98,11 @@ export const ResetPwd = ({ navigation, route }) => {
 
             />
 
-            <Btn onPress={() => UpdatePassword()}>
-                <ButtonTitle>Confirmar nova senha</ButtonTitle>
+            <Btn disabled={spinner} onPress={() => UpdatePassword()}>
+                {
+                    spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>Confirmar nova senha</ButtonTitle>
+                }
+
             </Btn>
 
         </Container>

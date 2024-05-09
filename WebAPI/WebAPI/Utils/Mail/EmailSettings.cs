@@ -16,5 +16,6 @@
 
         //Porta do servidor SMTP
         public int Port { get; set; }
+
     }
 }

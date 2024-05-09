@@ -12,7 +12,7 @@ border-width: 2px;
 border-radius: 5px;
 color: #34898F;
 font-size: 16px;
-font-family: 'MontserratAlternates_600SemiBold'
+font-family: 'MontserratAlternates_600SemiBold';
 `
 
 export const InputCode = styled.TextInput.attrs({

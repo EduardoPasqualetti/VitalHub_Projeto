@@ -6,16 +6,12 @@ const BottomTab = createBottomTabNavigator()
 import {Home} from '../Home/Home'
 import {Profile} from '../Profile/Profile'
 
-import {FontAwesome} from '@expo/vector-icons'
+import {FontAwesome, FontAwesome5} from '@expo/vector-icons'
 
-export const Main = ({ navigation, route }) => {
-    const routeParams = route.params
-    console.log(route);
-
+export const Main = () => {
     return(
         <BottomTab.Navigator
-        //   initialRouteName={ route != undefined ? routeParams.Screen : "Home" }
-        initialRouteName="Home"
+          initialRouteName="Home"
 
           screenOptions={ ({route}) => ({
             tabBarStyle: { backgroundColor: '#fff', height: 80, paddingTop: 10},
@@ -44,16 +40,19 @@ export const Main = ({ navigation, route }) => {
             }
           })}
           >
+
+            
+            
             
             <BottomTab.Screen
              name="Home"
              component={Home}
             />
 
-            <BottomTab.Screen name="Profile" component={Profile}>
-                {/* { (props) => <PerfilPaciente navigation={navigation} route={route} /> } */}
-            </BottomTab.Screen>
-
+            <BottomTab.Screen
+             name="Profile"
+             component={Profile}
+            />
         </BottomTab.Navigator>
     )
 }

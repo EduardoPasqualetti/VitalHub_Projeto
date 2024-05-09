@@ -3,29 +3,35 @@ import { Logo } from "../../components/Logo/Style"
 import { ButtonTitle, TextRec, Title } from "../../components/Title/Style"
 import { Input } from "../../components/Input/Style"
 import { Btn, BtnReturn, IconReturn } from "../../components/Button/Button"
-import api from "../../service/Service"
 import { useState } from "react"
+import api from "../../service/Service"
+import { ActivityIndicator, Alert } from "react-native"
 
-export const Recover = ({navigation}) => {
-    const [email, setEmail] = useState('eduardo.brenn2006@gmail.com')
+export const Recover = ({ navigation }) => {
+    const [email, setEmail] = useState('')
+    const [spinner, setSpinner] = useState(false)
 
-    async function SendEmail(){
-        console.log()
-     await api.post(`/RecuperarSenha/PostRecupSenha?email=${email}`)
-     .then( () =>  {
-         navigation.replace("VerifyEmail", { emailRecuperacao : email })
-     }).catch( error => {
-         console.log(error)
-     } )
- }
-
+    async function SendEmail() {
+        if (email != '' && email.length > 10 && email.includes('@')) {
+            setSpinner(true)
+            try {
+                await api.post(`/RecuperarSenha?email=${email}`)
+                navigation.replace("VerifyEmail", { emailRecuperacao: email })
+            } catch (error) {
+                Alert.alert("Erro ao tentar recuperar senha")
+            }
+            setSpinner(false)
+        }
+        else
+            Alert.alert("Email invalido, informe-o corretamente")
+    }
     return (
         <Container>
-            
+
             <BtnReturn onPress={() => navigation.navigate("Login")}>
-                 <IconReturn source={require("../../assets/return.png")}/>
+                <IconReturn source={require("../../assets/return.png")} />
             </BtnReturn>
-           
+
             <Logo source={require('../../assets/logo.png')}></Logo>
 
             <Title>Recuperar Senha</Title>
@@ -34,9 +40,13 @@ export const Recover = ({navigation}) => {
 
             <Input value={email} onChangeText={(txt) => setEmail(txt)} />
 
-            <Btn onPress={() => SendEmail()}>
-                <ButtonTitle>CONTINUAR</ButtonTitle>
-            </Btn>  
+            <Btn disabled={spinner} onPress={() => SendEmail()}>
+                {
+                    spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONTINUAR</ButtonTitle>
+                }
+
+            </Btn>
+
         </Container>
     )
 }

@@ -1,7 +1,7 @@
-import { Modal } from "react-native"
-import { BlueTitle, ContentModal, RowContainerButton, SmallButton, TypeAppointment, ViewModal, InputAppointment } from "./Style"
+import { Modal, Text } from "react-native"
+import { BlueTitle, ContentModal, RowContainerButton, TypeButton, SmallButton, TypeAppointment, ViewModal, InputAppointment } from "./Style"
 import { ButtonTitle, LabelSchedule, Title, TitleProfile } from "../Title/Style"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Btn } from "../Button/Button"
 import { LinkCancel } from "../Link/Style"
 
@@ -39,7 +39,7 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
               <SmallButton onPress={() => setAgendamento({
                 ...agendamento,
 
-                prioridadeId: '89925C39-3C30-4E9A-A14C-0B9201A98234',
+                prioridadeId: '1A97B012-4B63-403D-8E11-864EE1537E02',
                 prioridadeLabel: 'Rotina'
               })} isSelected={agendamento ? agendamento.prioridadeLabel == "Rotina" : false}>
                 <BlueTitle>Rotina</BlueTitle>
@@ -49,7 +49,7 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
                 setAgendamento({
                   ...agendamento,
 
-                  prioridadeId: '58608199-2C20-4975-9B45-94623153F506',
+                  prioridadeId: 'C568D663-7FAD-4696-896F-D0890D7BD1DA',
                   prioridadeLabel: 'Exames'
                 })
               }} isSelected={agendamento ? agendamento.prioridadeLabel == "Exames" : false}>
@@ -60,7 +60,7 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
                 setAgendamento({
                   ...agendamento, // Manter todas as informacoes presentes no state
 
-                  prioridadeId: 'DC9551A6-F632-44CF-9FCD-61959AA039D7',
+                  prioridadeId: '6F9EDEB1-2CC7-4681-BE83-A377C0F3C8DE',
                   prioridadeLabel: 'Urgencia'
                 })
               }} isSelected={agendamento ? agendamento.prioridadeLabel == "Urgencia" : false}>

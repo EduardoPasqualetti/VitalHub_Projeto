@@ -20,7 +20,7 @@
                     Body = GetHtmlContent(userName)
                 };
 
-                await _emailService.sendEmailAsync(request);
+                await _emailService.SendEmailAsync(request);
             }
             catch (Exception)
             {
@@ -41,7 +41,7 @@
                     Body = GetHtmlContentRecovery(codigo)
                 };
 
-                await _emailService.sendEmailAsync(request);
+                await _emailService.SendEmailAsync(request);
             }
             catch (Exception)
             {

@@ -2,35 +2,36 @@ import { useEffect, useState } from "react"
 import { ContainerProfile, ContainerScroll, ViewFormat, ViewTitleRecord } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, EmailProfile, SubtitleRecord, TextRecord, TitleProfile } from "../../components/Title/Style"
-import { Text } from "react-native"
+import { KeyboardAvoidingView, Platform, Text } from "react-native"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn } from "../../components/Button/Button"
 import { LinkCancelMargin } from "../../components/Link/Style"
 import moment from 'moment'
 import api from "../../service/Service"
 
-export const MedicalRecord = ({navigation, route}) => {
+export const MedicalRecord = ({ navigation, route }) => {
 
     const [recordEdit, setRecordEdit] = useState(true)
     const [descricao, setDescricao] = useState('')
     const [diagnostico, setDiagnostico] = useState('')
     const [receita, setReceita] = useState('')
-    const [email, setEmail] = useState('')
-    const [nome, setNome] = useState('')
-    const [dtNasc, setDtNasc] = useState('')
-    const [idConsulta, setIdConsulta] = useState('')
+    const [idConsulta, setIdConsulta] = useState()
+    const [spinner, setSpinner] = useState(false)
 
 
     useEffect(() => {
-        console.log(route.params.receita);
-        setDescricao(route.params.descricao)
-        setDiagnostico(route.params.diagnostico)
-        setReceita(route.params.receita)
-        setDtNasc(route.params.dtNasc)
-        setNome(route.params.nome)
-        setEmail(route.params.email)
         setIdConsulta(route.params.idConsulta)
-    },[route.params])
+        console.log(route.params);
+        GetRecord(route.params.idConsulta)
+    }, [route.params])
+
+    useEffect(() => {
+        if (recordEdit === false) {
+            console.log('effect dois');
+            GetRecord(idConsulta)
+        }
+
+    }, [recordEdit])
 
 
     const calculateAge = (dateOfBirth) => {
@@ -40,19 +41,37 @@ export const MedicalRecord = ({navigation, route}) => {
         return years;
     };
 
-    const idade = calculateAge(dtNasc)
+    const idade = calculateAge(route.params.dtNasc)
+
+    async function GetRecord(id) {
+        try {
+            const response = await api.get(`/Consultas/BuscarPorId?id=${id}`)
+            console.log('buscar');
+            setDescricao(response.data.descricao)
+            setDiagnostico(response.data.diagnostico)
+            setReceita(response.data.receita.medicamento)
+
+        } catch (error) {
+
+        }
+    }
 
     async function UpdateRecord() {
-        try {
-            await api.put('/Consultas/Prontuario',{
-                consultaId: idConsulta,
-                descricao: descricao,
-                diagnostico: diagnostico
-            })
-            console.log("Prontuario atualizado com sucesso");
-            navigation.replace("Main")
-        } catch (error) {
-            console.log(error);
+        if (descricao != '' && diagnostico != '' && receita != '') {
+            setSpinner(true)
+            try {
+                await api.put('/Consultas/Prontuario', {
+                    consultaId: idConsulta,
+                    medicamento: receita,
+                    descricao: descricao,
+                    diagnostico: diagnostico
+                })
+                console.log("Prontuario atualizado com sucesso");
+                GetRecord(idConsulta)
+            } catch (error) {
+                console.log(error);
+            }
+            setSpinner(false)
         }
     }
 
@@ -65,14 +84,14 @@ export const MedicalRecord = ({navigation, route}) => {
         <ContainerScroll>
             {recordEdit ? (
                 <>
-                    <ProfileImage source={require("../../assets/photo.png")} />
+                    <ProfileImage source={{ uri: route.params.photo }} />
 
                     <ContainerProfile>
 
-                        <TitleProfile>{nome}</TitleProfile>
+                        <TitleProfile>{route.params.nome}</TitleProfile>
                         <ViewTitleRecord>
-                            <SubtitleRecord>{idade}</SubtitleRecord>
-                            <SubtitleRecord>{email}</SubtitleRecord>
+                            <SubtitleRecord>{idade} anos</SubtitleRecord>
+                            <SubtitleRecord>{route.params.email}</SubtitleRecord>
                         </ViewTitleRecord>
 
                         <BoxInput
@@ -80,7 +99,7 @@ export const MedicalRecord = ({navigation, route}) => {
                             fieldValue={descricao}
                             fieldHeight={150}
                             multiline={true}
-                            
+
                         />
                         <BoxInput
                             textLabel={'Diagnóstico do paciente'}
@@ -89,34 +108,34 @@ export const MedicalRecord = ({navigation, route}) => {
                             multiline={true}
                         />
                         <BoxInput
-                            textLabel={'Prescrição médica'} 
+                            textLabel={'Prescrição médica'}
                             fieldValue={receita}
                             fieldHeight={150}
                             multiline={true}
-                        /> 
-                        <Btn onPress={() => setRecordEdit(false)}> 
+                        />
+                        <Btn onPress={() => setRecordEdit(false)}>
                             <ButtonTitle>EDITAR</ButtonTitle>
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => {navigation.replace("Main")}}>Cancelar</LinkCancelMargin>
+                        <LinkCancelMargin onPress={() => { navigation.replace("Main") }}>Cancelar</LinkCancelMargin>
                     </ContainerProfile>
 
                 </>
             ) : (
                 <>
-                    <ProfileImage source={require("../../assets/photo.png")} />
+                    <ProfileImage source={{ uri: route.params.photo }} />
 
                     <ContainerProfile>
 
-                        <TitleProfile>{nome}</TitleProfile>
+                        <TitleProfile>{route.params.nome}</TitleProfile>
                         <ViewTitleRecord>
                             <SubtitleRecord>{idade}</SubtitleRecord>
-                            <SubtitleRecord>{email}</SubtitleRecord>
+                            <SubtitleRecord>{route.params.email}</SubtitleRecord>
                         </ViewTitleRecord>
 
                         <BoxInput
                             textLabel={'Descrição da consulta'}
-                            placeholder={descricao}
+                            fieldValue={descricao}
                             onChangeText={setDescricao}
                             fieldHeight={150}
                             editable={true}
@@ -124,22 +143,24 @@ export const MedicalRecord = ({navigation, route}) => {
                         />
                         <BoxInput
                             textLabel={'Diagnóstico do paciente'}
-                            placeholder={diagnostico}
+                            fieldValue={diagnostico}
                             onChangeText={setDiagnostico}
-                            fieldHeight={80}                  
+                            fieldHeight={80}
                             editable={true}
                             multiline={true}
                         />
                         <BoxInput
                             textLabel={'Prescrição médica'}
-                            placeholder={receita}
+                            fieldValue={receita}
                             onChangeText={setReceita}
                             fieldHeight={150}
                             editable={true}
                             multiline={true}
                         />
-                        <Btn onPress={() => OnPressHandle()}>
-                            <ButtonTitle>SALVAR</ButtonTitle>
+                        <Btn disabled={spinner} onPress={() => OnPressHandle()}>
+                            {
+                                spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>SALVAR</ButtonTitle>
+                            }
                         </Btn>
 
                         <LinkCancelMargin onPress={() => setRecordEdit(true)}>Cancelar Edição</LinkCancelMargin>

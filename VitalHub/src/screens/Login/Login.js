@@ -1,3 +1,4 @@
+
 import { Container, ContentAccount } from "../../components/Container/Style"
 import { Logo } from "../../components/Logo/Style"
 import { ButtonGoogleTitle, ButtonTitle, ImgGoogle, TextAccount, TextFieldNull, Title } from "../../components/Title/Style"
@@ -10,6 +11,7 @@ import { useState } from "react"
 import api from "../../service/Service"
 import asyncStorage from '@react-native-async-storage/async-storage'
 
+
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('eduardo.brenn2006@gmail.com')
     const [senha, setSenha] = useState('paciente123')
@@ -17,34 +19,28 @@ export const Login = ({ navigation }) => {
     const [emailError, setEmailError] = useState(false);
     const [senhaError, setSenhaError] = useState(false);
 
-    // Funcao de login
     async function Login() {
 
         if (!email || !senha) {
-            setEmailError(!email) // true se email nulo
-            setSenhaError(!senha) // true se senha nulo
+            setEmailError(!email)
+            setSenhaError(!senha) 
             return
         }
 
-        // Definir que o estado do carregamento sera true e aparecera
         setLoading(true)
         try {
-            // Chamar a api de Login
             const response = await api.post('Login', {
-                email : email,
-                senha : senha
+                email: email,
+                senha: senha
             })
 
             await asyncStorage.setItem('token', JSON.stringify(response.data))
 
             navigation.replace("Main")
-
         } catch (error) {
-            
             Alert.alert(`Email ou Senha invalido`)
-
         } finally {
-            // Ao encerrar a requisicao torna o estado do carregamento false
+
             setLoading(false)
             setEmailError(false)
             setSenhaError(false)
@@ -57,6 +53,7 @@ export const Login = ({ navigation }) => {
     }
 
 
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>
@@ -64,6 +61,7 @@ export const Login = ({ navigation }) => {
                 <Logo source={require('../../assets/logo.png')} />
 
                 <Title>Entrar ou criar conta</Title>
+
 
 
                 <Input
@@ -74,8 +72,8 @@ export const Login = ({ navigation }) => {
                 {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>} 
                 <Input
                     placeholder={"Senha"}
-                    value={senha}
                     secureTextEntry={true}
+                    value={senha}
                     onChangeText={(txt) => setSenha(txt)}
                 />
                 {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 

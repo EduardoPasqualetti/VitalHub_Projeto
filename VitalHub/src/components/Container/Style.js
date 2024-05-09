@@ -7,14 +7,6 @@ export const Container = styled.View`
     
 `
 
-export const ConteinerTitle = styled.View`
-    width: 90%;
-    height: 80px;
-    align-self: center;
-    align-items: center;
-    margin-top: 80px;
-`
-
 export const ContentAccount = styled.View`
 margin-top: 40px;
 width: 90%;
@@ -42,10 +34,10 @@ width: 90%;
 height: 100%;
 align-self: center;
 align-items: center;
-margin-top: 30px;
+margin-top: 10px;
 `
 export const ContainerSafeEdit = styled(ContainerProfile)`
-/* margin-top: 120px; */
+margin-top: 120px;
 `
 
 
@@ -53,10 +45,7 @@ export const ViewFormat = styled.View`
 flex-direction: row;
 gap: 35px;
 height: 100px;
-`
-export const ViewFormatLog = styled.View`
-align-self: flex-start;
-width: 580px;
+margin-bottom: 25px;
 `
 
 export const ViewTitle = styled.View`
@@ -77,7 +66,7 @@ export const ViewTitleRecord = styled.View`
 flex-direction: row;
 justify-content: space-between;
 align-items: center;
-width: 85%;
+width: 90%;
 height: 50px;
 padding: 3%;
 margin-bottom: 30px;
@@ -134,6 +123,7 @@ width: 100%;
 height: 2px;
 background-color: #8C8A97;
 margin-top: 40px;
+margin-bottom: 40px;
 `
 
 export const ContainerMap = styled.View`
@@ -141,10 +131,12 @@ width: 100%;
 height: 50%;
 `
 
+
 export const ContainerImage = styled.View`
 width: 100%;
 height: 260px;
+margin-bottom: 20px;
 position: relative;
+align-items: center;
+justify-content: flex-start;
 `
-
-

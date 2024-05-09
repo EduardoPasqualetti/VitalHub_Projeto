@@ -1,8 +1,7 @@
 ﻿namespace WebAPI.Domains
 {
-    public class FileUploadModel
+    public class FIleUploadModel
     {
-        //IFormFile serve para receber uma imagem
         public IFormFile Image { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import { Modal } from "react-native"
 import { ButtonTitle, SubtitleRecord, TitleProfile } from "../Title/Style"
 import { ContentModal, ViewModal } from "./Style"
-import { ImageDoctor } from "../Images/Style"
+import { ImageModal } from "../Images/Style"
 import { ViewDataDoctor, ViewTitleRecord } from "../Container/Style"
 import { Btn, BtnModalSeeDoctor } from "../Button/Button"
 import { LinkCancelMargin } from "../Link/Style"
@@ -21,7 +21,7 @@ export const ModalSeeDoctor = ({ doctorInfo, navigation, visible, setShowModalSe
 
                     <ViewModal>
                         <ContentModal>
-                            <ImageDoctor source={{ uri: doctorInfo.photo }} />
+                            <ImageModal source={{ uri: doctorInfo.photo }} />
                             <TitleProfile>{doctorInfo.name}</TitleProfile>
 
                             <ViewDataDoctor>

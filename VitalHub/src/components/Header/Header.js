@@ -9,29 +9,23 @@ export const Header = ({onPress}) => {
   const [photo, setPhoto] = useState()
 
 
-  async function profileLoad() {
+  async function GetUser() {
     const token = await UserDecodeToken();
     setName(token.name)
 
-    if (photo == null) {
-      await GetUser(token.jti)
+    try {
+      const response =  await api.get(`/Usuario/BuscarPorId?id=${token.jti}`)
+      setPhoto(response.data.foto)
+    } catch (error) {
+      console.log(error + 'erro buscar usuario');
     }
     
   }
 
   useEffect(() => {
-    profileLoad()
+    GetUser()
   },[])
 
-  async function GetUser(id){
-    try {
-      const response =  await api.get(`/Usuario/BuscarPorId?id=${id}`)
-      setPhoto(response.data.foto)
-    } catch (error) {
-      console.log(error + 'erro na função GetUser');
-    }
-  }
-  
     return (
         <ContainerHeader>
         <BoxUser onPress={onPress}>

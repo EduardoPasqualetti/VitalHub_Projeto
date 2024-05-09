@@ -2,6 +2,7 @@ import { Image, Modal, StyleSheet, TouchableOpacity, View } from "react-native"
 import { Container } from "../Container/Style"
 import { useEffect, useRef, useState } from "react"
 import { BoxCamera, BoxTop, BtnCapture, BtnFlash, BtnFlip, BtnReturnPhoto, ConfigBtnCapture, LastPhoto } from "./Style"
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { FontAwesome6 } from '@expo/vector-icons';
 import * as MediaLibrary from 'expo-media-library'
 import * as ImagePicker from 'expo-image-picker'
@@ -11,22 +12,22 @@ import { ButtonTitle } from "../Title/Style";
 import { LinkCancel } from "../Link/Style";
 import { EvilIcons } from '@expo/vector-icons';
 
-import { Camera, CameraView, CameraViewRef, useCameraPermissions } from "expo-camera";
-import { CameraType } from "expo-camera/build/legacy/Camera.types";
-
 
 export const CameraPhoto = ({ navigation, route }) => {
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
     const [openModal, setOpenModal] = useState(false)
-    const [tipoCamera, setTipoCamera] = useState(CameraType.Constants.Type.front)
-    const [flashOn, setFlashOn] = useState(CameraType.Constants.FlashMode.off)
+    const [tipoCamera, setTipoCamera] = useState('front')
+    const [flashOn, setFlashOn] = useState('off')
     const [latestPhoto, setLatestPhoto] = useState(null)
+
+    const [cameraPermission, requestCameraPermissions] = useCameraPermissions();
+    const [mediaPermission, requestMediaPermissions ] = MediaLibrary.usePermissions();
 
     
     async function CapturePhoto() {
         if (cameraRef) {
-            const photo = await cameraRef.current.takePictureAsync()
+            const photo = await cameraRef.current.takePictureAsync({quality: 1})
             setPhoto(photo.uri)
             setOpenModal(true)
         }
@@ -40,8 +41,10 @@ export const CameraPhoto = ({ navigation, route }) => {
     
     async function GetLastPhoto() {
         const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
-        if (assets.length > 0) {
-            setLatestPhoto(assets[0].uri)
+        const infoAsset = await MediaLibrary.getAssetInfoAsync( assets[0].id )
+
+        if (infoAsset) {
+            setLatestPhoto(infoAsset.localUri)
         }
     }
     
@@ -59,32 +62,36 @@ export const CameraPhoto = ({ navigation, route }) => {
     
     useEffect(() => {
         (async () => {
-            const { status: cameraStatus } = await CameraView.requestCameraPermissionsAsync()
+            if(cameraPermission && !cameraPermission.granted){
+                await useCameraPermissions();
+            }
             
-            const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
+            if (MediaLibrary.PermissionStatus.DENIED) {
+                await requestMediaPermissions();
+            }
         })();
     }, [])
     
     useEffect(() => {
-        if (route.params.isProfile) {
+        if (route.params) {
             GetLastPhoto()
         }
-    })
+    }, [])
     
     return (
         <Container>
             <CameraView
                 ref={cameraRef}
-                type={tipoCamera}
-                style={styles.CameraView}
-                flashMode={flashOn}
+                facing={tipoCamera}
+                style={styles.camera}
+                flash={flashOn}
                 >
                 <BoxTop>
                     <BtnReturnPhoto onPress={() => { route.params.isProfile ? navigation.navigate("Profile") : navigation.navigate("SeePrescription") }}>
                         <EvilIcons name="close-o" size={70} color="white" />
                     </BtnReturnPhoto>
-                    <BtnFlash onPress={() => setFlashOn(flashOn == FlashMode.on ? FlashMode.off : FlashMode.on)}>
-                        <Ionicons name={flashOn === FlashMode.on ? "flash" : "flash-off"} size={42} color={flashOn === FlashMode.on ? "yellow" : "white"} />
+                    <BtnFlash onPress={() => setFlashOn(flashOn == 'on' ? 'off' : 'on')}>
+                        <Ionicons name={flashOn === 'on' ? "flash" : "flash-off"} size={42} color={flashOn === 'on' ? "yellow" : "white"} />
                     </BtnFlash>
                 </BoxTop>
                 <BoxCamera>
@@ -134,7 +141,7 @@ export const CameraPhoto = ({ navigation, route }) => {
 
 
 const styles = StyleSheet.create({
-    CameraView: {
+    camera: {
         flex: 1,
         height: '80%',
         width: '100%',

@@ -12,7 +12,7 @@ height: 45%;
 `
 
 
-export const ImageDoctor = styled.Image`
+export const ImageModal = styled.Image`
 width: 90%;
 height: 40%;
 margin-top: 10px;

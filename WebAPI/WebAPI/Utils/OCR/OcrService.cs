@@ -1,62 +1,61 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+﻿using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 
 namespace WebAPI.Utils.OCR
 {
     public class OcrService
     {
-        private readonly string _subscriptionKey = "";
+        private readonly string _subscriptionKey = "qxktfjzgpnozveoq";
 
         private readonly string _endpoint = "https://cvvitalhubg15.cognitiveservices.azure.com/";
 
-        public async Task<string> RecognizeTextAsync(Stream ImageStream)
+        // metodo para reconhecer o caracteres(texto) a partir de uma imagem
+        public async Task<string> RecognizeTextAsync(Stream imageStream)
         {
             try
             {
-                //Cria um Client para API do visão computacional (ComputerVision)
-                var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials
-                    (_subscriptionKey))
+                //cria um client para api de computer vision
+                var client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(_subscriptionKey))
                 {
                     Endpoint = _endpoint
                 };
 
-                //ImageStrem é o parâmetro passado no RecognizeTextAsync
-                //faz a chamada para a api
-                var ocrResult = await client.RecognizePrintedTextInStreamAsync(true, ImageStream);
+                //faz chamada para a API
+                var ocrResult = await client.RecognizePrintedTextInStreamAsync(true, imageStream);
 
                 //processa o resultado e retorna o texto reconhecido
                 return ProcessRecognitionResult(ocrResult);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return "Erro ao reconhecer o texto" + e.Message;
+
+               return("Erro ao reconhecer texto"+ ex.Message);
             }
         }
 
-        // O Static é para usar o método em outros lugares
-        // A classe OcrResult vai pegar o resultado
         private static string ProcessRecognitionResult(OcrResult result)
         {
+            
             string recognizedText = "";
 
-            //Foreach para pegar cada "Região" onde o texto está, depois pegar cada linha dentro da região, e depois cada palavra dentro das linhas
-            // += Operador de incremento
+            //percorre todas as regioes
             foreach (var region in result.Regions)
             {
-                //Para cada região percorre as linhas
+                //para cada regiao, percorre as linhas
                 foreach (var line in region.Lines)
                 {
-                    //Para cada linha percorre as palavras
+                    //para cada linha, percorre as palavras
                     foreach (var word in line.Words)
                     {
-                        //Adiciona cada palavra ao texto, separando com espaço cada palavra
-                        recognizedText += word.Text + " ";   
+                        //adiciona cada palavra ao texto, separando com espaco
+                        recognizedText += word.Text + " ";
                     }
-                    //Quebra de linha ao final de cada linha
+                    //quebra de linha ao final de cada linha
                     recognizedText += "\n";
                 }
             }
+
+            //retorna o texto
             return recognizedText;
         }
     }

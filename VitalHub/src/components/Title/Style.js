@@ -5,7 +5,6 @@ font-size: 25px;
 color: #33303e;
 font-family: "MontserratAlternates_600SemiBold";
 margin-bottom: 10px;
-
 `   
 
 export const ButtonTitle = styled(Title)`
@@ -45,7 +44,7 @@ font-size: 24px;
 `
 
 export const SubTitleProfile = styled(TextRec)`
-font-size: 16px;
+font-size: 18px;
 color: #4E4B59;
 margin-bottom: 40px;
 margin-top: 10px;

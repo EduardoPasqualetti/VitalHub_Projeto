@@ -90,7 +90,8 @@ padding: 12px;
 border-radius: 10px;
 background-color: #496bba;
 border: 1px solid #fbfbfb;
-top: 295px;
-right: 40px;
+top: 350px;
+right: 10px;
 position: absolute;
+z-index: 99;
 `

@@ -6,15 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "plugins": [
-      [
-        "expo-calendar",
-        {
-          "calendarPermission": "O aplicativo precisa acessar seu calendário.",
-          "remindersPermission" : "O aplicativo precisa ter a sua permissáo para lhe enviar notificações"
-        }
-      ]
-    ],
     "splash": {
       "image": "./assets/SplashScreen.png",
       "resizeMode": "cover",
