@@ -2,7 +2,7 @@ import { Image, Modal, StyleSheet, TouchableOpacity, View } from "react-native"
 import { Container } from "../Container/Style"
 import { useEffect, useRef, useState } from "react"
 import { BoxCamera, BoxTop, BtnCapture, BtnFlash, BtnFlip, BtnReturnPhoto, ConfigBtnCapture, LastPhoto } from "./Style"
-import { Camera, CameraType, FlashMode } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { FontAwesome6 } from '@expo/vector-icons';
 import * as MediaLibrary from 'expo-media-library'
 import * as ImagePicker from 'expo-image-picker'
@@ -17,9 +17,12 @@ export const CameraPhoto = ({ navigation, route }) => {
     const cameraRef = useRef(null)
     const [photo, setPhoto] = useState(null)
     const [openModal, setOpenModal] = useState(false)
-    const [tipoCamera, setTipoCamera] = useState(Camera.Constants.Type.front)
-    const [flashOn, setFlashOn] = useState(Camera.Constants.FlashMode.off)
+    const [tipoCamera, setTipoCamera] = useState('front')
+    const [flashOn, setFlashOn] = useState('off')
     const [latestPhoto, setLatestPhoto] = useState(null)
+
+    const [cameraPermission, requestCameraPermissions] = useCameraPermissions();
+    const [mediaPermission, requestMediaPermissions ] = MediaLibrary.usePermissions();
 
     
     async function CapturePhoto() {
@@ -38,8 +41,10 @@ export const CameraPhoto = ({ navigation, route }) => {
     
     async function GetLastPhoto() {
         const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
-        if (assets.length > 0) {
-            setLatestPhoto(assets[0].uri)
+        const infoAsset = await MediaLibrary.getAssetInfoAsync( assets[0].id )
+
+        if (infoAsset) {
+            setLatestPhoto(infoAsset.localUri)
         }
     }
     
@@ -57,9 +62,13 @@ export const CameraPhoto = ({ navigation, route }) => {
     
     useEffect(() => {
         (async () => {
-            const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
+            if(cameraPermission && !cameraPermission.granted){
+                await useCameraPermissions();
+            }
             
-            const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
+            if (MediaLibrary.PermissionStatus.DENIED) {
+                await requestMediaPermissions();
+            }
         })();
     }, [])
     
@@ -67,22 +76,22 @@ export const CameraPhoto = ({ navigation, route }) => {
         if (route.params) {
             GetLastPhoto()
         }
-    })
+    }, [])
     
     return (
         <Container>
-            <Camera
+            <CameraView
                 ref={cameraRef}
-                type={tipoCamera}
+                facing={tipoCamera}
                 style={styles.camera}
-                flashMode={flashOn}
+                flash={flashOn}
                 >
                 <BoxTop>
                     <BtnReturnPhoto onPress={() => { route.params.isProfile ? navigation.navigate("Profile") : navigation.navigate("SeePrescription") }}>
                         <EvilIcons name="close-o" size={70} color="white" />
                     </BtnReturnPhoto>
-                    <BtnFlash onPress={() => setFlashOn(flashOn == FlashMode.on ? FlashMode.off : FlashMode.on)}>
-                        <Ionicons name={flashOn === FlashMode.on ? "flash" : "flash-off"} size={42} color={flashOn === FlashMode.on ? "yellow" : "white"} />
+                    <BtnFlash onPress={() => setFlashOn(flashOn == 'on' ? 'off' : 'on')}>
+                        <Ionicons name={flashOn === 'on' ? "flash" : "flash-off"} size={42} color={flashOn === 'on' ? "yellow" : "white"} />
                     </BtnFlash>
                 </BoxTop>
                 <BoxCamera>
@@ -100,12 +109,12 @@ export const CameraPhoto = ({ navigation, route }) => {
                         <ConfigBtnCapture></ConfigBtnCapture>
                     </BtnCapture>
 
-                    <BtnFlip onPress={() => setTipoCamera(tipoCamera == CameraType.front ? CameraType.back : CameraType.front)}>
+                    <BtnFlip onPress={() => setTipoCamera(tipoCamera == 'front' ? 'back' : 'front')}>
                         <FontAwesome6 name="camera-rotate" size={45} color="white" />
                     </BtnFlip>
 
                 </BoxCamera>
-            </Camera>
+            </CameraView>
 
 
             <Modal

@@ -7,6 +7,7 @@ import { VerifyEmail } from './src/screens/VerifyEmail/VerifyEmail';
 import { ResetPwd } from './src/screens/ResetPwd/ResetPwd';
 import { Recover } from './src/screens/Recover/Recover';
 import { Profile } from './src/screens/Profile/Profile';
+import 'react-native-reanimated'
 
 const Stack = createNativeStackNavigator()
 
@@ -23,9 +24,7 @@ import { Main } from './src/screens/Main/Main';
 import { InsertRecord } from './src/screens/InsertRecord/InsertRecord';
 import { Camera, CameraPhoto } from './src/components/Camera/Camera';
 
-
 export default function App() {
-  ''
 
   const [fontsLoaded, fontsError] = useFonts({
     MontserratAlternates_600SemiBold,

@@ -146,17 +146,17 @@ export const Register = ({ navigation }) => {
             <ScrollView >
                 <Logo source={require('../../assets/logo.png')}></Logo>
 
-                <Title style={{alignSelf: 'center'}}>Criar conta</Title>
+                <Title style={{ alignSelf: 'center' }}>Criar conta</Title>
 
                 <TextRec>Insira seu endereço de e-mail, senha e dados pessoais para realizar seu cadastro.</TextRec>
 
-                <Input style={{alignSelf: 'center'}} placeholder={"Nome"} value={nome} onChangeText={setNome} />
-                <Input style={{alignSelf: 'center'}} placeholder={"Email"} value={email} onChangeText={setEmail} />
-                <Input style={{alignSelf: 'center'}} placeholder={"Senha"} value={senha} onChangeText={setSenha} secureTextEntry={true} />
-                <Input style={{alignSelf: 'center'}} placeholder={"Confirmar senha"} value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry={true} />
-                <Input style={{alignSelf: 'center'}} placeholder={"RG"} value={rg} onChangeText={setRG} keyboardType="numeric" />
-                <Input style={{alignSelf: 'center'}} {...cpfMasked} keyboardType="numeric" placeholder={"CPF"}/>
-                <Input style={{alignSelf: 'center'}} {...dataMasked} placeholder={"Data de nascimento"}/>
+                <Input style={{ alignSelf: 'center' }} placeholder={"Nome"} value={nome} onChangeText={setNome} />
+                <Input style={{ alignSelf: 'center' }} placeholder={"Email"} value={email} onChangeText={setEmail} />
+                <Input style={{ alignSelf: 'center' }} placeholder={"Senha"} value={senha} onChangeText={setSenha} secureTextEntry={true} />
+                <Input style={{ alignSelf: 'center' }} placeholder={"Confirmar senha"} value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry={true} />
+                <Input style={{ alignSelf: 'center' }} placeholder={"RG"} value={rg} onChangeText={setRG} keyboardType="numeric" />
+                <Input style={{ alignSelf: 'center' }} {...cpfMasked} placeholder={"CPF"} keyboardType="numeric" />
+                <Input style={{ alignSelf: 'center' }} {...dataMasked} placeholder={"Data de nascimento"} keyboardType="numeric" />
 
 
                 <Btn onPress={() => HandleRegister()}>
