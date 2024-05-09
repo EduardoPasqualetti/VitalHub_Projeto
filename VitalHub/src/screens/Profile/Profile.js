@@ -11,7 +11,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
 import moment from 'moment'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native"
+import { Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native"
+import { Masks, useMaskedInputProps } from 'react-native-mask-input';
 
 export const Profile = ({ navigation, route }) => {
     const [profileEdit, setProfileEdit] = useState(false)
@@ -31,7 +32,33 @@ export const Profile = ({ navigation, route }) => {
     const [numero, setNumero] = useState('')
     const [fotoUsuario, setFotoUsuario] = useState()
 
+    function validarCPF(cpf) {
+        cpf = cpf.replace(/\D/g, '');
+        if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+        var result = true;
+        [9, 10].forEach(function (j) {
+            var soma = 0, r;
+            cpf.split(/(?=)/).splice(0, j).forEach(function (e, i) {
+                soma += parseInt(e) * ((j + 2) - (i + 1));
+            });
+            r = soma % 11;
+            r = (r < 2) ? 0 : 11 - r;
+            if (r != cpf.substring(j, j + 1)) result = false;
+        });
+        return result;
+    }
 
+    const cpfMasked = useMaskedInputProps({
+        value: cpf,
+        onChangeText: setCpf,
+        mask: Masks.BRL_CPF
+    })
+
+    const dataMasked = useMaskedInputProps({
+        value: dtNasc,
+        onChangeText: setDtNasc,
+        mask: Masks.DATE_DDMMYYYY
+    });
 
     async function profileLoad() {
         const token = await UserDecodeToken();
@@ -84,15 +111,22 @@ export const Profile = ({ navigation, route }) => {
                     especialidade: especialidade
                 }, { headers: { Authorization: `Bearer ${token}` } });
             } else {
-                await api.put('/Pacientes', {
-                    rg: rg,
-                    cpf: cpf,
-                    dataNascimento: dtNasc,
-                    logradouro: logradouro,
-                    numero: numero,
-                    cep: cep,
-                    cidade: cidade
-                }, { headers: { Authorization: `Bearer ${token}` } });
+                console.log(validarCPF(cpf));
+                if (validarCPF(cpf) === true) {
+                    console.log('valido');
+                    await api.put('/Pacientes', {
+                        rg: rg,
+                        cpf: cpf,
+                        dataNascimento: dtNasc,
+                        logradouro: logradouro,
+                        numero: numero,
+                        cep: cep,
+                        cidade: cidade
+                    }, { headers: { Authorization: `Bearer ${token}` } });
+                } else
+                    Alert.alert("CPF invalido, nao foi possivel alteralo")
+                    profileLoad()
+
             }
 
             setProfileEdit(false);
@@ -121,6 +155,11 @@ export const Profile = ({ navigation, route }) => {
             console.log(error);
         }
 
+    }
+
+    async function CancelEdit() {
+        setProfileEdit(false)
+        profileLoad()
     }
 
     useEffect(() => {
@@ -240,17 +279,22 @@ export const Profile = ({ navigation, route }) => {
                             role == 'Paciente' ?
                                 <>
                                     <BoxInput
+                                    {...dataMasked}
                                         textLabel={'Data de nascimento:'}
+                                        editable={true}
+                                     
                                         placeholder={dtNasc ? formatarData(dtNasc) : null}
-
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
+                                        editable={true}
+                                        {...cpfMasked}
                                         placeholder={cpf}
                                     />
                                     <BoxInput
                                         textLabel={'RG'}
                                         placeholder={rg}
+                                        editable={true}
                                     />
                                 </>
                                 :
@@ -264,6 +308,7 @@ export const Profile = ({ navigation, route }) => {
                                     <BoxInput
                                         textLabel={'CRM'}
                                         placeholder={crm}
+                                        editable={true}
                                     />
                                 </>
                         }
@@ -305,7 +350,7 @@ export const Profile = ({ navigation, route }) => {
                             <ButtonTitle>SALVAR</ButtonTitle>
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => { setProfileEdit(false) }}>Cancelar Edição</LinkCancelMargin>
+                        <LinkCancelMargin onPress={() => CancelEdit()}>Cancelar Edição</LinkCancelMargin>
 
                     </ContainerSafeEdit>
                 </ScrollView>

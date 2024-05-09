@@ -50,12 +50,6 @@ export const Register = ({ navigation }) => {
         return result;
     }
 
-    function formatarData(data) {
-        const [dia, mes, ano] = data.split('/')
-
-        return `${dia}-${mes}-${ano}`
-    }
-
     const handleCallNotifications = async () => {
 
         const { status } = await Notifications.getPermissionsAsync()
@@ -102,7 +96,7 @@ export const Register = ({ navigation }) => {
             formData.append('IdTipoUsuario', idTipoUsuario);
             formData.append('Rg', rg);
             formData.append('Cpf', cpf);
-            formData.append('DataNascimento', formatarData(dtNasc));
+            formData.append('DataNascimento', dtNasc);
             try {
                 const response = await api.post("Pacientes", formData, {
                     headers: {
