@@ -40,9 +40,6 @@ export const Main = () => {
             }
           })}
           >
-
-            
-            
             
             <BottomTab.Screen
              name="Home"

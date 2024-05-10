@@ -36,10 +36,9 @@ export const ResetPwd = ({ navigation, route }) => {
                     {
                         senhaNova: senha
                     })
-                Alert.alert('Erro ao alterar senha')
                 handleCallNotifications()
             } catch (error) {
-                console.log(error);
+                Alert.alert('Erro ao alterar senha')
             }
             setSpinner(false)
         }
@@ -54,13 +53,9 @@ export const ResetPwd = ({ navigation, route }) => {
         const { status } = await Notifications.getPermissionsAsync()
 
         if (status !== "granted") {
-            alert("Voce nao permitiu as notificacoes estarem ativas")
+            Alert.alert("Voce nao permitiu as notificacoes estarem ativas")
             return
         }
-
-
-
-        // const token = await Notifications.getExpoPushTokenAsync()
 
         await Notifications.scheduleNotificationAsync({
             content: {
@@ -76,7 +71,6 @@ export const ResetPwd = ({ navigation, route }) => {
 
     return (
         <Container>
-
 
             <BtnReturn onPress={() => navigation.navigate("Login")}>
                 <IconClose source={require("../../assets/close.png")} />
@@ -102,7 +96,6 @@ export const ResetPwd = ({ navigation, route }) => {
                 {
                     spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>Confirmar nova senha</ButtonTitle>
                 }
-
             </Btn>
 
         </Container>

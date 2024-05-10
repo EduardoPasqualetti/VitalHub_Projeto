@@ -6,7 +6,7 @@ import { BtnProfile, SubtitleRecord, TitleCancelPhoto, TitleProfile } from "../.
 import { BtnCancelPhoto, BtnInsertPhoto } from "../../components/Button/Button"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinkCancelMargin } from "../../components/Link/Style"
-import { Image } from "react-native"
+import { Alert, Image } from "react-native"
 import { useEffect, useState } from "react"
 import { InputExame } from "../../components/Input/Style"
 import api from "../../service/Service"
@@ -46,20 +46,19 @@ export const SeePrescription = ({ navigation, route }) => {
             }
         }).then(response => {
             setDescricaoExame(descricaoExame + "/n" + response.data.descricao)
-            console.log('deu certo inserir exame');
         }).catch((error) => {
-            console.log(error + 'erro inserir exame');
+            Alert.alert("Erro ao inserir o exame");
         })
+        GetExame(dadosConsulta.consultaId)
     }
 
     async function GetExame(id) {
         try {
             const response = await api.get(`/Exame/BuscarPorIdConsulta?idConsulta=${id}`)
-            //setDescricaoExame(response.data[0].descricao)
             const descricoes = response.data.map(item => item.descricao);
             setDescricaoExame(descricoes.join("\n"));
         } catch (error) {
-            console.log(error + "erro listar exame");
+            Alert.alert("Erro ao recuperar dados do exame")
         }
     }
 
@@ -77,13 +76,11 @@ export const SeePrescription = ({ navigation, route }) => {
             })
             GetExame(route.params.consultaId)
         }
-
     }, [route.params])
 
     useEffect(() => {
         if (photoUri) {
             InserirExame()
-            GetExame(dadosConsulta.consultaId)
         }
     }, [photoUri])
 
@@ -133,8 +130,6 @@ export const SeePrescription = ({ navigation, route }) => {
                                         marginBottom={0}
                                     />
                             }
-
-
                             <ViewInsertPhoto>
 
                                 <BtnInsertPhoto onPress={() => { !photoUri ? onPressPhoto() : null }}>
@@ -146,9 +141,6 @@ export const SeePrescription = ({ navigation, route }) => {
                                 </BtnCancelPhoto>
 
                             </ViewInsertPhoto>
-
-
-
                             <Line></Line>
 
                             <InputExame>Descricao do Exame:</InputExame>

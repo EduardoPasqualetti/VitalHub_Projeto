@@ -25,6 +25,8 @@ export const Recover = ({ navigation }) => {
         else
             Alert.alert("Email invalido, informe-o corretamente")
     }
+
+    
     return (
         <Container>
 
@@ -44,7 +46,6 @@ export const Recover = ({ navigation }) => {
                 {
                     spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONTINUAR</ButtonTitle>
                 }
-
             </Btn>
 
         </Container>

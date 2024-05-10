@@ -1,4 +1,4 @@
-import { ActivityIndicator, Modal } from "react-native"
+import { ActivityIndicator, Alert, Modal } from "react-native"
 import { ButtonTitle, TextRec, Title } from "../Title/Style"
 import { Btn } from "../Button/Button"
 import { LinkCancel } from "../Link/Style"
@@ -34,7 +34,7 @@ export const ModalCancel = ({ idConsulta, visible, setShowModalCancel, ...rest }
     const { status } = await Notifications.getPermissionsAsync()
 
     if (status !== "granted") {
-      alert("Voce nao permitiu as notificacoes estarem ativas")
+      Alert.alert("Voce nao permitiu as notificacoes estarem ativas")
       return
     }
 
@@ -65,7 +65,7 @@ export const ModalCancel = ({ idConsulta, visible, setShowModalCancel, ...rest }
     try {
       await api.put(`/Consultas/Status?idConsulta=${consulta}&status=Cancelados`)
     } catch (error) {
-      console.log(error + 'erro ao atualizar status');
+      Alert.alert("Erro ao cancelar a consulta")
     }
     setSpinner(false)
   }
@@ -82,7 +82,6 @@ export const ModalCancel = ({ idConsulta, visible, setShowModalCancel, ...rest }
             {
               spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONFIRMAR</ButtonTitle>
             }
-
           </Btn>
 
           <LinkCancel onPress={() => setShowModalCancel(false)}>Cancelar</LinkCancel>

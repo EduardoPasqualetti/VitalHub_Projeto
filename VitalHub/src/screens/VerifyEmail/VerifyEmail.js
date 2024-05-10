@@ -14,7 +14,6 @@ export const VerifyEmail = ({ navigation, route }) => {
     const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
 
     async function focusNextInput(index) {
-        // Se o index é menor do que a quantidade de campo
         if (index < inputs.length - 1) {
             inputs[index + 1].current.focus()
         } else {
@@ -26,7 +25,7 @@ export const VerifyEmail = ({ navigation, route }) => {
         if (index > 0) {
             inputs[index - 1].current.focus()
         } else {
-
+            Alert.alert("Erro")
         }
     }
 
@@ -87,7 +86,6 @@ export const VerifyEmail = ({ navigation, route }) => {
                                     /// Verificar se o campo tem 1 caracter
                                     focusNextInput(index)
                                 }
-
                             }}
                         />
                     ))
@@ -98,7 +96,6 @@ export const VerifyEmail = ({ navigation, route }) => {
                 {
                     spinner ? ( <ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>ENTRAR</ButtonTitle>
                 }
-                
             </Btn>
 
             <LinkResend>Reenviar Código</LinkResend>

@@ -36,7 +36,6 @@ export const Header = ({onPress}) => {
           </DataUser>
         </BoxUser>
 
-        {/* material icons */}
         <MaterialIcons name="notifications" size={25} color="#fbfbfb" />
     
     </ContainerHeader>

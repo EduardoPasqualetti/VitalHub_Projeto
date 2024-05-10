@@ -48,17 +48,6 @@ export const Profile = ({ navigation, route }) => {
         return result;
     }
 
-    const cpfMasked = useMaskedInputProps({
-        value: cpf,
-        onChangeText: setCpf,
-        mask: Masks.BRL_CPF
-    })
-
-    const dataMasked = useMaskedInputProps({
-        value: dtNasc,
-        onChangeText: setDtNasc,
-        mask: Masks.DATE_DDMMYYYY
-    });
 
     async function profileLoad() {
         const token = await UserDecodeToken();
@@ -92,14 +81,13 @@ export const Profile = ({ navigation, route }) => {
             setCpf(response.data.cpf)
             setRg(response.data.rg)
         } catch (error) {
-            console.log(error);
+            Alert.alert("Erro ao buscar dados do usuario")
         }
 
     }
 
     async function updateUser() {
         const token = JSON.parse(await AsyncStorage.getItem('token')).token;
-
         try {
             if (role === 'Medico') {
                 await api.put('/Medicos', {
@@ -111,9 +99,7 @@ export const Profile = ({ navigation, route }) => {
                     especialidade: especialidade
                 }, { headers: { Authorization: `Bearer ${token}` } });
             } else {
-                console.log(validarCPF(cpf));
                 if (validarCPF(cpf) === true) {
-                    console.log('valido');
                     await api.put('/Pacientes', {
                         rg: rg,
                         cpf: cpf,
@@ -125,13 +111,12 @@ export const Profile = ({ navigation, route }) => {
                     }, { headers: { Authorization: `Bearer ${token}` } });
                 } else
                     Alert.alert("CPF invalido, nao foi possivel alteralo")
-                    profileLoad()
-
+                profileLoad()
             }
 
             setProfileEdit(false);
         } catch (error) {
-            console.log(error + " erro para atualizar usuario");
+            Alert.alert("Erro ao atualizar dados do usuario")
         }
     }
 
@@ -152,7 +137,7 @@ export const Profile = ({ navigation, route }) => {
                 setFotoUsuario(route.params.photoUri)
             })
         } catch (error) {
-            console.log(error);
+            Alert.alert('Erro ao atualizar foto de perfil do usuario')
         }
 
     }
@@ -173,15 +158,18 @@ export const Profile = ({ navigation, route }) => {
 
     }, [route.params, idUser])
 
-
     async function closeApp() {
         await AsyncStorage.removeItem('token')
         navigation.replace("Login")
     }
 
-    function formatarData(data) {
+    function formatarData(data, isValid) {
+        if (isValid == false) {
+            return moment(data).format('YYYY-MM-DD');
+        }
         return moment(data).format('DD/MM/YYYY');
     }
+    
 
     return (
         <KeyboardAvoidingView style={{ width: '100%', alignSelf: 'center' }} behavior={Platform.OS == 'ios' ? "padding" : "height"}
@@ -279,17 +267,16 @@ export const Profile = ({ navigation, route }) => {
                             role == 'Paciente' ?
                                 <>
                                     <BoxInput
-                                    {...dataMasked}
                                         textLabel={'Data de nascimento:'}
                                         editable={true}
-                                     
+                                        onChangeText={setDtNasc}
                                         placeholder={dtNasc ? formatarData(dtNasc) : null}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
                                         editable={true}
-                                        {...cpfMasked}
                                         placeholder={cpf}
+                                        onChangeText={setCpf}
                                     />
                                     <BoxInput
                                         textLabel={'RG'}

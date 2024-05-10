@@ -8,6 +8,7 @@ import { CardClinic } from "../../components/CardClinic/CardClinic"
 import { useEffect, useState } from "react"
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
 import api from "../../service/Service"
+import { Alert } from "react-native"
 
 export const SelectClinic = ({ navigation, route }) => {
 
@@ -17,9 +18,12 @@ export const SelectClinic = ({ navigation, route }) => {
 
 
     async function GetClinics() {
-        await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`)
-            .then(response => setClinicList(response.data))
-            .catch(error => console.log(error))
+        try {
+            const response = await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`)
+            setClinicList(response.data)
+        } catch (error) {
+            Alert.alert("Erro ao buscar dados das clinicas")
+        }
     }
 
     function onPressCancel() {
@@ -29,7 +33,7 @@ export const SelectClinic = ({ navigation, route }) => {
 
     function onPressContinue() {
         if (selectedClinic == null) {
-            alert("Necessario selecionar uma clinica")
+            Alert.alert("Necessario selecionar uma clinica")
         } else
             navigation.replace("SelectDoctor", {
                 agendamento: {
@@ -41,7 +45,7 @@ export const SelectClinic = ({ navigation, route }) => {
 
     useEffect(() => {
         GetClinics()
-    }, [route.params])
+    }, [route])
 
 
     return (
@@ -62,7 +66,6 @@ export const SelectClinic = ({ navigation, route }) => {
                             aval={item.Avaliacao}
                             date={item.Abertura}
                             isSelected={selectedClinic ? item.id == selectedClinic.clinicaId : false}
-
                         />
                     </BtnSelect>
 
@@ -80,7 +83,5 @@ export const SelectClinic = ({ navigation, route }) => {
             </Btn>
             <Cancel onPress={() => onPressCancel()}>Cancelar</Cancel>
         </Container>
-
-
     )
 }

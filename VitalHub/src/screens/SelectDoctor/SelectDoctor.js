@@ -7,6 +7,7 @@ import { ButtonTitle } from "../../components/Title/Style"
 import { BtnSelect, Cancel, Title } from "../SelectClinic/Style"
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
 import api from "../../service/Service"
+import { Alert } from "react-native"
 
 
 
@@ -18,9 +19,12 @@ export const SelectDoctor = ({ navigation, route }) => {
 
 
     async function GetDoctors() {
-        await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
-            .then(response => { setDoctorList(response.data) } )
-            .catch(error => { console.log(error) })
+        try {
+            const response = await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
+            setDoctorList(response.data)
+        } catch (error) {
+            Alert.alert("Erro ao buscar dados dos medicos")
+        }
     }
 
     function onPressCancel() {
@@ -30,7 +34,7 @@ export const SelectDoctor = ({ navigation, route }) => {
 
     function onPressContinue() {
         if (selectedDoctor == null) {
-            alert("Necessario selecionar um medico")
+            Alert.alert("Necessario selecionar um medico")
         } else
             navigation.replace("SelectDate", {
                 agendamento: {
@@ -63,7 +67,6 @@ export const SelectDoctor = ({ navigation, route }) => {
                             photo={item.idNavigation.foto}
                         />
                     </BtnSelect>
-
                 )}
             />}
 

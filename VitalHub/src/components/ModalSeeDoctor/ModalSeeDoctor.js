@@ -10,7 +10,6 @@ export const ModalSeeDoctor = ({ doctorInfo, navigation, visible, setShowModalSe
 
     function onPressHandle(){
         setShowModalSeeDoctor(false)
-
         navigation.navigate("SeeLocalAppointment", { clinicaid: doctorInfo.clinica });
     }
 

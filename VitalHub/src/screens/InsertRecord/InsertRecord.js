@@ -13,13 +13,6 @@ export const InsertRecord = ({ navigation, route }) => {
     const [diagnostico, setDiagnostico] = useState()
     const [receita, setReceita] = useState()
     const [spinner, setSpinner] = useState()
-    const [idConsulta, setIdConsulta] = useState()
-
-
-    useEffect(() => {
-        setIdConsulta(route.params.data.idConsulta);
-    }, [route.params])
-
 
     async function InsertRecord() {
         setSpinner(true)
@@ -91,19 +84,13 @@ export const InsertRecord = ({ navigation, route }) => {
                             {
                                 spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>SALVAR</ButtonTitle>
                             }
-
                         </Btn>
-
                         <LinkCancelMargin onPress={() => navigation.replace("Main")}>Cancelar</LinkCancelMargin>
                     </ContainerProfile>
                 </>
             ) : (
                 <></>
             )}
-
-
-
-
         </ContainerScroll>
     )
 }

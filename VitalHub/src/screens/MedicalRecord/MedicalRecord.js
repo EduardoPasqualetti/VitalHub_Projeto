@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { ContainerProfile, ContainerScroll, ViewFormat, ViewTitleRecord } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, EmailProfile, SubtitleRecord, TextRecord, TitleProfile } from "../../components/Title/Style"
-import { KeyboardAvoidingView, Platform, Text } from "react-native"
+import { Alert, KeyboardAvoidingView, Platform, Text } from "react-native"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn } from "../../components/Button/Button"
 import { LinkCancelMargin } from "../../components/Link/Style"
@@ -15,23 +15,15 @@ export const MedicalRecord = ({ navigation, route }) => {
     const [descricao, setDescricao] = useState('')
     const [diagnostico, setDiagnostico] = useState('')
     const [receita, setReceita] = useState('')
+    const [descricaoExame, setDescricaoExame] = useState('')
     const [idConsulta, setIdConsulta] = useState()
     const [spinner, setSpinner] = useState(false)
 
 
     useEffect(() => {
         setIdConsulta(route.params.idConsulta)
-        console.log(route.params);
         GetRecord(route.params.idConsulta)
     }, [route.params])
-
-    useEffect(() => {
-        if (recordEdit === false) {
-            console.log('effect dois');
-            GetRecord(idConsulta)
-        }
-
-    }, [recordEdit])
 
 
     const calculateAge = (dateOfBirth) => {
@@ -46,13 +38,15 @@ export const MedicalRecord = ({ navigation, route }) => {
     async function GetRecord(id) {
         try {
             const response = await api.get(`/Consultas/BuscarPorId?id=${id}`)
-            console.log('buscar');
             setDescricao(response.data.descricao)
             setDiagnostico(response.data.diagnostico)
             setReceita(response.data.receita.medicamento)
 
+            const exame = await api.get(`/Exame/BuscarPorIdConsulta?idConsulta=${id}`)
+            const descricoes = exame.data.map(item => item.descricao);
+            setDescricaoExame(descricoes.join("\n"));
         } catch (error) {
-
+            Alert.alert("erro ao buscar prontuario")
         }
     }
 
@@ -66,19 +60,25 @@ export const MedicalRecord = ({ navigation, route }) => {
                     descricao: descricao,
                     diagnostico: diagnostico
                 })
-                console.log("Prontuario atualizado com sucesso");
                 GetRecord(idConsulta)
             } catch (error) {
-                console.log(error);
+                Alert.alert("Erro ao atualizar o prontuario")
             }
             setSpinner(false)
         }
     }
 
-    async function OnPressHandle() {
-        UpdateRecord();
+    async function OnPressHandle(){
         setRecordEdit(true)
+        UpdateRecord()
     }
+
+    async function CancelEdit() {
+        setRecordEdit(true)
+        GetRecord(idConsulta)
+    }
+
+
 
     return (
         <ContainerScroll>
@@ -110,6 +110,12 @@ export const MedicalRecord = ({ navigation, route }) => {
                         <BoxInput
                             textLabel={'Prescrição médica'}
                             fieldValue={receita}
+                            fieldHeight={150}
+                            multiline={true}
+                        />
+                        <BoxInput
+                            textLabel={'Descricao do exame'}
+                            fieldValue={descricaoExame}
                             fieldHeight={150}
                             multiline={true}
                         />
@@ -154,7 +160,6 @@ export const MedicalRecord = ({ navigation, route }) => {
                             fieldValue={receita}
                             onChangeText={setReceita}
                             fieldHeight={150}
-                            editable={true}
                             multiline={true}
                         />
                         <Btn disabled={spinner} onPress={() => OnPressHandle()}>
@@ -163,7 +168,7 @@ export const MedicalRecord = ({ navigation, route }) => {
                             }
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => setRecordEdit(true)}>Cancelar Edição</LinkCancelMargin>
+                        <LinkCancelMargin onPress={() => CancelEdit()}>Cancelar Edição</LinkCancelMargin>
                     </ContainerProfile>
                 </>
             )}

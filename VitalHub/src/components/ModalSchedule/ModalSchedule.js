@@ -58,8 +58,7 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
 
               <SmallButton onPress={() => {
                 setAgendamento({
-                  ...agendamento, // Manter todas as informacoes presentes no state
-
+                  ...agendamento,
                   prioridadeId: '6F9EDEB1-2CC7-4681-BE83-A377C0F3C8DE',
                   prioridadeLabel: 'Urgencia'
                 })

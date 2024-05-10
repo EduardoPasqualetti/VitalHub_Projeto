@@ -56,9 +56,6 @@ export const Card = ({
                         <TextBold status={status}>{timeConsulta.split('T')[1].split(':')[0]}:{timeConsulta.split('T')[1].split(':')[1]}</TextBold>
                     </ClockCard>
 
-
-                    {/* valida e mostra o tipo de botao conforme a status */}
-
                     {
                         status === "Cancelados" ? (
                             <>

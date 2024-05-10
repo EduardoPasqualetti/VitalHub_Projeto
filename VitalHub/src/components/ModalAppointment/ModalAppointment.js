@@ -10,7 +10,7 @@ import { ImageModal } from "../Images/Style"
 export const ModalAppointment = ({ patientInfo, appointmentData, navigation, visible, setShowModalAppointment, ...rest }) => {
 
     const onPressHandler = () => {
-        navigation.navigate("InsertRecord", { data: patientInfo, idade: idade, });
+        navigation.navigate("InsertRecord", { data: patientInfo, idade: idade });
         setShowModalAppointment(false)
     };
 

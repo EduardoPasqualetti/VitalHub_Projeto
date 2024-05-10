@@ -6,7 +6,7 @@ import { Input } from "../../components/Input/Style"
 import { Btn } from "../../components/Button/Button"
 import { LinkCancel } from "../../components/Link/Style"
 import * as Notifications from "expo-notifications"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import api from "../../service/Service"
 import { Masks, useMaskedInputProps } from 'react-native-mask-input';
 
@@ -55,13 +55,9 @@ export const Register = ({ navigation }) => {
         const { status } = await Notifications.getPermissionsAsync()
 
         if (status !== "granted") {
-            alert("Voce nao permitiu as notificacoes estarem ativas")
+            Alert.alert("Voce nao permitiu as notificacoes estarem ativas")
             return
         }
-
-        0
-
-        // const token = await Notifications.getExpoPushTokenAsync()
 
         await Notifications.scheduleNotificationAsync({
             content: {
@@ -76,7 +72,6 @@ export const Register = ({ navigation }) => {
     }
 
     async function HandleRegister() {
-        console.log("entra no metodo cadastrar");
         if (
             senha === confirmarSenha &&
             senha !== '' &&
@@ -98,17 +93,15 @@ export const Register = ({ navigation }) => {
             formData.append('Cpf', cpf);
             formData.append('DataNascimento', dtNasc);
             try {
-                const response = await api.post("Pacientes", formData, {
+                await api.post("Pacientes", formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                console.log("feito a requisicao");
-                console.log(response);
-                navigation.replace("Login");
+                navigation.replace("Login", {email: email});
                 handleCallNotifications();
             } catch (error) {
-                console.log(error + 'erro no metodo');
+                Alert.alert("Erro ao cadastrar um novo usuario")
             }
             setSpinner(false)
         } else if (senha.length < 5) {
@@ -136,7 +129,7 @@ export const Register = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingView style={{ width: '100%', alignSelf: 'center' }} behavior={Platform.OS == 'ios' ? "padding" : "height"}
-            keyboardVerticalOffset={80}>
+            keyboardVerticalOffset={50}>
             <ScrollView >
                 <Logo source={require('../../assets/logo.png')}></Logo>
 
@@ -156,12 +149,9 @@ export const Register = ({ navigation }) => {
                 <Btn onPress={() => HandleRegister()}>
                     {
                         spinner ? (
-
                             <ActivityIndicator size="small" color="#ffffff" />
-
                         ) : <ButtonTitle>CADASTRAR</ButtonTitle>
                     }
-
                 </Btn>
 
                 <LinkCancel onPress={() => navigation.replace("Login")}>Cancelar</LinkCancel>

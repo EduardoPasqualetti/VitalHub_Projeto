@@ -19,8 +19,6 @@ export const UserDecodeToken = async () => {
         return null
     }
 
-    
-// Descriptografando
 const decode = jwtDecode(token)
 
 return{

@@ -10,12 +10,13 @@ import { ModalAppointment } from "../../components/ModalAppointment/ModalAppoint
 import { BtnCard, BtnSchedule } from "../../components/Button/Button"
 import { FontAwesome } from '@expo/vector-icons';
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
-import { Text, TouchableOpacity } from "react-native"
+import { Alert, Text, TouchableOpacity, View } from "react-native"
 import { ModalSeeDoctor } from "../../components/ModalSeeDoctor/ModalSeeDoctor"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import api from "../../service/Service"
 import moment from 'moment'
+import {  TextRec } from "../../components/Title/Style"
 
 export const Home = ({ navigation }) => {
 
@@ -34,6 +35,14 @@ export const Home = ({ navigation }) => {
     const [doctorInfo, setDoctorInfo] = useState(null)
     const [idConsulta, setIdConsulta] = useState(null)
 
+    const emptyComponent = () => {
+        return (
+            <View style={{ width: '100%', height: 100, alignItems: 'center' }}>
+                <TextRec>Nenhuma consulta {statusList} nesse dia</TextRec>
+            </View>
+        )
+    }
+
     async function profileLoad() {
         const token = await UserDecodeToken();
 
@@ -45,11 +54,11 @@ export const Home = ({ navigation }) => {
         const url = (userLogin.role === 'Medico' ? 'Medicos' : 'Pacientes')
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${userLogin.jti}`)
-        
+
             .then(response => {
                 setAppointments(response.data);
             }).catch(error => {
-                console.log(error);
+                Alert.alert("Erro ao buscar as consulta desse dia")
             })
     }
 
@@ -106,7 +115,7 @@ export const Home = ({ navigation }) => {
                 <ListComponent
                     data={appointments}
                     keyExtractor={(item) => item.id}
-
+                    ListEmptyComponent={emptyComponent}
                     renderItem={({ item }) => {
                         if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                             return (
@@ -170,6 +179,7 @@ export const Home = ({ navigation }) => {
                     <ListComponent
                         data={appointments}
                         keyExtractor={(item) => item.id}
+                        ListEmptyComponent={emptyComponent}
                         renderItem={({ item }) => {
                             if (statusList === 'agendada' && item.situacao.situacao === "Pendentes") {
                                 return (

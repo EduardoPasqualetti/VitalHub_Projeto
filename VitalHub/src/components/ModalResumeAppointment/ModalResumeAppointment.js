@@ -1,4 +1,4 @@
-import { ActivityIndicator, Modal } from "react-native"
+import { ActivityIndicator, Alert, Modal } from "react-native"
 import { ContentModal, TextData, TitleData, ViewData, ViewModal } from "./Style"
 import { ButtonTitle, SubTitleModalResume, TitleProfile } from "../Title/Style"
 import { LinkCancelMargin } from "../Link/Style"
@@ -8,6 +8,7 @@ import * as Notifications from "expo-notifications"
 import { useEffect, useState } from "react"
 import api from "../../service/Service"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
+import moment from 'moment'
 
 Notifications.requestPermissionsAsync()
 
@@ -32,13 +33,9 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
         const { status } = await Notifications.getPermissionsAsync()
 
         if (status !== "granted") {
-            alert("Voce nao permitiu as notificacoes estarem ativas")
+            Alert.alert("Voce nao permitiu as notificacoes estarem ativas")
             return
         }
-
-
-
-        // const token = await Notifications.getExpoPushTokenAsync()g
 
         await Notifications.scheduleNotificationAsync({
             content: {
@@ -77,7 +74,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
             }
 
         } catch (error) {
-            console.log(error + 'erro cadastrar consulta');
+            Alert.alert('Erro ao Cadastrar a consulta')
         }
         setSpinner(false)
     }
@@ -85,6 +82,10 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
     useEffect(() => {
         profileLoad()
     }, [])
+
+    function formatarData(data) {
+        return moment(data).format('DD/MM/YYYY');
+    }
 
     return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade" animationsOutTiming={0}>
@@ -96,7 +97,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
 
                     <ViewData fieldHeight={50}>
                         <TitleData>Data da consulta</TitleData>
-                        <TextData>{dataConsulta} {horarioConsulta}</TextData>
+                        <TextData>{formatarData(dataConsulta)} {horarioConsulta}</TextData>
                     </ViewData>
                     <ViewData fieldHeight={80}>
                         <TitleData>Médico(a) da consulta</TitleData>
@@ -115,9 +116,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
                         {
                             spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONFIRMAR</ButtonTitle>
                         }
-
                     </Btn>
-
                     <LinkCancelMargin onPress={() => setShowModalResume(false)}>Cancelar</LinkCancelMargin>
                 </ContentModal>
             </ViewModal>

@@ -12,9 +12,9 @@ import api from "../../service/Service"
 import asyncStorage from '@react-native-async-storage/async-storage'
 
 
-export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('eduardopasqualetti9@gmail.com')
-    const [senha, setSenha] = useState('eduardo123')
+export const Login = ({ navigation, route }) => {
+    const [email, setEmail] = useState('gustavopasqualetti@gmail.com')
+    const [senha, setSenha] = useState('gustavo123')
     const [loading, setLoading] = useState(false)
     const [emailError, setEmailError] = useState(false);
     const [senhaError, setSenhaError] = useState(false);
@@ -40,7 +40,6 @@ export const Login = ({ navigation }) => {
         } catch (error) {
             Alert.alert(`Email ou Senha invalido`)
         } finally {
-
             setLoading(false)
             setEmailError(false)
             setSenhaError(false)
@@ -49,7 +48,7 @@ export const Login = ({ navigation }) => {
     }
 
     function handleLogin() {
-        !loading ? Login() : alert(`Requisicao do Login ja feita, aguarde um retorno`)
+        !loading ? Login() : Alert.alert(`Requisicao do Login ja feita, aguarde um retorno`)
     }
 
 
@@ -66,7 +65,7 @@ export const Login = ({ navigation }) => {
 
                 <Input
                     placeholder={"Usuário ou E-mail"}
-                    value={email}
+                    value={route.params ? route.params.email : email}
                     onChangeText={(txt) => setEmail(txt)}
                 />
                 {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>} 

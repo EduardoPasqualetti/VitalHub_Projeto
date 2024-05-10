@@ -26,7 +26,6 @@ LocaleConfig.defaultLocale = 'br';
 export default function FullCalender({ selectedDate = '', setSelectedDate = null }) {
     const currentDate = new Date().toUTCString();
 
-    // Função para renderizar o cabeçalho do calendário com a fonte personalizada
     const renderHeader = (date) => {
         return (
             <TouchableOpacity>
@@ -47,7 +46,7 @@ export default function FullCalender({ selectedDate = '', setSelectedDate = null
                 calendarBackground: 'transparent'
                 
             }}
-            renderHeader={renderHeader} // Renderizar o cabeçalho personalizado
+            renderHeader={renderHeader} 
             dayComponent={({ date, state }) =>
                 <TouchableOpacity style={styles.button} onPress={() => {
                     if (state == 'disabled')

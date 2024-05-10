@@ -9,6 +9,7 @@ import { LinkCancelMargin } from "../../components/Link/Style";
 import InputSelect from "../../components/InputSelect/InputSelect";
 import { ModalResumeAppointment } from "../../components/ModalResumeAppointment/ModalResumeAppointment";
 import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule";
+import { Alert } from "react-native";
 
 export const SelectDate = ({ navigation, route }) => {
     const [selectedDate, setSelectedDate] = useState();
@@ -25,14 +26,13 @@ export const SelectDate = ({ navigation, route }) => {
 
     function onPressContinue() {
         if (selectedDate == null || selectedTime == null) {
-            alert("Necessario selecionar dia e horario da consulta")
+            Alert.alert("Necessario selecionar dia e horario da consulta")
         } else
             setShowModalResume(true)
     }
 
 
     return (
-
         <ContainerSelectDate>
             <Title>Selecionar Data</Title>
             <FullCalender

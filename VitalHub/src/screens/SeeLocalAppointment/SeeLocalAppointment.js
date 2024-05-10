@@ -6,12 +6,8 @@ import { SubTitleModalResume, TitleProfile } from "../../components/Title/Style"
 import { ActivityIndicator, StyleSheet, Text } from "react-native"
 import { mapskey } from "../../Utils/MapsKey/mapsApiKey"
 import {
-    requestForegroundPermissionsAsync, // solicita o acesso a localizacao
-    getCurrentPositionAsync,  //recebe a localizacao atual
-
-    watchPositionAsync,
-    LocationAccuracy,
-
+    requestForegroundPermissionsAsync,
+    getCurrentPositionAsync, 
 } from 'expo-location'
 import { useEffect, useRef, useState } from "react"
 import MapViewDirections from "react-native-maps-directions"
@@ -36,7 +32,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
 
         if (granted) {
             const captureLocation = await getCurrentPositionAsync()
-
             setInitialPosition(captureLocation)
         }
     }
