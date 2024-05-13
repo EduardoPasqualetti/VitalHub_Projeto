@@ -22,12 +22,8 @@ margin-top: 50px;
 `
 
 export const LinkCancel = styled(LinkCreate)`
-margin-top: 50px;
+margin-top: 30px;
 font-size: 18px;
 align-self: center;
-margin-bottom: 40px;
-`
-
-export const LinkCancelMargin = styled(LinkCancel)`
 margin-bottom: 40px;
 `

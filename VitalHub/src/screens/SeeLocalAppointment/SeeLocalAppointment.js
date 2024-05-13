@@ -1,7 +1,7 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Container, ContainerMap, ViewFormat, ViewLocal } from "../../components/Container/Style"
-import { LinkCancelMargin } from "../../components/Link/Style"
+import { LinkCancel } from "../../components/Link/Style"
 import { SubTitleModalResume, TitleProfile } from "../../components/Title/Style"
 import { ActivityIndicator, StyleSheet, Text } from "react-native"
 import { mapskey } from "../../Utils/MapsKey/mapsApiKey"
@@ -169,7 +169,7 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                     />
 
                 </ViewFormat>
-                <LinkCancelMargin onPress={() => { navigation.navigate("Main") }}>Voltar</LinkCancelMargin>
+                <LinkCancel onPress={() => { navigation.navigate("Main") }}>Voltar</LinkCancel>
             </ViewLocal>
         </Container>
     )

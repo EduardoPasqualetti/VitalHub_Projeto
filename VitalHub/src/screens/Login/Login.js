@@ -10,6 +10,20 @@ import { AntDesign } from '@expo/vector-icons';
 import { useState } from "react"
 import api from "../../service/Service"
 import asyncStorage from '@react-native-async-storage/async-storage'
+// import * as Notifications from "expo-notifications"
+
+// Notifications.requestPermissionsAsync()
+
+// Notifications.setNotificationHandler({
+//     handleNotification: async () => ({
+
+//         shouldShowAlert: true,
+
+//         shouldPlaySound: true,
+
+//         shouldSetBadge: false
+//     })
+// })
 
 
 export const Login = ({ navigation, route }) => {
@@ -19,11 +33,32 @@ export const Login = ({ navigation, route }) => {
     const [emailError, setEmailError] = useState(false);
     const [senhaError, setSenhaError] = useState(false);
 
+    // const handleCallNotifications = async () => {
+
+    //     const { status } = await Notifications.getPermissionsAsync()
+
+    //     if (status !== "granted") {
+    //         Alert.alert("Voce nao permitiu as notificacoes estarem ativas")
+    //         return
+    //     }
+    //     await Notifications.scheduleNotificationAsync({
+    //         content: {
+    //             title: "Login",
+    //             body: "Login realizado com sucesso",
+    //             sound: true
+    //         },
+    //         trigger: {
+    //             seconds: 1
+    //         }
+    //     })
+    // }
+
+
     async function Login() {
 
         if (!email || !senha) {
             setEmailError(!email)
-            setSenhaError(!senha) 
+            setSenhaError(!senha)
             return
         }
 
@@ -35,16 +70,16 @@ export const Login = ({ navigation, route }) => {
             })
 
             await asyncStorage.setItem('token', JSON.stringify(response.data))
-
             navigation.replace("Main")
+            // handleCallNotifications();
         } catch (error) {
             Alert.alert(`Email ou Senha invalido`)
-        } finally {
-            setLoading(false)
-            setEmailError(false)
-            setSenhaError(false)
         }
-        
+        setLoading(false)
+        setEmailError(false)
+        setSenhaError(false)
+
+
     }
 
     function handleLogin() {
@@ -68,14 +103,14 @@ export const Login = ({ navigation, route }) => {
                     value={route.params ? route.params.email : email}
                     onChangeText={(txt) => setEmail(txt)}
                 />
-                {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>} 
+                {emailError && <TextFieldNull>O Email é obrigatório</TextFieldNull>}
                 <Input
                     placeholder={"Senha"}
                     secureTextEntry={true}
                     value={senha}
                     onChangeText={(txt) => setSenha(txt)}
                 />
-                {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>} 
+                {senhaError && <TextFieldNull>A Senha é obrigatória</TextFieldNull>}
 
 
                 <LinkMedium onPress={() => navigation.replace("Recover")} >Esqueceu sua senha?</LinkMedium>

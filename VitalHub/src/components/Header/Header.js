@@ -31,7 +31,7 @@ export const Header = ({onPress}) => {
         <BoxUser onPress={onPress}>
           <ImageUser source={{uri: photo}} />
           <DataUser>
-            <TextDefault>Bem vindo !</TextDefault>
+            <TextDefault>Bem vindo !</TextDefault>  
             <NameUser>{name}</NameUser>
           </DataUser>
         </BoxUser>

@@ -19,7 +19,7 @@ export const ButtonTab = styled.TouchableHighlight`
 `
 
 export const ButtonText = styled.Text`
-  font-size: 13px;
+  font-size: 12px;
   font-family: 'MontserratAlternates_600SemiBold';
 
 

@@ -1,18 +1,18 @@
 
-import { ContainerImage, ContainerProfile, ContainerSafeEdit, ContainerScroll, ViewFormat, ViewTitle } from "../../components/Container/Style"
+import {  ContainerProfile, ContainerSafeEdit, ViewFormat, ViewTitle } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn, ButtonCamera } from "../../components/Button/Button"
 import { useEffect, useState } from "react"
-import { LinkCancelMargin } from "../../components/Link/Style"
+import { LinkCancel } from "../../components/Link/Style"
 import { UserDecodeToken } from "../../Utils/Auth/auth"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import api from "../../service/Service"
 import moment from 'moment'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native"
-import { Masks, useMaskedInputProps } from 'react-native-mask-input';
+
 
 export const Profile = ({ navigation, route }) => {
     const [profileEdit, setProfileEdit] = useState(false)
@@ -246,7 +246,7 @@ export const Profile = ({ navigation, route }) => {
                             <ButtonTitle>SAIR DO APP</ButtonTitle>
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => navigation.replace("Main")}>Voltar</LinkCancelMargin>
+                        <LinkCancel onPress={() => navigation.replace("Main")}>Voltar</LinkCancel>
                     </ContainerProfile>
                 </ScrollView>
             ) : (
@@ -337,7 +337,7 @@ export const Profile = ({ navigation, route }) => {
                             <ButtonTitle>SALVAR</ButtonTitle>
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => CancelEdit()}>Cancelar Edição</LinkCancelMargin>
+                        <LinkCancel onPress={() => CancelEdit()}>Cancelar Edição</LinkCancel>
 
                     </ContainerSafeEdit>
                 </ScrollView>

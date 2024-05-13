@@ -3,8 +3,8 @@ import { ButtonTitle, SubtitleRecord, TitleProfile } from "../Title/Style"
 import { ContentModal, ViewModal } from "./Style"
 import { ImageModal } from "../Images/Style"
 import { ViewDataDoctor, ViewTitleRecord } from "../Container/Style"
-import { Btn, BtnModalSeeDoctor } from "../Button/Button"
-import { LinkCancelMargin } from "../Link/Style"
+import { BtnModalSeeDoctor } from "../Button/Button"
+import { LinkCancel } from "../Link/Style"
 
 export const ModalSeeDoctor = ({ doctorInfo, navigation, visible, setShowModalSeeDoctor, ...rest }) => {
 
@@ -32,7 +32,7 @@ export const ModalSeeDoctor = ({ doctorInfo, navigation, visible, setShowModalSe
                                 <ButtonTitle>VER LOCAL DA CONSULTA</ButtonTitle>
                             </BtnModalSeeDoctor>
 
-                            <LinkCancelMargin onPress={() => setShowModalSeeDoctor(false)}>Cancelar</LinkCancelMargin>
+                            <LinkCancel onPress={() => setShowModalSeeDoctor(false)}>Cancelar</LinkCancel>
                         </ContentModal>
                     </ViewModal>
                 ) : (

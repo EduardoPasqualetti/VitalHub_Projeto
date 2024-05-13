@@ -13,32 +13,31 @@ border: ${props => props.isSelected ? '3px solid #496BBA' : 'none'};
 `
 
 export const View1 = styled.View`
-width: 62%;
+width: 72%;
 align-items: flex-start;
 gap: 18px;
 padding-left: 15px;
 `
 export const View2 = styled.View`
-width: 40%;
+width: 28%;
 align-items: flex-end;
-padding-right: 19px;
+padding-right: 10px;
 gap: 17px;
 `
 
 export const ViewStar = styled.View`
 flex-direction: row;
 gap: 5px;
-height: 20px;
+height: 30px;
 align-items: center;
 `
 export const ViewCalendar = styled.View`
 flex-direction: row;
 gap: 5px;
 height: 22px;   
-width: 100px;
+width: 100%;
 align-items: center;
 background-color: #E8FCFD;
-gap: 10px;
 justify-content: center;
 `
 
@@ -48,7 +47,7 @@ font-size: 16px;
 `
 export const TextLoc = styled.TextInput` 
 font-family: 'Quicksand_600SemiBold';
-font-size: 16px;
+font-size: 15px;
 `   
 export const TextAv = styled.Text`
 font-family: 'Quicksand_600SemiBold';
@@ -58,5 +57,5 @@ color: #F9A620;
 export const TextCalendar = styled.Text`
 font-family: 'Quicksand_600SemiBold';
 color: #49B3BA;
-font-size: 15px;
+font-size: 14px;
 `

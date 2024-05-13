@@ -22,62 +22,64 @@ export const CameraPhoto = ({ navigation, route }) => {
     const [latestPhoto, setLatestPhoto] = useState(null)
 
     const [cameraPermission, requestCameraPermissions] = useCameraPermissions();
-    const [mediaPermission, requestMediaPermissions ] = MediaLibrary.usePermissions();
+    const [mediaPermission, requestMediaPermissions] = MediaLibrary.usePermissions();
 
-    
+
     async function CapturePhoto() {
         if (cameraRef) {
-            const photo = await cameraRef.current.takePictureAsync({quality: 1})
+            const photo = await cameraRef.current.takePictureAsync({ quality: 1 })
             setPhoto(photo.uri)
             setOpenModal(true)
         }
     }
-    
+
     async function onPressToSend() {
         await setOpenModal(false)
         route.params.isProfile ? navigation.navigate("Profile", { photoUri: photo }) : navigation.navigate("SeePrescription", { photoUri: photo })
-        
+
     }
-    
+
     async function GetLastPhoto() {
         const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
-        const infoAsset = await MediaLibrary.getAssetInfoAsync( assets[0].id )
 
-        if (infoAsset) {
-            setLatestPhoto(infoAsset.localUri)
+
+        if (assets.length > 0) {
+            const infoAssets = await MediaLibrary.getAssetInfoAsync(assets[0].id)
+
+            setLatestPhoto(infoAssets.localUri)
         }
     }
-    
+
     async function SelectImageGallery() {
         const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes : ImagePicker.MediaTypeOptions.Images,
-            quality : 1
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1
         });
-        
+
         if (!result.canceled) {
             setPhoto(result.assets[0].uri)
             setOpenModal(true)
         }
     }
-    
+
     useEffect(() => {
         (async () => {
-            if(cameraPermission && !cameraPermission.granted){
+            if (cameraPermission && !cameraPermission.granted) {
                 await useCameraPermissions();
             }
-            
+
             if (MediaLibrary.PermissionStatus.DENIED) {
                 await requestMediaPermissions();
             }
         })();
     }, [])
-    
+
     useEffect(() => {
         if (route.params) {
             GetLastPhoto()
         }
     }, [])
-    
+
     return (
         <Container>
             <CameraView
@@ -85,7 +87,7 @@ export const CameraPhoto = ({ navigation, route }) => {
                 facing={tipoCamera}
                 style={styles.camera}
                 flash={flashOn}
-                >
+            >
                 <BoxTop>
                     <BtnReturnPhoto onPress={() => { route.params.isProfile ? navigation.navigate("Profile") : navigation.navigate("SeePrescription") }}>
                         <EvilIcons name="close-o" size={70} color="white" />
@@ -96,12 +98,12 @@ export const CameraPhoto = ({ navigation, route }) => {
                 </BoxTop>
                 <BoxCamera>
                     <TouchableOpacity onPress={() => SelectImageGallery()}>
-                    {
-                        latestPhoto != null ?
-                            (
-                                <LastPhoto source={{ uri: latestPhoto }} />
-                            ) : null
-                    }
+                        {
+                            latestPhoto != null ?
+                                (
+                                    <LastPhoto source={{ uri: latestPhoto }} />
+                                ) : null
+                        }
                     </TouchableOpacity>
 
 
