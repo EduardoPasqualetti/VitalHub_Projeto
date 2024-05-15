@@ -36,6 +36,7 @@ export const ResetPwd = ({ navigation, route }) => {
                     {
                         senhaNova: senha
                     })
+                navigation.navigate("Login")
                 handleCallNotifications()
             } catch (error) {
                 Alert.alert('Erro ao alterar senha')

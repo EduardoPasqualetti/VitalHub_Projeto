@@ -4,6 +4,7 @@ import { ButtonTitle, LabelSchedule, Title, TitleProfile } from "../Title/Style"
 import { useEffect, useState } from "react"
 import { LinkCancel } from "../Link/Style"
 import { SelectList } from "react-native-dropdown-select-list"
+import styled from "styled-components"
 
 export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, city, ...rest }) => {
 
@@ -92,7 +93,6 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, city,
               notFoundText='Nenhum dado encontrado'
               data={dePara(city)}
               save="endereco.cidade"
-              
             />
 
 

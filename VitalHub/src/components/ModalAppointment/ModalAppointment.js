@@ -32,7 +32,7 @@ export const ModalAppointment = ({ patientInfo, appointmentData, navigation, vis
                             <TitleProfile>{patientInfo.name}</TitleProfile>
 
                             <ViewData>
-                                <TextAge>{idade}</TextAge>
+                                <TextAge>{idade} anos</TextAge>
                                 <TextEmail>{patientInfo.email}</TextEmail>
                             </ViewData>
 

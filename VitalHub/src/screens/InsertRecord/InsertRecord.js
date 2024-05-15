@@ -1,21 +1,24 @@
-import { useEffect, useState } from "react"
-import { BoxInput } from "../../components/BoxInput/Index"
-import { Btn } from "../../components/Button/Button"
-import { ContainerProfile, ContainerScroll, ViewTitleRecord } from "../../components/Container/Style"
-import { ProfileImage } from "../../components/Images/Style"
-import { LinkCancelMargin } from "../../components/Link/Style"
-import { ButtonTitle, SubtitleRecord, TitleProfile } from "../../components/Title/Style"
-import api from "../../service/Service"
-import { ActivityIndicator, Alert } from "react-native"
+import {useState} from 'react'
+import { BoxInput } from '../../components/BoxInput/Index'
+import { Btn } from '../../components/Button/Button'
+import { ContainerProfile, ContainerScroll, ViewTitleRecord } from '../../components/Container/Style'
+import { ProfileImage } from '../../components/Images/Style'
+import { LinkCancel } from '../../components/Link/Style'
+import { ButtonTitle, SubtitleRecord, TitleProfile } from '../../components/Title/Style'
+import api from '../../service/Service'
+import { ActivityIndicator, Alert } from 'react-native'
 
 export const InsertRecord = ({ navigation, route }) => {
-    const [descricao, setDescricao] = useState()
+    const [descricao, ] = useState()
     const [diagnostico, setDiagnostico] = useState()
     const [receita, setReceita] = useState()
     const [spinner, setSpinner] = useState()
 
     async function InsertRecord() {
         setSpinner(true)
+        if (descricao && diagnostico && receita) {
+            
+        }
         try {
             response = await api.put('/Consultas/Prontuario', {
                 consultaId: route.params.data.idConsulta,
@@ -85,7 +88,7 @@ export const InsertRecord = ({ navigation, route }) => {
                                 spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>SALVAR</ButtonTitle>
                             }
                         </Btn>
-                        <LinkCancelMargin onPress={() => navigation.replace("Main")}>Cancelar</LinkCancelMargin>
+                        <LinkCancel onPress={() => navigation.replace("Main")}>Cancelar</LinkCancel>
                     </ContainerProfile>
                 </>
             ) : (

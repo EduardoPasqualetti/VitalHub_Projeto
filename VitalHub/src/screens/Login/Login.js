@@ -12,9 +12,9 @@ import api from "../../service/Service"
 import asyncStorage from '@react-native-async-storage/async-storage'
 
 
-export const Login = ({ navigation, route }) => {
-    const [email, setEmail] = useState('rubens@gmail.com')
-    const [senha, setSenha] = useState('rubens123')
+export const Login = ({ navigation }) => {
+    const [email, setEmail] = useState('gustavopasqualetti@gmail.com')
+    const [senha, setSenha] = useState('gustavo123')
     const [loading, setLoading] = useState(false)
     const [emailError, setEmailError] = useState(false);
     const [senhaError, setSenhaError] = useState(false);

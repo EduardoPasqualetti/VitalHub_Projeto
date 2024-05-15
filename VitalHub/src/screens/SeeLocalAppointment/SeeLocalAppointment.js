@@ -7,7 +7,7 @@ import { ActivityIndicator, StyleSheet, Text } from "react-native"
 import { mapskey } from "../../Utils/MapsKey/mapsApiKey"
 import {
     requestForegroundPermissionsAsync,
-    getCurrentPositionAsync, 
+    getCurrentPositionAsync,
 } from 'expo-location'
 import { useEffect, useRef, useState } from "react"
 import MapViewDirections from "react-native-maps-directions"
@@ -36,13 +36,6 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
         }
     }
 
-    useEffect(() => {
-        CapturarLocalizacao()
-    }, [4000])
-
-    useEffect(() => {
-        RecarregarVizualizacaoMapa()
-    }, [initialPosition])
 
     async function RecarregarVizualizacaoMapa() {
         if (mapReference.current && initialPosition) {
@@ -57,6 +50,15 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
             )
         }
     }
+
+    useEffect(() => {
+        CapturarLocalizacao()
+    }, [])
+
+    useEffect(() => {
+        RecarregarVizualizacaoMapa()
+    }, [initialPosition])
+
 
     useEffect(() => {
         if (route.params) {
@@ -80,97 +82,100 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
         } catch (error) {
             console.log(error);
         }
-        
+
     }
 
 
 
     return (
         <Container>
-            <ContainerMap>
-                {
-                    initialPosition != null
 
-                        ?
-                        <MapView
-                            initialRegion={{
-                                latitude: initialPosition.coords.latitude,
-                                longitude: initialPosition.coords.longitude,
-                                longitudeDelta: 0.005,
-                                latitudeDelta: 0.005,
+            {
+                initialPosition != null
 
-                            }}
-                            customMapStyle={grayMapStyle}
-                            provider={PROVIDER_GOOGLE}
-                            style={styles.map}
-                        >
-                            <Marker
-                                coordinate={{
+                    ?
+                    <>
+                        <ContainerMap>
+                            <MapView
+                                ref={mapReference}
+                                initialRegion={{
                                     latitude: initialPosition.coords.latitude,
                                     longitude: initialPosition.coords.longitude,
                                     longitudeDelta: 0.005,
                                     latitudeDelta: 0.005,
+
                                 }}
-                                title='Voce esta aqui'
-                                description='Marcador que representa sua localizacao'
-                                pinColor={'blue'}
+                                customMapStyle={grayMapStyle}
+                                style={styles.map}
+                            >
+                                <Marker
+                                    coordinate={{
+                                        latitude: initialPosition.coords.latitude,
+                                        longitude: initialPosition.coords.longitude,
+                                        longitudeDelta: 0.005,
+                                        latitudeDelta: 0.005,
+                                    }}
+                                    title='Voce esta aqui'
+                                    description='Marcador que representa sua localizacao'
+                                    pinColor={'blue'}
+                                />
+                                <MapViewDirections
+                                    origin={initialPosition.coords}
+                                    destination={{
+                                        latitude: finalPosition.latitude,
+                                        longitude: finalPosition.longitude,
+                                        longitudeDelta: 0.005,
+                                        latitudeDelta: 0.005,
+                                    }}
+                                    apikey={mapskey}
+                                    strokeWidth={5}
+                                    strokeColor='#496BBA'
+                                />
+                                <Marker
+                                    coordinate={{
+                                        latitude: finalPosition.latitude,
+                                        longitude: finalPosition.longitude,
+                                        longitudeDelta: 0.005,
+                                        latitudeDelta: 0.005,
+                                    }}
+                                    title='Clinica Aqui'
+                                    description='Marcador que representa localizacao da clinica'
+                                    pinColor={'red'}
+                                />
+                            </MapView>
+                        </ContainerMap>
+                        <ViewLocal>
+                            <TitleProfile>{nome}</TitleProfile>
+                            <SubTitleModalResume>{cidade}</SubTitleModalResume>
+
+                            <BoxInput
+                                textLabel={'Endereco'}
+                                fieldValue={logradouro}
                             />
-                            <MapViewDirections
-                                origin={initialPosition.coords}
-                                destination={{
-                                    latitude: finalPosition.latitude,
-                                    longitude: finalPosition.longitude,
-                                    longitudeDelta: 0.005,
-                                    latitudeDelta: 0.005,
-                                }}
-                                apikey={mapskey}
-                                strokeWidth={5}
-                                strokeColor='#496BBA'
-                            />
-                            <Marker
-                                coordinate={{
-                                    latitude: finalPosition.latitude,
-                                    longitude: finalPosition.longitude,
-                                    longitudeDelta: 0.005,
-                                    latitudeDelta: 0.005,
-                                }}
-                                title='Clinica Aqui'
-                                description='Marcador que representa localizacao da clinica'
-                                pinColor={'red'}
-                            />
-                        </MapView>
-                        :
-                        <>
-                            <Text>Localizacao nao Encontrada</Text>
+                            <ViewFormat>
 
-                            <ActivityIndicator size="small" color="#ffffff" />
-                        </>
-                }
-            </ContainerMap>
-            <ViewLocal>
-                <TitleProfile>{nome}</TitleProfile>
-                <SubTitleModalResume>{cidade}</SubTitleModalResume>
+                                <BoxInput
+                                    textLabel={'Número'}
+                                    fieldValue={numero}
+                                    fieldWidth={45}
+                                />
+                                <BoxInput
+                                    textLabel={'Cidade'}
+                                    fieldValue={cidade}
+                                    fieldWidth={46}
+                                />
 
-                <BoxInput
-                    textLabel={'Endereco'}
-                    fieldValue={logradouro}
-                />
-                <ViewFormat>
+                            </ViewFormat>
+                            <LinkCancel onPress={() => { navigation.navigate("Main") }}>Voltar</LinkCancel>
+                        </ViewLocal>
+                    </>
+                    :
+                    <Container>
+                        <Text>Localizacao nao Encontrada</Text>
 
-                    <BoxInput
-                        textLabel={'Número'}
-                        fieldValue={numero}
-                        fieldWidth={45}
-                    />
-                    <BoxInput
-                        textLabel={'Cidade'}
-                        fieldValue={cidade}
-                        fieldWidth={46}
-                    />
-
-                </ViewFormat>
-                <LinkCancel onPress={() => { navigation.navigate("Main") }}>Voltar</LinkCancel>
-            </ViewLocal>
+                        <ActivityIndicator size="small" color="#ffffff" />
+                    </Container>
+            }
         </Container>
     )
 }

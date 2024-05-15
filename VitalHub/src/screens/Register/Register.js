@@ -98,20 +98,28 @@ export const Register = ({ navigation }) => {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                navigation.replace("Login", {email: email});
+                navigation.replace("Login", { email: email });
                 handleCallNotifications();
             } catch (error) {
                 Alert.alert("Erro ao cadastrar um novo usuario")
             }
             setSpinner(false)
+        } else if (
+            !senha ||
+            !confirmarSenha ||
+            !nome ||
+            !email ||
+            !cpf ||
+            !rg ||
+            !dtNasc) {
+                
+            Alert.alert("Preencha todas as informações para criar sua conta")
         } else if (senha.length < 5) {
             Alert.alert("Senha muito pequena!")
         } else if (senha !== confirmarSenha) {
             Alert.alert("Senha de confirmação não corresponde à senha")
         } else if (!validarCPF(cpf)) {
             Alert.alert("CPF inválido");
-        } else {
-            Alert.alert("Preencha todas as informações para criar sua conta")
         }
     }
 

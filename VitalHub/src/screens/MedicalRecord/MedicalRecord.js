@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { ContainerProfile, ContainerScroll, ViewFormat, ViewTitleRecord } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
-import { ButtonTitle, EmailProfile, SubtitleRecord, TextRecord, TitleProfile } from "../../components/Title/Style"
-import { Alert, KeyboardAvoidingView, Platform, Text } from "react-native"
+import { ButtonTitle, SubtitleRecord, TitleProfile } from "../../components/Title/Style"
+import { Alert } from "react-native"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Btn } from "../../components/Button/Button"
-import { LinkCancelMargin } from "../../components/Link/Style"
+import { LinkCancel } from "../../components/Link/Style"
 import moment from 'moment'
 import api from "../../service/Service"
 
@@ -51,7 +51,7 @@ export const MedicalRecord = ({ navigation, route }) => {
     }
 
     async function UpdateRecord() {
-        if (descricao != '' && diagnostico != '' && receita != '') {
+        if (descricao && diagnostico && receita) {
             setSpinner(true)
             try {
                 await api.put('/Consultas/Prontuario', {
@@ -66,9 +66,11 @@ export const MedicalRecord = ({ navigation, route }) => {
             }
             setSpinner(false)
         }
+        Alert.alert('Preencha os campos vazios')
+
     }
 
-    async function OnPressHandle(){
+    async function OnPressHandle() {
         setRecordEdit(true)
         UpdateRecord()
     }
@@ -123,7 +125,7 @@ export const MedicalRecord = ({ navigation, route }) => {
                             <ButtonTitle>EDITAR</ButtonTitle>
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => { navigation.replace("Main") }}>Cancelar</LinkCancelMargin>
+                        <LinkCancel onPress={() => { navigation.replace("Main") }}>Cancelar</LinkCancel>
                     </ContainerProfile>
 
                 </>
@@ -168,7 +170,7 @@ export const MedicalRecord = ({ navigation, route }) => {
                             }
                         </Btn>
 
-                        <LinkCancelMargin onPress={() => CancelEdit()}>Cancelar Edição</LinkCancelMargin>
+                        <LinkCancel onPress={() => CancelEdit()}>Cancelar Edição</LinkCancel>
                     </ContainerProfile>
                 </>
             )}
