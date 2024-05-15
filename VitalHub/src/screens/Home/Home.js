@@ -33,6 +33,7 @@ export const Home = ({ navigation }) => {
     const [patientInfo, setPatientInfo] = useState(null);
     const [doctorInfo, setDoctorInfo] = useState(null)
     const [idConsulta, setIdConsulta] = useState(null)
+    const [city, setCity] = useState(null);
 
     const emptyComponent = () => {
         return (
@@ -61,8 +62,18 @@ export const Home = ({ navigation }) => {
             })
     }
 
+    async function GetCity() {
+        try {
+          response = await api.get(`Clinica/ListarClinicasEndereco`)
+          setCity(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
     useEffect(() => {
         profileLoad();
+        GetCity()
     }, [])
 
     useEffect(() => {
@@ -252,6 +263,7 @@ export const Home = ({ navigation }) => {
                         visible={showModalSchedule}
                         navigation={navigation}
                         setShowModalSchedule={setShowModalSchedule}
+                        city={city}
                     />
 
                     <ModalSeeDoctor

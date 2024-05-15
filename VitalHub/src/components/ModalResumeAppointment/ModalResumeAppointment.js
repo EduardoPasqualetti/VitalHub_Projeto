@@ -1,14 +1,14 @@
-import { ActivityIndicator, Alert, Modal } from "react-native"
-import { ContentModal, TextData, TitleData, ViewData, ViewModal } from "./Style"
-import { ButtonTitle, SubTitleModalResume, TitleProfile } from "../Title/Style"
-import { LinkCancelMargin } from "../Link/Style"
-import { Btn } from "../Button/Button"
 
-import * as Notifications from "expo-notifications"
-import { useEffect, useState } from "react"
-import api from "../../service/Service"
-import { UserDecodeToken } from "../../Utils/Auth/auth"
 import moment from 'moment'
+import { ActivityIndicator, Alert,Modal } from 'react-native'
+import { ContentModal, TextData, TitleData, ViewData, ViewModal} from "./Style"
+import {ButtonTitle, SubTitleModalResume, TitleProfile} from "../Title/Style"
+import {LinkCancel} from "../Link/Style"
+import { Btn } from "../Button/Button"
+import * as Notifications from 'expo-notifications'
+import { useEffect,useState } from 'react'
+import api from "../../service/Service"
+import {UserDecodeToken} from "../../Utils/Auth/auth"
 
 Notifications.requestPermissionsAsync()
 
@@ -53,7 +53,6 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
         const token = await UserDecodeToken();
 
         setIdPaciente(token.jti)
-        console.log(token.jti);
     }
 
     async function onPressConfirm() {
@@ -117,7 +116,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
                             spinner ? (<ActivityIndicator size="small" color="#ffffff" />) : <ButtonTitle>CONFIRMAR</ButtonTitle>
                         }
                     </Btn>
-                    <LinkCancelMargin onPress={() => setShowModalResume(false)}>Cancelar</LinkCancelMargin>
+                    <LinkCancel onPress={() => setShowModalResume(false)}>Cancelar</LinkCancel>
                 </ContentModal>
             </ViewModal>
         </Modal>

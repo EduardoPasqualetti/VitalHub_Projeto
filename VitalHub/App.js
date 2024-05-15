@@ -22,7 +22,8 @@ import { SeeLocalAppointment } from './src/screens/SeeLocalAppointment/SeeLocalA
 import { SeePrescription } from './src/screens/SeePrescription/SeePrescription';
 import { Main } from './src/screens/Main/Main';
 import { InsertRecord } from './src/screens/InsertRecord/InsertRecord';
-import { Camera, CameraPhoto } from './src/components/Camera/Camera';
+import { CameraPhoto } from './src/components/Camera/Camera';
+import { LogBox } from 'react-native';
 
 export default function App() {
 
@@ -39,6 +40,10 @@ export default function App() {
   if (!fontsLoaded && !fontsError) {
     return null
   }
+
+  LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+  LogBox.ignoreAllLogs();//Ignore all log notifications
+
 
   return (
 

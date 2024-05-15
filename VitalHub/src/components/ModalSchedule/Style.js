@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components"
+import { Btn } from "../Button/Button"
 
 export const ViewModal = styled.View`
 flex: 1;
@@ -49,6 +50,10 @@ color: #34898F;
 font-size: 15px;
 `
 
+export const BtnModal = styled(Btn)`
+    margin-top: 100px
+`
+
 
 export const InputAppointment = styled.TextInput.attrs({
     placeholderTextColor: '#34898F'
@@ -62,6 +67,8 @@ justify-content: center;
 font-family: 'MontserratAlternates_600SemiBold';
 font-size: 15px
 `
+
+
 
 export const OptionsContainer = styled.View`
 gap: 5px;

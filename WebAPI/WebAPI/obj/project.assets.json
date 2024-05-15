@@ -8181,11 +8181,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\49802002810\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\WebAPI.csproj",
+      "projectUniqueName": "C:\\Users\\49802002810\\Desktop\\VitalHub_Projeto_novo\\WebAPI\\WebAPI\\WebAPI.csproj",
       "projectName": "WebAPI",
-      "projectPath": "C:\\Users\\49802002810\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\WebAPI.csproj",
+      "projectPath": "C:\\Users\\49802002810\\Desktop\\VitalHub_Projeto_novo\\WebAPI\\WebAPI\\WebAPI.csproj",
       "packagesPath": "C:\\Users\\49802002810\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\49802002810\\Desktop\\VitalHub_Projeto\\WebAPI\\WebAPI\\obj\\",
+      "outputPath": "C:\\Users\\49802002810\\Desktop\\VitalHub_Projeto_novo\\WebAPI\\WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\49802002810\\AppData\\Roaming\\NuGet\\NuGet.Config",

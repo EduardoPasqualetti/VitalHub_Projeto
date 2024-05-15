@@ -110,7 +110,7 @@ export const Profile = ({ navigation, route }) => {
                         cidade: cidade
                     }, { headers: { Authorization: `Bearer ${token}` } });
                 } else
-                    Alert.alert("CPF invalido, nao foi possivel alteralo")
+                    Alert.alert("CPF invalido, nao foi possivel altera-lo")
                 profileLoad()
             }
 

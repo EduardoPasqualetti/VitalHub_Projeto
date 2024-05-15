@@ -1,22 +1,19 @@
 import { Modal, Text } from "react-native"
-import { BlueTitle, ContentModal, RowContainerButton, TypeButton, SmallButton, TypeAppointment, ViewModal, InputAppointment } from "./Style"
+import { BlueTitle, ContentModal, RowContainerButton, TypeButton, SmallButton, TypeAppointment, ViewModal, InputAppointment, BtnModal } from "./Style"
 import { ButtonTitle, LabelSchedule, Title, TitleProfile } from "../Title/Style"
 import { useEffect, useState } from "react"
-import { Btn } from "../Button/Button"
 import { LinkCancel } from "../Link/Style"
+import { SelectList } from "react-native-dropdown-select-list"
 
-
-export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...rest }) => {
-
+export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, city, ...rest }) => {
 
   const [agendamento, setAgendamento] = useState()
 
-
   async function onPressContinue() {
-    if (agendamento == null ) {
+    if (agendamento == null) {
       alert("Informacoes necessarias")
 
-    }else if(agendamento.localizacao == null || agendamento.prioridadeId == null){
+    } else if (agendamento.localizacao == null || agendamento.prioridadeId == null) {
       alert("Informacoes necessarias")
     } else {
       await setShowModalSchedule(false)
@@ -24,6 +21,16 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
     }
   }
 
+  function dePara(retornoApi) {
+    if (city != null) {
+      let arrayOptions = [];
+      retornoApi.forEach((e) => {
+        arrayOptions.push({ value: e.endereco.cidade });
+      });
+
+      return arrayOptions;
+    }
+  }
 
   return (
     <Modal {...rest} visible={visible} transparent={true} animationType="fade" animationsOutTiming={0}>
@@ -68,19 +75,31 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
 
             </RowContainerButton>
 
-            {/* INFORMAR A LOCALIZACAO */}
             <LabelSchedule>Informe a localizacao desejada</LabelSchedule>
-            <InputAppointment placeholder={"Informe a localizacao"} value={agendamento ? agendamento.localizacao : null} onChangeText={(txt) => setAgendamento({
-              ...agendamento,
-
-              localizacao: txt
-            })} />
+            <SelectList
+              boxStyles={{ width: "100%", height: 70, alignItems: "center", marginTop: 5, borderColor: '#60BFC5', borderWidth: 2 }}
+              fontFamily="Quicksand_500Medium"
+              searchPlaceholder="Pesquise"
+              placeholder="Selecione uma cidade"
+              maxHeight={100}
+              dropdownStyles={{borderWidth: 2, borderColor: '#60BFC5'}}
+              dropdownTextStyles={{ fontSize: 18, color: '#34898F'}}
+              inputStyles={{ fontSize: 18, color: '#34898F' }}
+              setSelected={(txt) => setAgendamento({
+                ...agendamento,
+                localizacao: txt
+              })}
+              notFoundText='Nenhum dado encontrado'
+              data={dePara(city)}
+              save="endereco.cidade"
+              
+            />
 
 
           </TypeAppointment>
-          <Btn onPress={() => onPressContinue()}>
+          <BtnModal onPress={() => onPressContinue()}>
             <ButtonTitle >CONTINUAR</ButtonTitle>
-          </Btn>
+          </BtnModal>
 
           <LinkCancel onPress={() => setShowModalSchedule(false)}>Cancelar</LinkCancel>
 
