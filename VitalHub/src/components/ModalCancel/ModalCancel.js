@@ -57,13 +57,11 @@ export const ModalCancel = ({ idConsulta, visible, setShowModalCancel, ...rest }
     UpdateStatus()
   }
 
-  const consulta = idConsulta;
-
 
   async function UpdateStatus() {
     setSpinner(true)
     try {
-      await api.put(`/Consultas/Status?idConsulta=${consulta}&status=Cancelados`)
+      await api.put(`/Consultas/Status?idConsulta=${idConsulta}&status=Cancelados`)
     } catch (error) {
       Alert.alert("Erro ao cancelar a consulta")
     }

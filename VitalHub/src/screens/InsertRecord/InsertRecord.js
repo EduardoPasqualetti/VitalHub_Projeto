@@ -9,7 +9,7 @@ import api from '../../service/Service'
 import { ActivityIndicator, Alert } from 'react-native'
 
 export const InsertRecord = ({ navigation, route }) => {
-    const [descricao, ] = useState()
+    const [descricao, setDescricao ] = useState()
     const [diagnostico, setDiagnostico] = useState()
     const [receita, setReceita] = useState()
     const [spinner, setSpinner] = useState()
@@ -35,7 +35,7 @@ export const InsertRecord = ({ navigation, route }) => {
                 }
             }
             navigation.replace("Main")
-        } catch (error) {
+        } catch (error) { 
             Alert.alert('erro ao inserir prontuario')
         }
 

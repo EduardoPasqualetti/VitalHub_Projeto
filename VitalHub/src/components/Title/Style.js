@@ -89,3 +89,10 @@ font-family: 'Quicksand_700Bold';
 font-size: 17px;
 color: #DC143C;
 `
+
+
+export const TextLoc = styled(TextRec)`
+margin-top: 300px;
+margin-bottom: 90px;
+font-size: 23px;
+`

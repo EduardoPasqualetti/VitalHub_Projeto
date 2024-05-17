@@ -102,6 +102,7 @@ export const Register = ({ navigation }) => {
                 handleCallNotifications();
             } catch (error) {
                 Alert.alert("Erro ao cadastrar um novo usuario")
+                console.log(error);
             }
             setSpinner(false)
         } else if (

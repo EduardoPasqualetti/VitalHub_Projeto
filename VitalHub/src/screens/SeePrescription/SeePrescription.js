@@ -5,8 +5,8 @@ import { DoctorImage, PhotoTaked } from "../../components/Images/Style"
 import { BtnProfile, SubtitleRecord, TitleCancelPhoto, TitleProfile } from "../../components/Title/Style"
 import { BtnCancelPhoto, BtnInsertPhoto } from "../../components/Button/Button"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { LinkCancelMargin } from "../../components/Link/Style"
-import { Alert, Image } from "react-native"
+import { LinkCancel } from "../../components/Link/Style"
+import { Alert } from "react-native"
 import { useEffect, useState } from "react"
 import { InputExame } from "../../components/Input/Style"
 import api from "../../service/Service"
@@ -58,12 +58,12 @@ export const SeePrescription = ({ navigation, route }) => {
             const descricoes = response.data.map(item => item.descricao);
             setDescricaoExame(descricoes.join("\n"));
         } catch (error) {
-            Alert.alert("Erro ao recuperar dados do exame")
+            // Alert.alert("Erro ao recuperar dados do exame")
         }
     }
 
     useEffect(() => {
-        if (route.params.home == true) {
+        if (route.params.home) {
             setDadosConsulta({
                 nome: route.params.nome,
                 crm: route.params.crm,
@@ -151,7 +151,7 @@ export const SeePrescription = ({ navigation, route }) => {
                                 fieldValue={descricaoExame}
                             />
 
-                            <LinkCancelMargin onPress={() => { navigation.replace("Main") }}>Voltar</LinkCancelMargin>
+                            <LinkCancel onPress={() => { navigation.replace("Main") }}>Voltar</LinkCancel>
 
                         </ContainerProfile>
                     </ContainerScroll>

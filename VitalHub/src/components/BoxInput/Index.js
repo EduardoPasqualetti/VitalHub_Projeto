@@ -13,7 +13,8 @@ export const BoxInput = ({
     multiline = false,
     marginBottom = 40,
     insertRecord = false,
-    onChangeText = null
+    onChangeText = null,
+    maskedInput
 }) => {
     return (
         <FieldContent fieldWidth={fieldWidth} marginBottom={marginBottom}>
@@ -28,7 +29,7 @@ export const BoxInput = ({
             ) : (
                 <>
                 <InputText placeholder={placeholder} value={fieldValue} editable={editable}
-                fieldHeight={fieldHeight} multiline={multiline} onChangeText={onChangeText} />
+                fieldHeight={fieldHeight} multiline={multiline} onChangeText={onChangeText} {...maskedInput}/>
                 </>
             )}
             

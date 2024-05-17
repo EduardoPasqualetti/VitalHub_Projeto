@@ -1,5 +1,5 @@
 
-import {  ContainerProfile, ContainerSafeEdit, ViewFormat, ViewTitle } from "../../components/Container/Style"
+import { ContainerProfile, ContainerSafeEdit, ViewFormat, ViewTitle } from "../../components/Container/Style"
 import { ProfileImage } from "../../components/Images/Style"
 import { ButtonTitle, SubTitleProfile, TitleProfile } from "../../components/Title/Style"
 import { BoxInput } from "../../components/BoxInput/Index"
@@ -12,6 +12,7 @@ import api from "../../service/Service"
 import moment from 'moment'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native"
+import { Masks, useMaskedInputProps } from "react-native-mask-input"
 
 
 export const Profile = ({ navigation, route }) => {
@@ -20,7 +21,6 @@ export const Profile = ({ navigation, route }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [idUser, setIdUser] = useState('')
-    const [userData, setUserData] = useState('')
     const [cpf, setCpf] = useState()
     const [rg, setRg] = useState('')
     const [dtNasc, setDtNasc] = useState('')
@@ -31,22 +31,6 @@ export const Profile = ({ navigation, route }) => {
     const [cidade, setCidade] = useState("")
     const [numero, setNumero] = useState('')
     const [fotoUsuario, setFotoUsuario] = useState()
-
-    function validarCPF(cpf) {
-        cpf = cpf.replace(/\D/g, '');
-        if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-        var result = true;
-        [9, 10].forEach(function (j) {
-            var soma = 0, r;
-            cpf.split(/(?=)/).splice(0, j).forEach(function (e, i) {
-                soma += parseInt(e) * ((j + 2) - (i + 1));
-            });
-            r = soma % 11;
-            r = (r < 2) ? 0 : 11 - r;
-            if (r != cpf.substring(j, j + 1)) result = false;
-        });
-        return result;
-    }
 
 
     async function profileLoad() {
@@ -65,8 +49,6 @@ export const Profile = ({ navigation, route }) => {
 
         try {
             const response = await api.get(`/${url}/BuscarPorId?id=${token.jti}`);
-
-            setUserData(response.data)
             setFotoUsuario(response.data.idNavigation.foto)
             setCep(response.data.endereco.cep)
             setCidade(response.data.endereco.cidade)
@@ -99,24 +81,23 @@ export const Profile = ({ navigation, route }) => {
                     especialidade: especialidade
                 }, { headers: { Authorization: `Bearer ${token}` } });
             } else {
-                if (validarCPF(cpf) === true) {
-                    await api.put('/Pacientes', {
-                        rg: rg,
-                        cpf: cpf,
-                        dataNascimento: dtNasc,
-                        logradouro: logradouro,
-                        numero: numero,
-                        cep: cep,
-                        cidade: cidade
-                    }, { headers: { Authorization: `Bearer ${token}` } });
-                } else
-                    Alert.alert("CPF invalido, nao foi possivel altera-lo")
+
+                await api.put('/Pacientes', {
+                    rg: rg,
+                    cpf: cpf,
+                    dataNascimento: dtNasc,
+                    logradouro: logradouro,
+                    numero: numero,
+                    cep: cep,
+                    cidade: cidade
+                }, { headers: { Authorization: `Bearer ${token}` } });
                 profileLoad()
             }
 
-            setProfileEdit(false);
+            setProfileEdit(false);  
         } catch (error) {
             Alert.alert("Erro ao atualizar dados do usuario")
+            console.log(error);
         }
     }
 
@@ -138,6 +119,7 @@ export const Profile = ({ navigation, route }) => {
             })
         } catch (error) {
             Alert.alert('Erro ao atualizar foto de perfil do usuario')
+            console.log(error);
         }
 
     }
@@ -169,7 +151,18 @@ export const Profile = ({ navigation, route }) => {
         }
         return moment(data).format('DD/MM/YYYY');
     }
-    
+
+    const cpfMasked = useMaskedInputProps({
+        value: cpf,
+        onChangeText: setCpf,
+        mask: Masks.BRL_CPF
+    })
+
+    const dataMasked = useMaskedInputProps({
+        value: dtNasc,
+        onChangeText: setDtNasc,
+        mask: Masks.DATE_DDMMYYYY
+    });
 
     return (
         <KeyboardAvoidingView style={{ width: '100%', alignSelf: 'center' }} behavior={Platform.OS == 'ios' ? "padding" : "height"}
@@ -269,19 +262,20 @@ export const Profile = ({ navigation, route }) => {
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
                                         editable={true}
-                                        onChangeText={setDtNasc}
                                         placeholder={dtNasc ? formatarData(dtNasc) : null}
+                                        maskedInput={dataMasked}
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
                                         editable={true}
                                         placeholder={cpf}
-                                        onChangeText={setCpf}
+                                        maskedInput={cpfMasked}
                                     />
                                     <BoxInput
                                         textLabel={'RG'}
                                         placeholder={rg}
                                         editable={true}
+                                        onChangeText={setRg}
                                     />
                                 </>
                                 :
@@ -296,6 +290,7 @@ export const Profile = ({ navigation, route }) => {
                                         textLabel={'CRM'}
                                         placeholder={crm}
                                         editable={true}
+                                        onChangeText={setCrm}
                                     />
                                 </>
                         }

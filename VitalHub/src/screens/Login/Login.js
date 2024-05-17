@@ -6,15 +6,14 @@ import { Input } from "../../components/Input/Style"
 import { LinkCreate, LinkMedium } from "../../components/Link/Style"
 import { Btn, BtnGoogle } from "../../components/Button/Button"
 import { ActivityIndicator, Alert, Keyboard, Text, TouchableWithoutFeedback } from "react-native"
-import { AntDesign } from '@expo/vector-icons';
 import { useState } from "react"
 import api from "../../service/Service"
 import asyncStorage from '@react-native-async-storage/async-storage'
 
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('gustavopasqualetti@gmail.com')
-    const [senha, setSenha] = useState('gustavo123')
+    const [email, setEmail] = useState('joaovitor@gmail.com')
+    const [senha, setSenha] = useState('joao123')
     const [loading, setLoading] = useState(false)
     const [emailError, setEmailError] = useState(false);
     const [senhaError, setSenhaError] = useState(false);
@@ -88,11 +87,11 @@ export const Login = ({ navigation }) => {
                         <ButtonTitle>ENTRAR</ButtonTitle>
                     )}
                 </Btn>
-
+{/* 
                 <BtnGoogle>
                     <AntDesign name="google" size={21} color="#496BBA" />
                     <ButtonGoogleTitle>ENTRAR COM GOOGLE</ButtonGoogleTitle>
-                </BtnGoogle>
+                </BtnGoogle> */}
 
                 <ContentAccount>
                     <TextAccount>Nao tem Conta?</TextAccount>

@@ -1,9 +1,9 @@
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
+import MapView, { Marker } from "react-native-maps"
 import { BoxInput } from "../../components/BoxInput/Index"
 import { Container, ContainerMap, ViewFormat, ViewLocal } from "../../components/Container/Style"
 import { LinkCancel } from "../../components/Link/Style"
-import { SubTitleModalResume, TitleProfile } from "../../components/Title/Style"
-import { ActivityIndicator, StyleSheet, Text } from "react-native"
+import { SubTitleModalResume, TextLoc, TitleProfile } from "../../components/Title/Style"
+import { ActivityIndicator, StyleSheet } from "react-native"
 import { mapskey } from "../../Utils/MapsKey/mapsApiKey"
 import {
     requestForegroundPermissionsAsync,
@@ -171,9 +171,9 @@ export const SeeLocalAppointment = ({ navigation, route }) => {
                     </>
                     :
                     <Container>
-                        <Text>Localizacao nao Encontrada</Text>
+                        <TextLoc>Localizacao nao Encontrada</TextLoc>
 
-                        <ActivityIndicator size="small" color="#ffffff" />
+                        <ActivityIndicator size="large" color="#5F5C6B" />
                     </Container>
             }
         </Container>
