@@ -24,7 +24,6 @@ export const ModalSchedule = ({ navigation, visible, setShowModalSchedule, ...re
     }
   }
 
-
   return (
     <Modal {...rest} visible={visible} transparent={true} animationType="fade" animationsOutTiming={0}>
 

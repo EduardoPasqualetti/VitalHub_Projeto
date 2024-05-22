@@ -5,7 +5,7 @@ namespace WebAPI.Utils.OCR
 {
     public class OcrService
     {
-        private readonly string _subscriptionKey = "qxktfjzgpnozveoq";
+        private readonly string _subscriptionKey = "";
 
         private readonly string _endpoint = "https://cvvitalhubg15.cognitiveservices.azure.com/";
 

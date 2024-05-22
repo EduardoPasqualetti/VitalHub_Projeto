@@ -35,6 +35,7 @@ height: 100%;
 align-self: center;
 align-items: center;
 margin-top: 10px;
+/* background-color: white; */
 `
 export const ContainerSafeEdit = styled(ContainerProfile)`
 margin-top: 120px;
@@ -51,10 +52,8 @@ margin-bottom: 25px;
 export const ViewTitle = styled.View`
 width: 80%;
 height: 130px;
-position: absolute;
 z-index: 99;
 margin-bottom: 20px;
-background-color: #FFFFFF;
 border-radius: 7px;
 align-self: center;
 align-items: center;
@@ -101,7 +100,6 @@ align-items: center;
 padding-top: 20px;
 padding-left: 25px;
 padding-right: 25px;
-
 `
 
 export const ViewDataDoctor = styled(ViewTitleRecord)`

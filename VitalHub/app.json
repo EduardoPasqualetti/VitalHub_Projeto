@@ -10,7 +10,8 @@
       "image": "./assets/SplashScreen.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
-    },    "assetBundlePatterns": [
+    },
+    "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
@@ -20,13 +21,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.merbach.VitalHub"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "acd78ac4-ed97-40e6-8492-364323451795"
+      }
+    }
   }
 }

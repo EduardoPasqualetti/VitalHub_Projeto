@@ -99,7 +99,6 @@ export const MedicalRecord = ({ navigation, route }) => {
                             fieldValue={descricao}
                             fieldHeight={150}
                             multiline={true}
-
                         />
                         <BoxInput
                             textLabel={'Diagnóstico do paciente'}

@@ -21,7 +21,6 @@ export const SeePrescription = ({ navigation, route }) => {
     function onPressPhoto() {
         setIsPhoto(true)
         navigation.navigate("CameraPhoto", { isProfile: false });
-
     }
 
     function onPressCancel() {

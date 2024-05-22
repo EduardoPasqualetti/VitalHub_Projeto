@@ -9,7 +9,6 @@ import { ModalSchedule } from "../../components/ModalSchedule/ModalSchedule"
 import api from "../../service/Service"
 
 
-
 export const SelectDoctor = ({ navigation, route }) => {
 
     const [selectedDoctor, setSelectedDoctor] = useState(null);

@@ -77,7 +77,7 @@ export const ModalResumeAppointment = ({ dadosAgendamento, dataConsulta, horario
             }
 
         } catch (error) {
-            console.log(error + ' erro cadastrar consulta');
+            console.log(error + ' erro cadastrar consulta: ');
         }
         setSpinner(false)
     }

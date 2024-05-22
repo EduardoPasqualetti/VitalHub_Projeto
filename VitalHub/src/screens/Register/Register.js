@@ -82,7 +82,7 @@ export const Register = ({ navigation }) => {
     }
 
     async function HandleRegister() {
-        console.log("entra no metodo cadastrar");
+        // console.log("entra no metodo cadastrar");
         if (
             senha === confirmarSenha &&
             senha !== '' &&

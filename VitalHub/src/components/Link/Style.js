@@ -29,5 +29,9 @@ margin-bottom: 40px;
 `
 
 export const LinkCancelMargin = styled(LinkCancel)`
-margin-bottom: 40px;
+margin-top: 25px;
+`
+
+export const LinkCancelMarginButton = styled(LinkCancelMargin)`
+    margin-top: -10px;
 `

@@ -4,7 +4,7 @@ export const Container = styled.View`
 flex-direction: row;
 width: 320px;
 height: 120px;
-margin-top: 20px;
+/* margin-top: 20px; */
 border-radius: 7px;
 background-color:#fff ;
 box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.08);

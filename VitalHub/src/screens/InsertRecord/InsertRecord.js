@@ -54,7 +54,7 @@ export const InsertRecord = ({ navigation, route }) => {
 
                     <ProfileImage source={{ uri: route.params.data.photo }} />
                     <ContainerProfile>
-                        <TitleProfile>{route.params.data.name}</TitleProfile>
+                        <TitleProfile>{route.params.dataF.name}</TitleProfile>
                         <ViewTitleRecord>
                             <SubtitleRecord>{route.params.idade} anos</SubtitleRecord>
                             <SubtitleRecord>{route.params.data.email}</SubtitleRecord>
@@ -67,7 +67,7 @@ export const InsertRecord = ({ navigation, route }) => {
                             multiline={true}
                             editable={true}
                             onChangeText={setDescricao}
-                        />
+                        />  
                         <BoxInput
                             textLabel={'Diagnóstico do paciente'}
                             placeholder={'Diagnóstico'}

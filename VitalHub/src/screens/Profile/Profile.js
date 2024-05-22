@@ -65,7 +65,7 @@ export const Profile = ({ navigation, route }) => {
             setCpf(response.data.cpf)
             setRg(response.data.rg)
         } catch (error) {
-            console.log(error);
+            console.log(error + ' getUser ');
         }
 
     }
@@ -118,7 +118,7 @@ export const Profile = ({ navigation, route }) => {
                 setFotoUsuario(route.params.photoUri)
             })
         } catch (error) {
-            console.log(error);
+            console.log(error + ' AlterarFotoPerfil ');
         }
 
     }
@@ -227,76 +227,66 @@ export const Profile = ({ navigation, route }) => {
                     <ProfileImage source={{ uri: fotoUsuario }} />
 
 
-                    <ViewTitle>
+                    <ContainerProfile>
                         <TitleProfile>{name}</TitleProfile>
                         <SubTitleProfile>{email}</SubTitleProfile>
-                    </ViewTitle>
-                    <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", { isProfile: true })}>
-                        <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
-                    </ButtonCamera>
 
-                    <ContainerSafeEdit>
+                        <ButtonCamera onPress={() => navigation.navigate("CameraPhoto", { isProfile: true })}>
+                            <MaterialCommunityIcons name="camera-plus" size={20} color="#fbfbfb" />
+                        </ButtonCamera>
+
+
                         {
                             role == 'Paciente' ?
                                 <>
                                     <BoxInput
                                         textLabel={'Data de nascimento:'}
-                                        placeholder={dtNasc ? formatarData(dtNasc) : null}
+                                        fieldValue={dtNasc ? formatarData(dtNasc) : null}
 
                                     />
                                     <BoxInput
                                         textLabel={'CPF'}
-                                        placeholder={cpf}
+                                        fieldValue={cpf}
                                     />
                                     <BoxInput
                                         textLabel={'RG'}
-                                        placeholder={rg}
+                                        fieldValue={rg}
                                     />
                                 </>
                                 :
                                 <>
                                     <BoxInput
                                         textLabel={'Especialidade'}
-                                        placeholder={especialidade}
-                                        editable={true}
-                                        onChangeText={setEspecialidade}
+                                        fieldValue={especialidade}
                                     />
                                     <BoxInput
                                         textLabel={'CRM'}
-                                        placeholder={crm}
+                                        fieldValue={crm}
                                     />
                                 </>
                         }
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Logradouro'}
-                                placeholder={logradouro}
+                                fieldValue={logradouro}
                                 fieldWidth={'60'}
-                                editable={true}
-                                onChangeText={setLogradouro}
                             />
                             <BoxInput
                                 textLabel={'Numero'}
-                                placeholder={numero ? numero.toString() : null}
+                                fieldValue={numero ? numero.toString() : null}
                                 fieldWidth={'30'}
-                                editable={true}
-                                onChangeText={txt => setNumero(parseInt(txt))}
                             />
                         </ViewFormat>
                         <ViewFormat>
                             <BoxInput
                                 textLabel={'Cep'}
-                                placeholder={cep}
+                                fieldValue={cep}
                                 fieldWidth={'45'}
-                                editable={true}
-                                onChangeText={setCep}
                             />
                             <BoxInput
                                 textLabel={'Cidade'}
-                                placeholder={cidade}
+                                fieldValue={cidade}
                                 fieldWidth={'45'}
-                                editable={true}
-                                onChangeText={setCidade}
                             />
 
                         </ViewFormat>
@@ -306,8 +296,7 @@ export const Profile = ({ navigation, route }) => {
                         </Btn>
 
                         <LinkCancelMargin onPress={() => { setProfileEdit(false) }}>Cancelar Edição</LinkCancelMargin>
-
-                    </ContainerSafeEdit>
+                    </ContainerProfile>
                 </ScrollView>
             )}
         </KeyboardAvoidingView>

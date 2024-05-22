@@ -23,7 +23,7 @@ export const Recover = ({ navigation }) => {
             setSpinner(false)
         }
         else
-            Alert.alert("Email invalido, informe-o corretamente")
+            Alert.alert("Email invalido, verifique se ele foi escrito corretamente!")
     }
     return (
         <Container>

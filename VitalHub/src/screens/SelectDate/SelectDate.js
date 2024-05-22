@@ -17,7 +17,6 @@ export const SelectDate = ({ navigation, route }) => {
     const [showModalResume, setShowModalResume] = useState(false)
     const [showModalSchedule, setShowModalSchedule] = useState(false)
 
-
     function onPressCancel() {
         setShowModalSchedule(true)
         navigation.navigate("Main");
